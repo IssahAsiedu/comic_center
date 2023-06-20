@@ -81,7 +81,6 @@ class _ComicImagesState extends State<ComicImages> {
   void onSelectedImage() {
     showDialog(context: context, builder: (_) {
       return InteractiveViewer(
-        constrained: false,
           child: FilledImageContainer(imageUrl: selectedImage));
     });
   }
