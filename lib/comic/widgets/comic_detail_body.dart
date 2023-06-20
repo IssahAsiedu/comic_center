@@ -18,16 +18,6 @@ class ComicDetailBody extends StatelessWidget {
     return Stack(
       children: [
         const Positioned(top: 30, left: 10, child: AppBackButton()),
-        Positioned(
-          top: 40,
-          left: 80,
-          right: 0,
-          child: SlideWidget(
-              child: Text(
-            comicDetails.name,
-            style: const TextStyle(fontFamily: 'Bangers', fontSize: 25),
-          )),
-        ),
         Positioned.fill(
             top: 110,
             child: SingleChildScrollView(
@@ -57,7 +47,17 @@ class ComicDetailBody extends StatelessWidget {
                   ],
                 ),
               ),
-            ))
+            )),
+        Positioned(
+          top: 40,
+          left: 80,
+          right: 0,
+          child: SlideWidget(
+              child: Text(
+                comicDetails.name,
+                style: const TextStyle(fontFamily: 'Bangers', fontSize: 25),
+              )),
+        ),
       ],
     );
   }

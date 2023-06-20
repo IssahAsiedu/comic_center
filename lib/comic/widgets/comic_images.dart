@@ -33,7 +33,7 @@ class _ComicImagesState extends State<ComicImages> {
       mainAxisSize: MainAxisSize.min,
       children: [
         InkWell(
-          onTap: onSelectedImage,
+          onTap: _onSelectedImage,
           child: Container(
             height: size.height * 0.45,
             width: size.width,
@@ -65,8 +65,10 @@ class _ComicImagesState extends State<ComicImages> {
                     clipBehavior: Clip.antiAlias,
                     width: 80,
                     height: 80,
-                    decoration: BoxDecoration(borderRadius: kCircularBorder12),
+                    decoration: BoxDecoration(borderRadius: kCircularBorder12,
+                    border: _isSelected(images.elementAt(i)) ? Border.all(width: 2, color: Colors.blue) : null,),
                     child: FilledImageContainer(
+                      borderRadius: kCircularBorder12,
                       imageUrl: images.elementAt(i),
                     ),
                   ),
@@ -78,7 +80,11 @@ class _ComicImagesState extends State<ComicImages> {
     );
   }
 
-  void onSelectedImage() {
+  bool _isSelected(String image) {
+    return selectedImage == image;
+  }
+
+  void _onSelectedImage() {
     showDialog(context: context, builder: (_) {
       return InteractiveViewer(
           child: FilledImageContainer(imageUrl: selectedImage));
