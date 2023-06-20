@@ -21,4 +21,5 @@ class RestInterceptor extends Interceptor {
     options.queryParameters.putIfAbsent("hash", () => hash);
     handler.next(options);
   }
+
 }

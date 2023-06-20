@@ -1,13 +1,13 @@
-class Comic {
-  final int id;
-  final String title;
+import '../../shared/models/Item.dart';
+
+class Comic extends Item {
   final int issueNumber;
   final String format;
   final String thumbnail;
 
   Comic({
-    required this.id,
-    required this.title,
+    required super.id,
+    required super.name,
     required this.issueNumber,
     required this.format,
     required this.thumbnail,
@@ -16,7 +16,7 @@ class Comic {
   factory Comic.fromMap(Map<String, dynamic> json) {
     return Comic(
         id: json["id"],
-        title: json["title"],
+        name: json["title"],
         issueNumber: json["issueNumber"],
         thumbnail: '${json["thumbnail"]["path"]}/detail.${json["thumbnail"]["extension"]}',
         format: json["format"]

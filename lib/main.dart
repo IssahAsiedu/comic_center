@@ -1,4 +1,4 @@
-import 'package:comics_center/main_screen.dart';
+import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -12,13 +12,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return MaterialApp.router(
       theme: ThemeData(
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(bodyMedium: TextStyle(color: Colors.white))
       ),
-      home: const MainScreen(),
+      routeInformationParser: AppRoute.router.routeInformationParser,
+      routeInformationProvider: AppRoute.router.routeInformationProvider,
+      routerDelegate: AppRoute.router.routerDelegate,
     );
   }
 }

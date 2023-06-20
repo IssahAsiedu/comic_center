@@ -1,15 +1,20 @@
 import 'dart:async';
 
-import 'package:comics_center/response.dart';
-import 'package:comics_center/rest_client.dart';
-import 'package:comics_center/search_app_bar.dart';
+
+import 'package:comics_center/network/response.dart';
+import 'package:comics_center/routing/route_config.dart';
+import 'package:comics_center/shared/widgets/search_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import 'character.dart';
-import 'character_card.dart';
-import 'comic.dart';
-import 'comic_card.dart';
+import 'character/models/character.dart';
+import 'character/widgets/character_card.dart';
+import 'comic/models/comic.dart';
+import 'comic/widgets/comic_card.dart';
+import 'network/rest_client.dart';
+
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -84,7 +89,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void searchTextChanged(String text) {
     timer?.cancel();
-    timer = Timer(const Duration(seconds: 5), () => fetchData());
+    timer = Timer(const Duration(seconds: 2), () => fetchData());
   }
 
   @override
@@ -121,15 +126,20 @@ class _MainScreenState extends State<MainScreen> {
                     animateTransitions: true,
                     itemBuilder: (context, item, index) {
                       var itemWidth = MediaQuery.of(context).size.width * 0.8;
-                      return Container(
-                        margin: EdgeInsets.only(
-                            left: index == 0 ? 12 : 0,
-                            right: _isLastItem(index) ? 12 : 0),
-                        child: CharacterCard(
-                          itemWidth: itemWidth,
-                          itemHeight: listHeight,
-                          thumbnailUrl: item.thumbnail!,
-                          characterName: item.name,
+                      return GestureDetector(
+                        onTap: () {
+                          GoRouter.of(context).push(AppRoute.characterRouteWithParam("${item.id}"));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              left: index == 0 ? 12 : 0,
+                              right: _isLastItem(index) ? 12 : 0),
+                          child: CharacterCard(
+                            itemWidth: itemWidth,
+                            itemHeight: listHeight,
+                            thumbnailUrl: item.thumbnail!,
+                            characterName: item.name,
+                          ),
                         ),
                       );
                     }),
@@ -152,7 +162,11 @@ class _MainScreenState extends State<MainScreen> {
                   pagingController: _comicsPagingController,
                   builderDelegate: PagedChildBuilderDelegate(
                       itemBuilder: (context, item, index) {
-                    return ComicCard(comic: item);
+                    return GestureDetector(
+                      onTap: () {
+                        GoRouter.of(context).push(AppRoute.comicRouteWithParam("${item.id}"));
+                      },
+                        child: ComicCard(comic: item));
                   }),
                   separatorBuilder: (_, i) {
                     return const SizedBox(
@@ -173,6 +187,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void dispose() {
     _textEditingController.dispose();
+    _characterPagingController.dispose();
+    _comicsPagingController.dispose();
     super.dispose();
   }
 }

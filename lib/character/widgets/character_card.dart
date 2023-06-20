@@ -53,3 +53,28 @@ class CharacterCard extends StatelessWidget {
     );
   }
 }
+
+
+
+class CharacterDetailBottomFade extends StatelessWidget {
+  const CharacterDetailBottomFade({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.3,
+      width: size.width,
+      decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              colors: [Colors.transparent, Colors.black],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              tileMode: TileMode.clamp
+          )
+      ),
+    );
+  }
+}

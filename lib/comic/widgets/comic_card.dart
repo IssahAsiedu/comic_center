@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'comic.dart';
+import '../models/comic.dart';
 
 class ComicCard extends StatelessWidget {
   final double cardHeight;
@@ -35,7 +35,7 @@ class ComicCard extends StatelessWidget {
                   SizedBox(
                       width: MediaQuery.of(context).size.width * 0.3,
                       child: Text(
-                        comic.title,
+                        comic.name,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontFamily: 'Bangers'),
                       )),
