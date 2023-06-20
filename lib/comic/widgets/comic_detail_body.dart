@@ -15,50 +15,52 @@ class ComicDetailBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Positioned(top: 30, left: 10, child: AppBackButton()),
-        Positioned.fill(
-            top: 110,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: [
-                    SlideWidget(
-                        child: ComicImages(
-                      comicDetails: comicDetails,
-                    )),
-                    Container(
-                      margin: const EdgeInsets.only(top: 15),
-                      child: Text("PAGE COUNT: ${comicDetails.pageCount}"),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(top: 12),
-                        child: PricesSection(prices: comicDetails.prices,)),
-                    if (comicDetails.description != null && comicDetails.description!.isNotEmpty)
+    return SafeArea(
+      child: Stack(
+        children: [
+          const Positioned(top: 30, left: 10, child: AppBackButton()),
+          Positioned.fill(
+              top: 110,
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Column(
+                    children: [
+                      SlideWidget(
+                          child: ComicImages(
+                        comicDetails: comicDetails,
+                      )),
                       Container(
-                        margin: const EdgeInsets.only(top: 25),
-                        child: DescriptionSection(
-                          title: "Description",
-                          content: comicDetails.description!,
-                        ),
-                      )
-                  ],
+                        margin: const EdgeInsets.only(top: 15),
+                        child: Text("PAGE COUNT: ${comicDetails.pageCount}"),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 12),
+                          child: PricesSection(prices: comicDetails.prices,)),
+                      if (comicDetails.description != null && comicDetails.description!.isNotEmpty)
+                        Container(
+                          margin: const EdgeInsets.only(top: 25),
+                          child: DescriptionSection(
+                            title: "Description",
+                            content: comicDetails.description!,
+                          ),
+                        )
+                    ],
+                  ),
                 ),
-              ),
-            )),
-        Positioned(
-          top: 40,
-          left: 80,
-          right: 0,
-          child: SlideWidget(
-              child: Text(
-                comicDetails.name,
-                style: const TextStyle(fontFamily: 'Bangers', fontSize: 25),
               )),
-        ),
-      ],
+          Positioned(
+            top: 40,
+            left: 80,
+            right: 0,
+            child: SlideWidget(
+                child: Text(
+                  comicDetails.name,
+                  style: const TextStyle(fontFamily: 'Bangers', fontSize: 25),
+                )),
+          ),
+        ],
+      ),
     );
   }
 }

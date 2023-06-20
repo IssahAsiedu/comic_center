@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class FilledImageContainer extends StatelessWidget {
   final String imageUrl;
   final BorderRadius? borderRadius;
