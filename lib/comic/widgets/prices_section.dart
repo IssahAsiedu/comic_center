@@ -1,3 +1,4 @@
+import 'package:comics_center/shared/AppAssets.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Comic_price.dart';
@@ -12,7 +13,7 @@ class PricesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white24,
+      color: Colors.black,
       height: 50,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
@@ -22,18 +23,17 @@ class PricesSection extends StatelessWidget {
 
             IconData icon = Icons.computer;
 
+            var imgSrc = AppAssets.digitalImage;
+
             if (price.type.toLowerCase().contains("print")) {
               icon = Icons.print;
+              imgSrc = AppAssets.paperImage;
             }
 
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  icon,
-                  size: 24,
-                  color: Colors.white,
-                ),
+                Image.asset(imgSrc, width: 80, height: 80,),
                 const SizedBox(
                   width: 5,
                 ),
