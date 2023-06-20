@@ -17,7 +17,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onTextChange,
     required this.textController,
     this.title = 'Enjoy Marvel\'s Collection',
-    this.hintText = 'Enter character name',
+    this.hintText = 'Enter search key',
     this.searchBoxWidth,
   }) : super(key: key);
 
@@ -37,6 +37,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
           style: Theme.of(context).textTheme.bodyMedium,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.search),
+            hintStyle: const TextStyle(color: Colors.white24),
             hintText: hintText,
             fillColor: const Color(0x0ff00fff),
             filled: true,

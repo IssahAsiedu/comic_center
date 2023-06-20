@@ -1,4 +1,4 @@
-import '../../shared/models/Item.dart';
+import '../../shared/models/item.dart';
 import 'character.dart';
 
 class CharacterDetails extends Character {

@@ -47,6 +47,8 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> fetchData() async {
     _characterPagingController.itemList?.clear();
     _characterPagingController.refresh();
+    _comicsPagingController.itemList?.clear();
+    _comicsPagingController.refresh();
   }
 
   Future<void> fetchCharacters(int pageKey) async {
@@ -73,6 +75,10 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> fetchComics(int pageKey) async {
     var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+
+    if (_textEditingController.text.isNotEmpty) {
+      query["titleStartsWith"] = _textEditingController.text;
+    }
     var response = await _client.getComics(query);
 
     if (response.status == Status.error) {

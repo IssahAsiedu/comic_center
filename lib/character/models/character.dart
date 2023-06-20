@@ -1,4 +1,4 @@
-import '../../shared/models/Item.dart';
+import '../../shared/models/item.dart';
 
 class Character extends Item {
   final String? thumbnail;

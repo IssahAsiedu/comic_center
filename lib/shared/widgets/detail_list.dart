@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/Item.dart';
+import '../models/item.dart';
 
 class DetailList<T extends Item> extends StatelessWidget {
   final String title;
