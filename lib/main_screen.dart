@@ -70,7 +70,6 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     _characterPagingController.appendPage(response.data!.data, ++pageKey);
-    setState((){});
   }
 
   Future<void> fetchComics(int pageKey) async {
@@ -91,7 +90,6 @@ class _MainScreenState extends State<MainScreen> {
       return;
     }
     _comicsPagingController.appendPage(response.data!.data, ++pageKey);
-    setState((){});
   }
 
   void searchTextChanged(String text) {
