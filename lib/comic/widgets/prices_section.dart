@@ -21,21 +21,19 @@ class PricesSection extends StatelessWidget {
           itemBuilder: (_, i) {
             var price = prices[i];
 
-            IconData icon = Icons.computer;
 
             var imgSrc = AppAssets.digitalImage;
 
             if (price.type.toLowerCase().contains("print")) {
-              icon = Icons.print;
               imgSrc = AppAssets.paperImage;
             }
 
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(imgSrc, width: 80, height: 80,),
+                Image.asset(imgSrc, width: 50, height: 50,),
                 const SizedBox(
-                  width: 5,
+                  width: 3,
                 ),
                 Text("${price.displayString}: "),
                 Text("\$ ${price.price}")
