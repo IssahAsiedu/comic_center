@@ -1,9 +1,10 @@
 import 'dart:async';
 
-
 import 'package:comics_center/network/response.dart';
 import 'package:comics_center/routing/route_config.dart';
+import 'package:comics_center/shared/app_strings.dart';
 import 'package:comics_center/shared/widgets/search_app_bar.dart';
+import 'package:comics_center/shared/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -13,8 +14,6 @@ import 'character/widgets/character_card.dart';
 import 'comic/models/comic.dart';
 import 'comic/widgets/comic_card.dart';
 import 'network/rest_client.dart';
-
-
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -71,6 +70,7 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     _characterPagingController.appendPage(response.data!.data, ++pageKey);
+    setState((){});
   }
 
   Future<void> fetchComics(int pageKey) async {
@@ -91,33 +91,40 @@ class _MainScreenState extends State<MainScreen> {
       return;
     }
     _comicsPagingController.appendPage(response.data!.data, ++pageKey);
+    setState((){});
   }
 
   void searchTextChanged(String text) {
     timer?.cancel();
-    timer = Timer(const Duration(seconds: 2), () => fetchData());
+    if(text.isEmpty) {
+      timer = Timer(const Duration(seconds: 2), () => fetchData());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     var listHeight = MediaQuery.of(context).size.height * 0.6 - 190;
+
     return Scaffold(
       backgroundColor: Colors.white12,
       appBar: SearchAppBar(
         textController: _textEditingController,
         onTextChange: searchTextChanged,
+        onSubmit:  _onSubmitSearch,
       ),
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(
-            child: Container(
-              margin: const EdgeInsets.only(top: 20, bottom: 20, left: 10),
-              child: const Text(
-                "Characters",
-                style: TextStyle(fontFamily: 'Bangers', fontSize: 24),
+            SliverToBoxAdapter(
+              child: SlideWidget(
+                child: Container(
+                  margin: const EdgeInsets.only(top: 20, bottom: 20, left: 10),
+                  child:  Text(
+                    AppStrings.charactersTitle,
+                    style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
+                  ),
+                ),
               ),
             ),
-          ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: listHeight,
@@ -134,7 +141,8 @@ class _MainScreenState extends State<MainScreen> {
                       var itemWidth = MediaQuery.of(context).size.width * 0.8;
                       return GestureDetector(
                         onTap: () {
-                          GoRouter.of(context).push(AppRoute.characterRouteWithParam("${item.id}"));
+                          GoRouter.of(context).push(
+                              AppRoute.characterRouteWithParam("${item.id}"));
                         },
                         child: Container(
                           margin: EdgeInsets.only(
@@ -152,14 +160,14 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Container(
-                margin: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
-                child: const Text(
-                  'Comics',
-                  style: TextStyle(fontFamily: 'Bangers', fontSize: 24),
-                )),
-          ),
+            SliverToBoxAdapter(
+              child: Container(
+                  margin: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
+                  child:  Text(
+                    AppStrings.comicsTitle,
+                    style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
+                  )),
+            ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.of(context).size.height - listHeight,
@@ -169,9 +177,10 @@ class _MainScreenState extends State<MainScreen> {
                   builderDelegate: PagedChildBuilderDelegate(
                       itemBuilder: (context, item, index) {
                     return GestureDetector(
-                      onTap: () {
-                        GoRouter.of(context).push(AppRoute.comicRouteWithParam("${item.id}"));
-                      },
+                        onTap: () {
+                          GoRouter.of(context)
+                              .push(AppRoute.comicRouteWithParam("${item.id}"));
+                        },
                         child: ComicCard(comic: item));
                   }),
                   separatorBuilder: (_, i) {
@@ -180,11 +189,25 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   }),
             ),
-          )
+          ),
+
         ],
       ),
     );
   }
+
+  void _onSubmitSearch() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if(!currentFocus.hasPrimaryFocus) {
+      currentFocus.unfocus();
+    }
+    if(_textEditingController.text.isEmpty) {
+      return;
+    }
+    fetchData();
+  }
+
+
 
   bool _isLastItem(int index) {
     return index == _characterPagingController.itemList!.length - 1;

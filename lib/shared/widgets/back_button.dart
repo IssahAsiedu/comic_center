@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../utils.dart';
+
 class AppBackButton extends StatelessWidget {
   const AppBackButton({
     super.key,
@@ -9,8 +11,7 @@ class AppBackButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      style: OutlinedButton.styleFrom(
-          shape: const CircleBorder(), backgroundColor: Colors.white54),
+      style: kOutlinedButtonCircleBackgroundStyle,
       onPressed: () => GoRouter.of(context).pop(),
       child: const Icon(
         Icons.arrow_back,

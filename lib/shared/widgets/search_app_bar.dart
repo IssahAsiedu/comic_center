@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils.dart';
+
 var border = OutlineInputBorder(
   borderSide: const BorderSide(color: Colors.transparent, width: 0),
   borderRadius: BorderRadius.circular(30),
@@ -7,6 +9,7 @@ var border = OutlineInputBorder(
 
 class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function(String text)? onTextChange;
+  final Function()? onSubmit;
   final TextEditingController textController;
   final String title;
   final String hintText;
@@ -19,6 +22,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title = 'Enjoy Marvel\'s Collection',
     this.hintText = 'Enter search key',
     this.searchBoxWidth,
+    this.onSubmit
   }) : super(key: key);
 
   @override
@@ -34,6 +38,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
         TextField(
           controller: textController,
           onChanged: onTextChange,
+          onEditingComplete: onSubmit,
           style: Theme.of(context).textTheme.bodyMedium,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.search),
@@ -41,6 +46,9 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
             hintText: hintText,
             fillColor: const Color(0x0ff00fff),
             filled: true,
+            suffixIcon: OutlinedButton(onPressed: onSubmit,
+              style: kOutlinedButtonCircleBackgroundStyle,
+              child: const Icon(Icons.arrow_forward, color: Colors.white),),
             contentPadding: EdgeInsets.zero,
             focusedBorder: border,
             enabledBorder: border,

@@ -1,4 +1,4 @@
-import 'package:comics_center/shared/AppAssets.dart';
+import 'package:comics_center/shared/app_assets.dart';
 import 'package:flutter/material.dart';
 
 import '../models/Comic_price.dart';
