@@ -64,3 +64,4 @@ class ComicDetailBody extends StatelessWidget {
     );
   }
 }
+

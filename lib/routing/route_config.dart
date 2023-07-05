@@ -10,6 +10,8 @@ class AppRoute {
   static const characters = "/characters";
   static const comics = "/comics";
 
+  AppRoute._();
+
   static characterRouteWithParam([String? id]) => "$characters/${id ?? ':id'}";
 
   static comicRouteWithParam([String? id]) => "$comics/${id ?? ':id'}";

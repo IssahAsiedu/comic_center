@@ -56,7 +56,7 @@ class CharacterDetailBody extends StatelessWidget {
                       child: DetailList(
                           items: characterDetails.comics, title: "Comics",
                         onTap: (e) {
-                          GoRouter.of(context).push(AppRoute.comicRouteWithParam("${e.id}"));
+                          GoRouter.of(context).pushReplacement(AppRoute.comicRouteWithParam("${e.id}"));
                         },
                       ),
                     ),

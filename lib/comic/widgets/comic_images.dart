@@ -1,4 +1,5 @@
 import 'package:comics_center/comic/models/comic_details.dart';
+import 'package:comics_center/download/downloader.dart';
 import 'package:comics_center/shared/widgets/filled_image_container.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,19 @@ class _ComicImagesState extends State<ComicImages> {
             width: size.width,
             clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(borderRadius: kCircularBorder12),
-            child: FilledImageContainer(imageUrl: selectedImage),
+            child: Stack(
+              children: [
+                Positioned.fill(child: FilledImageContainer(imageUrl: selectedImage)),
+                Positioned(
+                  right: 20,
+                  bottom: 5,
+                    child: IconButton(
+                      color: Colors.blue,
+                      icon: const Icon(Icons.download, size: 40,), onPressed: () {
+                        Downloader().download(selectedImage, 1);
+                    },))
+              ],
+             ),
           ),
         ),
         const SizedBox(
@@ -65,8 +78,12 @@ class _ComicImagesState extends State<ComicImages> {
                     clipBehavior: Clip.antiAlias,
                     width: 80,
                     height: 80,
-                    decoration: BoxDecoration(borderRadius: kCircularBorder12,
-                    border: _isSelected(images.elementAt(i)) ? Border.all(width: 2, color: Colors.blue) : null,),
+                    decoration: BoxDecoration(
+                      borderRadius: kCircularBorder12,
+                      border: _isSelected(images.elementAt(i))
+                          ? Border.all(width: 2, color: Colors.blue)
+                          : null,
+                    ),
                     child: FilledImageContainer(
                       borderRadius: kCircularBorder12,
                       imageUrl: images.elementAt(i),
@@ -85,9 +102,11 @@ class _ComicImagesState extends State<ComicImages> {
   }
 
   void _onSelectedImage() {
-    showDialog(context: context, builder: (_) {
-      return InteractiveViewer(
-          child: FilledImageContainer(imageUrl: selectedImage));
-    });
+    showDialog(
+        context: context,
+        builder: (_) {
+          return InteractiveViewer(
+              child: FilledImageContainer(imageUrl: selectedImage));
+        });
   }
 }
