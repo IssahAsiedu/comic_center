@@ -17,7 +17,7 @@ A flutter application that fetches comics from the marvel api.
 
 <table>
     <tr>
-        <td><img src="./exhibit/img_#2.png"/></td>
-        <td><img src="./exhibit/img_#1.png"/></td>
+        <td><img src="./exhibit/img2.png" width=250px height=500px /></td>
+        <td><img src="./exhibit/img1.png" width=250px height=500px/></td>
     </tr>
 </table>
