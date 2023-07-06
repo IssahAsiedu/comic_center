@@ -25,6 +25,7 @@ dependencies:
   permission_handler: ^10.4.1
   path: ^1.8.2
   flutter_riverpod: ^2.3.6
+  lottie: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +41,7 @@ flutter:
   assets:
      - .env
      - assets/images/
+     - assets/lottie/
 
   fonts:
      - family: Bangers

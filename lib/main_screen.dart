@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:comics_center/network/response.dart';
 import 'package:comics_center/routing/route_config.dart';
+import 'package:comics_center/shared/app_assets.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:comics_center/shared/widgets/search_app_bar.dart';
 import 'package:comics_center/shared/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:lottie/lottie.dart';
 
 import 'character/models/character.dart';
 import 'character/widgets/character_card.dart';
@@ -135,6 +137,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 builderDelegate: PagedChildBuilderDelegate(
                     animateTransitions: true,
+                    firstPageProgressIndicatorBuilder: (_) =>  Lottie.asset(AppAssets.drStrangeLottieFile),
                     itemBuilder: (context, item, index) {
                       var itemWidth = MediaQuery.of(context).size.width * 0.8;
                       return GestureDetector(
@@ -173,6 +176,7 @@ class _MainScreenState extends State<MainScreen> {
                   clipBehavior: Clip.antiAlias,
                   pagingController: _comicsPagingController,
                   builderDelegate: PagedChildBuilderDelegate(
+                      firstPageProgressIndicatorBuilder: (_) =>  Lottie.asset(AppAssets.drStrangeLottieFile),
                       itemBuilder: (context, item, index) {
                     return GestureDetector(
                         onTap: () {

@@ -1,8 +1,10 @@
 import 'package:comics_center/character/widgets/character_detail_body.dart';
 import 'package:comics_center/network/response.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../network/rest_client.dart';
+import '../../shared/app_assets.dart';
 import '../models/character_detail.dart';
 
 class CharacterDetailPage extends StatefulWidget {
@@ -25,7 +27,7 @@ class _CharacterDetailPageState extends State<CharacterDetailPage> {
         future: RestClient().getCharacterDetails(widget.id),
         builder: (_, snapshot) {
             if(snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator(),);
+              return Center(child: Lottie.asset(AppAssets.drStrangeLottieFile),);
             }
 
             if(!snapshot.hasData) {

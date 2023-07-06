@@ -1,8 +1,10 @@
 import 'package:comics_center/comic/widgets/comic_detail_body.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../network/response.dart';
 import '../../network/rest_client.dart';
+import '../../shared/app_assets.dart';
 import '../models/comic_details.dart';
 
 class ComicDetailPage extends StatelessWidget {
@@ -18,8 +20,8 @@ class ComicDetailPage extends StatelessWidget {
         future: RestClient().getComicDetails(id),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return  Center(
+              child: Lottie.asset(AppAssets.drStrangeLottieFile),
             );
           }
 
