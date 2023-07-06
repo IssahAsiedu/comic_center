@@ -36,10 +36,11 @@ class NotificationService {
         channelShowBadge: false,
         importance: Importance.max,
         priority: Priority.high,
-        onlyAlertOnce: true,
+        onlyAlertOnce: false,
         showProgress: true,
         maxProgress: count,
-        progress: i);
+        progress: i
+    );
 
     var platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);

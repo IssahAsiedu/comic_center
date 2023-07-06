@@ -1,7 +1,8 @@
 import 'package:comics_center/comic/models/comic_details.dart';
-import 'package:comics_center/download/downloader.dart';
+import 'package:comics_center/providers/providers.dart';
 import 'package:comics_center/shared/widgets/filled_image_container.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../shared/utils.dart';
 
@@ -46,11 +47,7 @@ class _ComicImagesState extends State<ComicImages> {
                 Positioned(
                   right: 20,
                   bottom: 5,
-                    child: IconButton(
-                      color: Colors.blue,
-                      icon: const Icon(Icons.download, size: 40,), onPressed: () {
-                        Downloader().download(selectedImage, 1);
-                    },))
+                    child: DownloadButton(selectedImage: selectedImage))
               ],
              ),
           ),
@@ -108,5 +105,43 @@ class _ComicImagesState extends State<ComicImages> {
           return InteractiveViewer(
               child: FilledImageContainer(imageUrl: selectedImage));
         });
+  }
+}
+
+class DownloadButton extends ConsumerWidget {
+  const DownloadButton({
+    super.key,
+    required this.selectedImage,
+  });
+
+  final String selectedImage;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var downloader = ref.watch(downloaderProvider);
+
+    int value = downloader.cache[selectedImage] ?? 0;
+
+    return CircleAvatar(
+      backgroundColor: Colors.black,
+      radius: 30,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+           SizedBox(
+            width: 50,
+              height: 50,
+              child: CircularProgressIndicator(
+                value: value.toDouble(),
+              )),
+          IconButton(
+            iconSize: 30,
+            color: Colors.white,
+            icon: const Icon(Icons.download,), onPressed: () {
+             downloader.downloadOnAndroid(selectedImage);
+          },),
+        ],
+      ),
+    );
   }
 }

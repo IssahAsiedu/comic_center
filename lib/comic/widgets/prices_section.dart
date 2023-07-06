@@ -31,7 +31,7 @@ class PricesSection extends StatelessWidget {
             return Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Image.asset(imgSrc, width: 50, height: 50,),
+                Image.asset(imgSrc, width: 30, height: 30,),
                 const SizedBox(
                   width: 3,
                 ),
