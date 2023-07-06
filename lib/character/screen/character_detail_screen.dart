@@ -23,22 +23,26 @@ class _CharacterDetailPageState extends State<CharacterDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black54,
-      body: FutureBuilder<ApiResponse<CharacterDetails>> (
+      body: FutureBuilder<ApiResponse<CharacterDetails>>(
         future: RestClient().getCharacterDetails(widget.id),
         builder: (_, snapshot) {
-            if(snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: Lottie.asset(AppAssets.drStrangeLottieFile),);
-            }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: Lottie.asset(AppAssets.drStrangeLottieFile),
+            );
+          }
 
-            if(!snapshot.hasData) {
-              return const Center(child: Text('No data was received'),);
-            }
+          if (!snapshot.hasData) {
+            return const Center(
+              child: Text('No data was received'),
+            );
+          }
 
-            if(snapshot.hasError || snapshot.data!.status == Status.error) {
-              return const Center(child: Text("An error occurred"));
-            }
+          if (snapshot.hasError || snapshot.data!.status == Status.error) {
+            return const Center(child: Text("An error occurred"));
+          }
 
-            return CharacterDetailBody(characterDetails: snapshot.data!.data!);
+          return CharacterDetailBody(characterDetails: snapshot.data!.data!);
         },
       ),
     );
