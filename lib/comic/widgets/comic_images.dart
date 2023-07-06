@@ -120,7 +120,7 @@ class DownloadButton extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     var downloader = ref.watch(downloaderProvider);
 
-    int value = downloader.cache[selectedImage] ?? 0;
+    int value = downloader[selectedImage] ?? 0;
 
     return CircleAvatar(
       backgroundColor: Colors.black,
@@ -138,7 +138,7 @@ class DownloadButton extends ConsumerWidget {
             iconSize: 30,
             color: Colors.white,
             icon: const Icon(Icons.download,), onPressed: () {
-             downloader.downloadOnAndroid(selectedImage);
+             ref.read(downloaderProvider.notifier).downloadOnAndroid(selectedImage);
           },),
         ],
       ),

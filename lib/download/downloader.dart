@@ -4,13 +4,12 @@ import 'dart:io';
 import 'package:comics_center/download/notification.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
-import 'package:flutter/material.dart';
 
-class Downloader extends ChangeNotifier {
+class Downloader extends Notifier<Map<String, int>> {
   NotificationService notificationService = NotificationService();
-  Map<String, int> cache = <String, int>{};
 
   //this function only works on android
   void downloadOnAndroid(String url) async {
@@ -27,18 +26,23 @@ class Downloader extends ChangeNotifier {
       String currentFileName = "$hash.$extension";
 
       String savingPath = path.join(dir.path, currentFileName);
-      var id = cache.length + 1;
+      var id = state.length + 1;
 
       dio.download(url, savingPath, onReceiveProgress: (count, total){
           var progress = ((count / total) * 100).toInt();
           notificationService.createNotification(100, progress, id);
-          cache[url] = progress;
-          notifyListeners();
+          state[url] = progress;
+          ref.notifyListeners();
       });
 
     } catch (e) {
       print("an error just occurred");
     }
+  }
+
+  @override
+  Map<String, int> build() {
+    return <String, int>{};
   }
 
 

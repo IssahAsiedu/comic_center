@@ -3,14 +3,21 @@
 A new Flutter project.
 
 ## Getting Started
+<p>
+A flutter application that fetches comics from the marvel api.
+</p>
 
-This project is a starting point for a Flutter application.
+<p>
+    Currently, the images of comics can only be downloaded on android.
+</p>
 
-A few resources to get you started if this is your first Flutter project:
+<p>
+ Flutter version used is 3.7.12
+</p>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<table>
+    <tr>
+        <td><img src="./exhibit/img_#2.png"/></td>
+        <td><img src="./exhibit/img_#1.png"/></td>
+    </tr>
+</table>
