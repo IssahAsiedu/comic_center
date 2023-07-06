@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
-class Downloader extends Notifier<Map<String, int>> {
+class Downloader extends Notifier<Map<String, double>> {
   NotificationService notificationService = NotificationService();
 
   //this function only works on android
@@ -29,8 +29,8 @@ class Downloader extends Notifier<Map<String, int>> {
       var id = state.length + 1;
 
       dio.download(url, savingPath, onReceiveProgress: (count, total){
-          var progress = ((count / total) * 100).toInt();
-          notificationService.createNotification(100, progress, id);
+          var progress = ((count / total) * 100);
+          notificationService.createNotification(100, progress.toInt(), id);
           state[url] = progress;
           ref.notifyListeners();
       });
@@ -41,8 +41,8 @@ class Downloader extends Notifier<Map<String, int>> {
   }
 
   @override
-  Map<String, int> build() {
-    return <String, int>{};
+  Map<String, double> build() {
+    return <String, double>{};
   }
 
 
