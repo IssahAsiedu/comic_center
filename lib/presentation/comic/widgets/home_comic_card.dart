@@ -35,19 +35,51 @@ class HomeComicCard extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              const ColoredBox(color: Colors.black12),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    comic.name,
-                    style: const TextStyle(color: Colors.white),
+              const Positioned.fill(
+                child: ColoredBox(color: Colors.black12),
+              ),
+              SizedBox(
+                width: width,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 35,
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Colors.black45,
+                            borderRadius: BorderRadius.circular(3)),
+                        child: Text(
+                          comic.name,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 19,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(2)),
+                        child: Text(
+                          '#${comic.id}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10)
+                    ],
                   ),
-                  Text(
-                    '#${comic.issueNumber}',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
+                ),
               )
             ],
           )),
