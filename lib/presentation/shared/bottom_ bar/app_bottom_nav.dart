@@ -17,28 +17,32 @@ class _AppBottomNavigationBarState
     final halfScreen = MediaQuery.of(context).size.width * 0.5;
 
     ref.watch(homeViewProvider);
+    final homeScrolling = ref.watch(homeScrollingProvider);
 
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: halfScreen / 2, vertical: 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFF636363),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      height: 70,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _BottomButton(
-            selected: getSelectedIndex(0),
-            onTap: () => ref.read(homeViewProvider.notifier).state = 0,
-          ),
-          const SizedBox(width: 20),
-          _BottomButton(
-            iconData: Icons.bookmark_border_rounded,
-            selected: getSelectedIndex(4),
-            onTap: () => ref.read(homeViewProvider.notifier).state = 4,
-          )
-        ],
+    return Visibility(
+      visible: !homeScrolling,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: halfScreen / 2, vertical: 10),
+        decoration: BoxDecoration(
+          color: const Color(0xFF636363),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        height: 70,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _BottomButton(
+              selected: getSelectedIndex(0),
+              onTap: () => ref.read(homeViewProvider.notifier).state = 0,
+            ),
+            const SizedBox(width: 20),
+            _BottomButton(
+              iconData: Icons.bookmark_border_rounded,
+              selected: getSelectedIndex(4),
+              onTap: () => ref.read(homeViewProvider.notifier).state = 4,
+            )
+          ],
+        ),
       ),
     );
   }
