@@ -3,4 +3,5 @@ class AppStrings {
 
   static String comicsTitle = "Comics";
   static String charactersTitle = "Characters";
+  static String storiesTitle = "Stories";
 }

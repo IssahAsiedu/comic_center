@@ -1,5 +1,6 @@
 import 'package:comics_center/presentation/screen_sections/home_all_characters.dart';
 import 'package:comics_center/presentation/screen_sections/home_all_comics.dart';
+import 'package:comics_center/presentation/screen_sections/home_all_stories.dart';
 import 'package:flutter/material.dart';
 
 class HomeAllScreen extends StatelessWidget {
@@ -11,7 +12,9 @@ class HomeAllScreen extends StatelessWidget {
       children: const [
         HomeAllCharactersSection(),
         SizedBox(height: 20),
-        HomeAllComicsSection()
+        HomeAllComicsSection(),
+        SizedBox(height: 20),
+        HomeAllStoriesSection()
       ],
     );
   }
