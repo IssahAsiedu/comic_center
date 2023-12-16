@@ -12,7 +12,10 @@ class CharacterDetailPage extends StatefulWidget {
 
   final String id;
 
-  const CharacterDetailPage({Key? key, required this.id}) : super(key: key);
+  const CharacterDetailPage({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
   State<CharacterDetailPage> createState() => _CharacterDetailPageState();

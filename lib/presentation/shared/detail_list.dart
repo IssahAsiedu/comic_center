@@ -6,9 +6,12 @@ class DetailList<T extends Item> extends StatelessWidget {
   final List<T> items;
   final void Function(T t)? onTap;
 
-  const DetailList(
-      {Key? key, required this.items, required this.title, this.onTap})
-      : super(key: key);
+  const DetailList({
+    Key? key,
+    required this.items,
+    required this.title,
+    this.onTap,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +32,29 @@ class DetailList<T extends Item> extends StatelessWidget {
     }
 
     return DataTable(
+      dividerThickness: 1,
+      showBottomBorder: true,
       columns: [
         DataColumn(
             label: Expanded(
                 child: Text(
           title,
-          style: const TextStyle(color: Colors.white, fontSize: 20),
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: 'Bangers',
+            decoration: TextDecoration.underline,
+          ),
         )))
       ],
       rows: items
           .map((e) => DataRow(cells: [
-                DataCell(Text(e.name), onTap: () {
-                  onTap?.call(e);
-                })
+                DataCell(
+                  Text(e.name),
+                  onTap: () {
+                    onTap?.call(e);
+                  },
+                )
               ]))
           .toList(),
     );
