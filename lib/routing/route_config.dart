@@ -1,9 +1,8 @@
-import 'package:comics_center/character/screen/character_detail_screen.dart';
-import 'package:comics_center/main_screen.dart';
+import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
+import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
+import 'package:comics_center/presentation/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import '../comic/screen/comic_detail.dart';
 
 class AppRoute {
   static const root = "/";
@@ -17,7 +16,7 @@ class AppRoute {
   static comicRouteWithParam([String? id]) => "$comics/${id ?? ':id'}";
 
   static Widget _homePageRouteBuilder(BuildContext context, GoRouterState _) {
-    return const MainScreen();
+    return const HomeScreen();
   }
 
   static Widget _characterWithParam(BuildContext context, GoRouterState state) {

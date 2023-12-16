@@ -1,21 +1,21 @@
 import 'dart:async';
 
-import 'package:comics_center/network/response.dart';
+import 'package:comics_center/domain/character/character.dart';
+import 'package:comics_center/domain/comic/comic.dart';
+import 'package:comics_center/infrastructure/network/response.dart';
+import 'package:comics_center/infrastructure/network/rest_client.dart';
+import 'package:comics_center/presentation/character/widgets/character_card.dart';
+import 'package:comics_center/presentation/comic/widgets/comic_card.dart';
+import 'package:comics_center/presentation/shared/search_app_bar.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:comics_center/shared/app_assets.dart';
 import 'package:comics_center/shared/app_strings.dart';
-import 'package:comics_center/shared/widgets/search_app_bar.dart';
-import 'package:comics_center/shared/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lottie/lottie.dart';
 
-import 'character/models/character.dart';
-import 'character/widgets/character_card.dart';
-import 'comic/models/comic.dart';
-import 'comic/widgets/comic_card.dart';
-import 'network/rest_client.dart';
+import 'presentation/shared/slide_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
   final PagingController<int, Comic> _comicsPagingController =
       PagingController(firstPageKey: 0);
   final TextEditingController _textEditingController = TextEditingController();
-  final RestClient _client = RestClient();
+  final MarvelRestClient _client = MarvelRestClient();
   Timer? timer;
   final int limit = 10;
 
@@ -96,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
 
   void searchTextChanged(String text) {
     timer?.cancel();
-    if(text.isEmpty) {
+    if (text.isEmpty) {
       timer = Timer(const Duration(seconds: 2), () => fetchData());
     }
   }
@@ -110,21 +110,21 @@ class _MainScreenState extends State<MainScreen> {
       appBar: SearchAppBar(
         textController: _textEditingController,
         onTextChange: searchTextChanged,
-        onSubmit:  _onSubmitSearch,
+        onSubmit: _onSubmitSearch,
       ),
       body: CustomScrollView(
         slivers: [
-            SliverToBoxAdapter(
-              child: SlideWidget(
-                child: Container(
-                  margin: const EdgeInsets.only(top: 20, bottom: 20, left: 10),
-                  child:  Text(
-                    AppStrings.charactersTitle,
-                    style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
-                  ),
+          SliverToBoxAdapter(
+            child: SlideWidget(
+              child: Container(
+                margin: const EdgeInsets.only(top: 20, bottom: 20, left: 10),
+                child: Text(
+                  AppStrings.charactersTitle,
+                  style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
                 ),
               ),
             ),
+          ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: listHeight,
@@ -137,7 +137,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 builderDelegate: PagedChildBuilderDelegate(
                     animateTransitions: true,
-                    firstPageProgressIndicatorBuilder: (_) =>  Lottie.asset(AppAssets.drStrangeLottieFile),
+                    firstPageProgressIndicatorBuilder: (_) =>
+                        Lottie.asset(AppAssets.drStrangeLottieFile),
                     itemBuilder: (context, item, index) {
                       var itemWidth = MediaQuery.of(context).size.width * 0.8;
                       return GestureDetector(
@@ -161,14 +162,14 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ),
           ),
-            SliverToBoxAdapter(
-              child: Container(
-                  margin: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
-                  child:  Text(
-                    AppStrings.comicsTitle,
-                    style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
-                  )),
-            ),
+          SliverToBoxAdapter(
+            child: Container(
+                margin: const EdgeInsets.only(top: 15, left: 15, bottom: 15),
+                child: Text(
+                  AppStrings.comicsTitle,
+                  style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
+                )),
+          ),
           SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.of(context).size.height - listHeight,
@@ -176,15 +177,16 @@ class _MainScreenState extends State<MainScreen> {
                   clipBehavior: Clip.antiAlias,
                   pagingController: _comicsPagingController,
                   builderDelegate: PagedChildBuilderDelegate(
-                      firstPageProgressIndicatorBuilder: (_) =>  Lottie.asset(AppAssets.drStrangeLottieFile),
+                      firstPageProgressIndicatorBuilder: (_) =>
+                          Lottie.asset(AppAssets.drStrangeLottieFile),
                       itemBuilder: (context, item, index) {
-                    return GestureDetector(
-                        onTap: () {
-                          GoRouter.of(context)
-                              .push(AppRoute.comicRouteWithParam("${item.id}"));
-                        },
-                        child: ComicCard(comic: item));
-                  }),
+                        return GestureDetector(
+                            onTap: () {
+                              GoRouter.of(context).push(
+                                  AppRoute.comicRouteWithParam("${item.id}"));
+                            },
+                            child: ComicCard(comic: item));
+                      }),
                   separatorBuilder: (_, i) {
                     return const SizedBox(
                       height: 10,
@@ -192,7 +194,6 @@ class _MainScreenState extends State<MainScreen> {
                   }),
             ),
           ),
-
         ],
       ),
     );
@@ -200,16 +201,14 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onSubmitSearch() {
     FocusScopeNode currentFocus = FocusScope.of(context);
-    if(!currentFocus.hasPrimaryFocus) {
+    if (!currentFocus.hasPrimaryFocus) {
       currentFocus.unfocus();
     }
-    if(_textEditingController.text.isEmpty) {
+    if (_textEditingController.text.isEmpty) {
       return;
     }
     fetchData();
   }
-
-
 
   bool _isLastItem(int index) {
     return index == _characterPagingController.itemList!.length - 1;
