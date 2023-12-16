@@ -3,12 +3,10 @@ import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/character/widgets/character_card.dart';
 import 'package:comics_center/routing/route_config.dart';
-import 'package:comics_center/shared/app_assets.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:lottie/lottie.dart';
 
 class HomeAllCharactersSection extends StatefulWidget {
   const HomeAllCharactersSection({super.key});
