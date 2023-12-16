@@ -9,7 +9,6 @@ class HomeAllScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: const [
-        SizedBox(height: 120),
         HomeAllCharactersSection(),
         SizedBox(height: 20),
         HomeAllComicsSection()
