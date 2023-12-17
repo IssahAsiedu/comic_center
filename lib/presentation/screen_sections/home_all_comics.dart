@@ -97,10 +97,12 @@ class _HomeAllComicsSectionState extends State<HomeAllComicsSection> {
     }
 
     var pages = (response.data!.total / limit).ceil();
-    if (pageKey == pages) {
+    if (pageKey == pages && mounted) {
       _comicsPagingController.appendLastPage(response.data!.data);
       return;
     }
+
+    if (!mounted) return;
     _comicsPagingController.appendPage(response.data!.data, ++pageKey);
   }
 

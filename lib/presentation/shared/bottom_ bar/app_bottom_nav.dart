@@ -50,7 +50,7 @@ class _AppBottomNavigationBarState
   bool getSelectedIndex(int index) {
     final selectedHomeOption = ref.read(homeViewProvider);
     if (index == 0) {
-      return selectedHomeOption == 0;
+      return selectedHomeOption < 4;
     }
 
     return selectedHomeOption == 4;

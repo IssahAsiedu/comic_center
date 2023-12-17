@@ -15,24 +15,29 @@ class HomeScreen extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(homeViewProvider);
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: const HomeAppBar(),
-      body: Stack(children: [
-        const [
-          HomeAllScreen(),
-          HomeCharactersScreen(),
-          HomeComicsScreen(),
-          HomeStoriesScreen(),
-          Placeholder(),
-        ][selectedOption],
-        const Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: AppBottomNavigationBar(),
+    return FocusScope(
+      child: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          appBar: const HomeAppBar(),
+          body: Stack(children: [
+            const [
+              HomeAllScreen(),
+              HomeCharactersScreen(),
+              HomeComicsScreen(),
+              HomeStoriesScreen(),
+              Placeholder(),
+            ][selectedOption],
+            const Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: AppBottomNavigationBar(),
+            ),
+          ]),
         ),
-      ]),
+      ),
     );
   }
 

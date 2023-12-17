@@ -14,15 +14,15 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String hintText;
   final double? searchBoxWidth;
 
-  const SearchAppBar(
-      {Key? key,
-      this.onTextChange,
-      required this.textController,
-      this.title = 'Enjoy Marvel\'s Collection',
-      this.hintText = 'Enter search key',
-      this.searchBoxWidth,
-      this.onSubmit})
-      : super(key: key);
+  const SearchAppBar({
+    Key? key,
+    this.onTextChange,
+    required this.textController,
+    this.title = 'Enjoy Marvel\'s Collection',
+    this.hintText = 'Enter search key',
+    this.searchBoxWidth,
+    this.onSubmit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +31,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
       padding: const EdgeInsets.all(24),
       child: Column(children: [
         Align(alignment: Alignment.topLeft, child: Text(title)),
-        const SizedBox(
-          height: 20,
-        ),
+        const SizedBox(height: 20),
         TextField(
           controller: textController,
           onChanged: onTextChange,

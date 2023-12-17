@@ -84,8 +84,6 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
   Future<void> fetchStories(int pageKey) async {
     var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
 
-    print('running');
-
     var response = await MarvelRestClient().getStories(query);
 
     if (response.status == Status.error) {
@@ -95,11 +93,12 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
 
     var pages = (response.data!.total / limit).ceil();
 
-    if (pageKey == pages) {
+    if (pageKey == pages && mounted) {
       _storyPagingController.appendLastPage(response.data!.data);
       return;
     }
 
+    if (!mounted) return;
     _storyPagingController.appendPage(response.data!.data, ++pageKey);
   }
 
