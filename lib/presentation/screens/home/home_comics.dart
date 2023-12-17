@@ -3,7 +3,6 @@ import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/comic_card.dart';
 import 'package:comics_center/presentation/shared/search_field.dart';
-import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +18,6 @@ class HomeComicsScreen extends ConsumerStatefulWidget {
 
 class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
   final _searchController = TextEditingController();
-  final _focusNode = FocusNode();
 
   final PagingController<int, Comic> _comicsPagingController =
       PagingController(firstPageKey: 0);
@@ -29,15 +27,6 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
   @override
   void initState() {
     _comicsPagingController.addPageRequestListener(fetchComics);
-
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        ref.read(homeScrollingProvider.notifier).state = true;
-        return;
-      }
-      ref.read(homeScrollingProvider.notifier).state = false;
-    });
-
     super.initState();
   }
 
@@ -85,7 +74,6 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                 right: 24,
               ),
               child: SearchField(
-                focusNode: _focusNode,
                 textController: _searchController,
                 onSubmit: _onSubmitText,
               ),
@@ -128,7 +116,6 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
 
   @override
   void dispose() {
-    _focusNode.dispose();
     _searchController.dispose();
     _comicsPagingController.dispose();
     super.dispose();

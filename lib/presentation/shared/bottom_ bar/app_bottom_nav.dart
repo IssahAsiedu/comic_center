@@ -1,5 +1,6 @@
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class AppBottomNavigationBar extends ConsumerStatefulWidget {
@@ -19,32 +20,35 @@ class _AppBottomNavigationBarState
     ref.watch(homeViewProvider);
     final homeScrolling = ref.watch(homeScrollingProvider);
 
-    return Visibility(
-      visible: !homeScrolling,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: halfScreen / 2, vertical: 10),
-        decoration: BoxDecoration(
-          color: const Color(0xFF636363),
-          borderRadius: BorderRadius.circular(50),
+    return KeyboardVisibilityBuilder(builder: (_, isKeyboardVisible) {
+      return Visibility(
+        visible: !homeScrolling && !isKeyboardVisible,
+        child: Container(
+          margin:
+              EdgeInsets.symmetric(horizontal: halfScreen / 2, vertical: 10),
+          decoration: BoxDecoration(
+            color: const Color(0xFF636363),
+            borderRadius: BorderRadius.circular(50),
+          ),
+          height: 70,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _BottomButton(
+                selected: getSelectedIndex(0),
+                onTap: () => ref.read(homeViewProvider.notifier).state = 0,
+              ),
+              const SizedBox(width: 20),
+              _BottomButton(
+                iconData: Icons.bookmark_border_rounded,
+                selected: getSelectedIndex(4),
+                onTap: () => ref.read(homeViewProvider.notifier).state = 4,
+              )
+            ],
+          ),
         ),
-        height: 70,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _BottomButton(
-              selected: getSelectedIndex(0),
-              onTap: () => ref.read(homeViewProvider.notifier).state = 0,
-            ),
-            const SizedBox(width: 20),
-            _BottomButton(
-              iconData: Icons.bookmark_border_rounded,
-              selected: getSelectedIndex(4),
-              onTap: () => ref.read(homeViewProvider.notifier).state = 4,
-            )
-          ],
-        ),
-      ),
-    );
+      );
+    });
   }
 
   bool getSelectedIndex(int index) {
