@@ -58,8 +58,11 @@ class _HomeAllComicsSectionState extends State<HomeAllComicsSection> {
               scrollDirection: Axis.horizontal,
               clipBehavior: Clip.antiAlias,
               pagingController: _comicsPagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                  itemBuilder: (context, item, index) {
+              builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
+                context,
+                item,
+                index,
+              ) {
                 var itemWidth = MediaQuery.of(context).size.width * 0.4;
 
                 var margin = EdgeInsets.only(

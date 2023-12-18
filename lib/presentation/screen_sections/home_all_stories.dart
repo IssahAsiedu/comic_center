@@ -55,7 +55,11 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
             separatorBuilder: (context, index) => const SizedBox(width: 20),
             builderDelegate: PagedChildBuilderDelegate(
                 animateTransitions: true,
-                itemBuilder: (context, item, index) {
+                itemBuilder: (
+                  context,
+                  item,
+                  index,
+                ) {
                   var itemWidth = MediaQuery.of(context).size.width * 0.4;
 
                   var margin = EdgeInsets.only(
