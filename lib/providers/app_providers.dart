@@ -3,3 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final downloaderProvider =
     NotifierProvider<Downloader, Map<String, double>>(Downloader.new);
+
+
+final subabaseClientProvider = Provider((ref) => Supaba)
