@@ -1,6 +1,6 @@
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/presentation/shared/filled_image_container.dart';
-import 'package:comics_center/providers/providers.dart';
+import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

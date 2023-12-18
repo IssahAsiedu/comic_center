@@ -1,17 +1,21 @@
+import 'dart:async';
+
 import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
 import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
 import 'package:comics_center/presentation/screens/home/home.dart';
 import 'package:comics_center/presentation/screens/onboarding.dart';
+import 'package:comics_center/providers/app_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppRoute {
+class AppRoute extends AutoDisposeAsyncNotifier<void> implements Listenable {
   static const root = "/";
   static const characters = "/characters";
   static const comics = "/comics";
   static const home = "/home";
 
-  AppRoute._();
+  VoidCallback? _routerListener;
 
   static characterRouteWithParam([String? id]) => "$characters/${id ?? ':id'}";
 
@@ -29,12 +33,57 @@ class AppRoute {
     return ComicDetailPage(id: state.pathParameters["id"]!);
   }
 
-  static final GoRouter _router = GoRouter(routes: <GoRoute>[
+  final _router = <GoRoute>[
     GoRoute(path: root, builder: _homePageRouteBuilder),
     GoRoute(path: home, builder: (_, state) => const HomeScreen()),
     GoRoute(path: characterRouteWithParam(), builder: _characterWithParam),
     GoRoute(path: comicRouteWithParam(), builder: _comicWithParam)
-  ]);
+  ];
 
-  static GoRouter get router => _router;
+  List<GoRoute> get router => _router;
+
+  @override
+  void addListener(VoidCallback listener) {
+    _routerListener = listener;
+  }
+
+  @override
+  FutureOr<void> build() {
+    ref.listenSelf((previous, next) {
+      if (state.isLoading) return;
+      _routerListener?.call();
+    });
+  }
+
+  @override
+  void removeListener(VoidCallback listener) {
+    _routerListener = null;
+  }
+
+  String? redirect(BuildContext context, GoRouterState state) {
+    if (this.state.isLoading || this.state.hasError) return null;
+
+    final user = ref.read(supabaseClientProvider).auth.currentUser;
+
+    if (state.uri.path == root && user != null) {
+      return home;
+    }
+
+    return null;
+  }
 }
+
+final routerNotifierProvider =
+    AutoDisposeAsyncNotifierProvider<AppRoute, void>(AppRoute.new);
+
+final routerProvider = Provider.autoDispose<GoRouter>((ref) {
+  final routerNotifier = ref.watch(routerNotifierProvider.notifier);
+
+  return GoRouter(
+    initialLocation: AppRoute.root,
+    routes: routerNotifier.router,
+    refreshListenable: routerNotifier,
+    debugLogDiagnostics: true,
+    redirect: routerNotifier.redirect,
+  );
+});

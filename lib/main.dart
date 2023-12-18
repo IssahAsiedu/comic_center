@@ -1,18 +1,34 @@
+import 'package:comics_center/firebase_options.dart';
 import 'package:comics_center/routing/route_config.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  var supabaseAppUrl = dotenv.env['SUPABASE_APP_URL'];
+  var supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
+
+  await Supabase.initialize(
+    url: supabaseAppUrl!,
+    anonKey: supabaseAnonKey!,
+  );
+
   runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends HookConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.read(routerProvider);
+
     return MaterialApp.router(
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.white12,
@@ -21,9 +37,9 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white),
         ),
       ),
-      routeInformationParser: AppRoute.router.routeInformationParser,
-      routeInformationProvider: AppRoute.router.routeInformationProvider,
-      routerDelegate: AppRoute.router.routerDelegate,
+      routeInformationParser: router.routeInformationParser,
+      routeInformationProvider: router.routeInformationProvider,
+      routerDelegate: router.routerDelegate,
     );
   }
 }
