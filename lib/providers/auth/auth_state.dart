@@ -1,4 +1,4 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:comics_center/domain/user_data.dart';
 
 abstract class AuthState {
   const AuthState();
@@ -8,16 +8,18 @@ class AuthInitial extends AuthState {
   const AuthInitial();
 }
 
-class AuthLoading extends AuthState {}
+class AuthLoading extends AuthState {
+  const AuthLoading();
+}
 
 class AuthSuccess extends AuthState {
-  final User user;
+  final UserData user;
 
-  AuthSuccess(this.user);
+  const AuthSuccess(this.user);
 }
 
 class AuthError extends AuthState {
   final String message;
 
-  AuthError(this.message);
+  const AuthError(this.message);
 }

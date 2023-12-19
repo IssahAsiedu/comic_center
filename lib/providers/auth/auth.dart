@@ -1,3 +1,4 @@
+import 'package:comics_center/domain/user_data.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -34,17 +35,31 @@ class AuthNotifier extends p.Notifier<AuthState> {
                 accessToken: accessToken,
               );
 
-      state = AuthSuccess(response.user!);
+      final userData = <String, dynamic>{}
+        ..addAll(response.user!.userMetadata!);
+
+      userData['id'] = response.user!.id;
+      state = AuthSuccess(UserData.fromMap(userData));
+
       print('done');
     } catch (e) {
       print(e);
       print('failed');
-      state = AuthError('Login Failed');
+      state = const AuthError('Login Failed');
     }
   }
 
+  void logout() async {
+    var webClientId = dotenv.env['APP_WEB_CLIENT'];
+    ref.read(supabaseClientProvider).auth.signOut();
+    await GoogleSignIn(clientId: webClientId).signOut();
+    state = const AuthInitial();
+  }
+
   void setUser(sb.User user) {
-    state = AuthSuccess(user);
+    final userData = <String, dynamic>{}..addAll(user!.userMetadata!);
+    userData['id'] = user.id;
+    state = AuthSuccess(UserData.fromMap(userData));
   }
 }
 

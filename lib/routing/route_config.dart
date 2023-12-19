@@ -5,6 +5,7 @@ import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
 import 'package:comics_center/presentation/screens/home/home.dart';
 import 'package:comics_center/presentation/screens/onboarding.dart';
 import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -66,6 +67,7 @@ class AppRoute extends AutoDisposeAsyncNotifier<void> implements Listenable {
     final user = ref.read(supabaseClientProvider).auth.currentUser;
 
     if (state.uri.path == root && user != null) {
+      Future(() => ref.read(authProvider.notifier).setUser(user));
       return home;
     }
 

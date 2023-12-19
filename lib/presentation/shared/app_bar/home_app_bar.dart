@@ -1,4 +1,6 @@
 import 'package:comics_center/presentation/shared/button/selection_button.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -16,6 +18,7 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
+            const _UserDetails(),
             SizedBox(
               height: 40,
               child: ListView.separated(
@@ -40,5 +43,57 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(120);
+}
+
+class _UserDetails extends HookConsumerWidget {
+  const _UserDetails();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authState = ref.watch(authProvider);
+
+    if (authState is! AuthSuccess) return const SizedBox.shrink();
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                margin: const EdgeInsets.only(right: 10),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Image.network(authState.user.avatarUrl),
+              ),
+              Text('Hey, ${authState.user.displayName}'),
+            ],
+          ),
+          InkWell(
+            onTap: () => ref.read(authProvider.notifier).logout(),
+            child: Container(
+              width: 30,
+              height: 30,
+              padding: const EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white),
+                  borderRadius: BorderRadius.circular(15)),
+              child: const Icon(
+                Icons.logout,
+                color: Colors.white,
+                size: 19,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
 }
