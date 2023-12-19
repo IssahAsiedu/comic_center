@@ -1,4 +1,4 @@
-import 'package:comics_center/presentation/shared/search_app_bar.dart';
+import 'package:comics_center/presentation/widgets/search_app_bar.dart';
 import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
 

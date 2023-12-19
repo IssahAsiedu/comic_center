@@ -1,4 +1,4 @@
-import 'package:comics_center/presentation/shared/button/selection_button.dart';
+import 'package:comics_center/presentation/widgets/button/selection_button.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';

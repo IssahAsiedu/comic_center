@@ -1,5 +1,5 @@
 import 'package:comics_center/domain/comic/comic_details.dart';
-import 'package:comics_center/presentation/shared/filled_image_container.dart';
+import 'package:comics_center/presentation/widgets/filled_image_container.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
@@ -43,12 +43,16 @@ class _ComicImagesState extends State<ComicImages> {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: FilledImageContainer(imageUrl: selectedImage),
+                  child: FilledImageContainer(
+                    imageUrl: selectedImage,
+                  ),
                 ),
                 Positioned(
                   right: 20,
                   bottom: 5,
-                  child: DownloadButton(selectedImage: selectedImage),
+                  child: DownloadButton(
+                    selectedImage: selectedImage,
+                  ),
                 )
               ],
             ),

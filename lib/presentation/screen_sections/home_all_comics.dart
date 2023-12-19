@@ -76,7 +76,8 @@ class _HomeAllComicsSectionState extends State<HomeAllComicsSection> {
                   width: itemWidth,
                   height: listHeight,
                   onTap: () {
-                    var route = AppRoute.comicRouteWithParam("${item.id}");
+                    var route =
+                        AppRouteNotifier.comicRouteWithParam("${item.id}");
                     GoRouter.of(context).push(route);
                   },
                 );

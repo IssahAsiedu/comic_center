@@ -1,4 +1,4 @@
-import 'package:comics_center/presentation/shared/button/google_button.dart';
+import 'package:comics_center/presentation/widgets/button/google_button.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/routing/route_config.dart';
@@ -25,7 +25,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       }
 
       if (next is AuthSuccess) {
-        print('success');
+        GoRouter.of(context).pushReplacement(AppRouteNotifier.home);
       }
     });
 
@@ -111,7 +111,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 Align(
                   child: TextButton(
                     onPressed: () {
-                      GoRouter.of(context).pushReplacement(AppRoute.home);
+                      GoRouter.of(context)
+                          .pushReplacement(AppRouteNotifier.home);
                     },
                     style: TextButton.styleFrom(
                         backgroundColor: Colors.blueAccent),

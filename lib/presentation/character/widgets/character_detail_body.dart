@@ -1,11 +1,10 @@
 import 'package:comics_center/domain/character/character_detail.dart';
-import 'package:comics_center/presentation/shared/back_button.dart';
-import 'package:comics_center/presentation/shared/detail_list.dart';
+import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/detail_list.dart';
+import 'package:comics_center/presentation/widgets/slide_widget.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:comics_center/presentation/shared/slide_widget.dart';
 
 class CharacterDetailBody extends StatelessWidget {
   final CharacterDetails characterDetails;
@@ -32,7 +31,7 @@ class CharacterDetailBody extends StatelessWidget {
             title: "Comics",
             onTap: (e) {
               GoRouter.of(context).pushReplacement(
-                AppRoute.comicRouteWithParam("${e.id}"),
+                AppRouteNotifier.comicRouteWithParam("${e.id}"),
               );
             },
           ),

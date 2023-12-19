@@ -2,7 +2,7 @@ import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/comic_card.dart';
-import 'package:comics_center/presentation/shared/search_field.dart';
+import 'package:comics_center/presentation/widgets/search_field.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +54,7 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                     margin: margin,
                     onTap: () {
                       GoRouter.of(context).push(
-                        AppRoute.comicRouteWithParam("${item.id}"),
+                        AppRouteNotifier.comicRouteWithParam("${item.id}"),
                       );
                     },
                   );

@@ -2,13 +2,12 @@ import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/character/widgets/character_card.dart';
-import 'package:comics_center/presentation/shared/search_field.dart';
+import 'package:comics_center/presentation/widgets/search_field.dart';
+import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-
-import '../../../routing/route_config.dart';
 
 class HomeCharactersScreen extends ConsumerStatefulWidget {
   const HomeCharactersScreen({super.key});
@@ -59,7 +58,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                     itemHeight: 200,
                     onTap: () {
                       GoRouter.of(context).push(
-                        AppRoute.characterRouteWithParam("${item.id}"),
+                        AppRouteNotifier.characterRouteWithParam("${item.id}"),
                       );
                     },
                   );

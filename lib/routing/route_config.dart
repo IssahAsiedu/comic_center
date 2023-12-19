@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppRoute extends AutoDisposeAsyncNotifier<void> implements Listenable {
+class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
+    implements Listenable {
   static const root = "/";
   static const characters = "/characters";
   static const comics = "/comics";
@@ -76,13 +77,14 @@ class AppRoute extends AutoDisposeAsyncNotifier<void> implements Listenable {
 }
 
 final routerNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<AppRoute, void>(AppRoute.new);
+    AutoDisposeAsyncNotifierProvider<AppRouteNotifier, void>(
+        AppRouteNotifier.new);
 
 final routerProvider = Provider.autoDispose<GoRouter>((ref) {
   final routerNotifier = ref.watch(routerNotifierProvider.notifier);
 
   return GoRouter(
-    initialLocation: AppRoute.root,
+    initialLocation: AppRouteNotifier.root,
     routes: routerNotifier.router,
     refreshListenable: routerNotifier,
     debugLogDiagnostics: true,

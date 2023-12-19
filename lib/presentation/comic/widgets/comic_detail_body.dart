@@ -1,7 +1,7 @@
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/presentation/comic/widgets/prices_section.dart';
-import 'package:comics_center/presentation/shared/back_button.dart';
-import 'package:comics_center/presentation/shared/slide_widget.dart';
+import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'comic_images.dart';
