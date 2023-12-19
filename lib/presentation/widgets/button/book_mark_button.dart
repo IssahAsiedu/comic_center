@@ -1,7 +1,10 @@
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/exceptions.dart';
+import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
 import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class BookMarkButton extends ConsumerStatefulWidget {
@@ -32,11 +35,13 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
         try {
           setState(() => bookMarked = !bookMarked);
           await ref.read(bookmarkingProvider(widget.bookMarkable).future);
-          print('done bookmarking');
         } catch (e) {
           setState(() => bookMarked = !bookMarked);
           if (e is! UserNotFoundException) return;
-          print('User not found');
+          Navigator.of(context).push(LoginDialog(() async {
+            context.pop();
+            await ref.read(authProvider.notifier).googleLogin();
+          }));
         }
       },
       child: CircleAvatar(
