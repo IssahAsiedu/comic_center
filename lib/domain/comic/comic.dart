@@ -1,5 +1,6 @@
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/item.dart';
+import 'package:uuid/uuid.dart';
 
 class Comic extends Item implements BookMarkable {
   final int issueNumber;
@@ -29,4 +30,13 @@ class Comic extends Item implements BookMarkable {
 
   @override
   bool bookMarked;
+
+  @override
+  get bookmarkData => {
+        "pk": const Uuid().v4(),
+        "name": name,
+        "thumbnail": thumbnail,
+        "id": id,
+        "type": "Comic"
+      };
 }
