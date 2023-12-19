@@ -1,6 +1,7 @@
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/item.dart';
 
-class Comic extends Item {
+class Comic extends Item implements BookMarkable {
   final int issueNumber;
   final String format;
   final String thumbnail;
@@ -11,6 +12,7 @@ class Comic extends Item {
     required this.issueNumber,
     required this.format,
     required this.thumbnail,
+    this.bookMarked = false,
   });
 
   factory Comic.fromMap(Map<String, dynamic> json) {
@@ -24,4 +26,7 @@ class Comic extends Item {
         thumbnail: thumbnail,
         format: json["format"]);
   }
+
+  @override
+  bool bookMarked;
 }

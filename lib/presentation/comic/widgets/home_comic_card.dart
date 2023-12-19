@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/comic/comic.dart';
+import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:flutter/material.dart';
 
 class HomeComicCard extends StatelessWidget {
@@ -80,6 +81,13 @@ class HomeComicCard extends StatelessWidget {
                     ],
                   ),
                 ),
+              ),
+
+              //book mark
+              Positioned(
+                top: 10,
+                right: 10,
+                child: BookMarkButton(bookMarkable: comic),
               )
             ],
           )),

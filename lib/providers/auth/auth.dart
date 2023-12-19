@@ -11,10 +11,8 @@ class AuthNotifier extends p.Notifier<AuthState> {
   AuthState build() => const AuthInitial();
 
   Future<void> googleLogin() async {
-    state = AuthLoading();
+    state = const AuthLoading();
     var webClientId = dotenv.env['APP_WEB_CLIENT'];
-
-    print(webClientId);
 
     try {
       final googleSignIn = GoogleSignIn(clientId: webClientId);
@@ -24,7 +22,7 @@ class AuthNotifier extends p.Notifier<AuthState> {
       final idToken = googleAuth.idToken;
 
       if (accessToken == null || idToken == null) {
-        state = AuthError('Error occurred whiles retrieving tokens');
+        state = const AuthError('Error occurred whiles retrieving tokens');
         return;
       }
 
@@ -40,11 +38,7 @@ class AuthNotifier extends p.Notifier<AuthState> {
 
       userData['id'] = response.user!.id;
       state = AuthSuccess(UserData.fromMap(userData));
-
-      print('done');
     } catch (e) {
-      print(e);
-      print('failed');
       state = const AuthError('Login Failed');
     }
   }
