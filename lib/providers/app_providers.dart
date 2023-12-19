@@ -21,15 +21,18 @@ final bookmarkingProvider =
       throw UserNotFoundException();
     }
 
+    final table =
+        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+    var userId = authState.user.id;
+
     if (bookMarkable.bookMarked) {
       bookMarkable.bookMarked = false;
+      await table.delete().match({"userid": userId, "id": bookMarkable.id});
       return;
     }
 
-    final table =
-        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
     var data = bookMarkable.bookmarkData;
-    data['userid'] = authState.user.id;
+    data['userid'] = userId;
 
     await table.insert(data);
     bookMarkable.bookMarked = true;
