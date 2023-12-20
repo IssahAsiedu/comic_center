@@ -81,12 +81,14 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
       {"userid": authState.user.id},
     ).range(from, to);
 
-    if (result.isEmpty) {
+    if (result.isEmpty && mounted) {
       _bookmarksPagingController.appendLastPage([]);
       return;
     }
 
     var bookmarks = result.map((e) => Bookmark.fromMap(e)).toList();
+
+    if (!mounted) return;
     _bookmarksPagingController.appendPage(bookmarks, key + 1);
   }
 
