@@ -39,7 +39,10 @@ class _ComicImagesState extends State<ComicImages> {
             height: size.height * 0.45,
             width: size.width,
             clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(borderRadius: kCircularBorder12),
+            decoration: BoxDecoration(
+              borderRadius: kCircularBorder4,
+              border: Border.all(color: Colors.white12),
+            ),
             child: Stack(
               children: [
                 Positioned.fill(
@@ -82,13 +85,13 @@ class _ComicImagesState extends State<ComicImages> {
                     width: 80,
                     height: 80,
                     decoration: BoxDecoration(
-                      borderRadius: kCircularBorder12,
+                      borderRadius: kCircularBorder4,
                       border: _isSelected(images.elementAt(i))
-                          ? Border.all(width: 2, color: Colors.blue)
+                          ? Border.all(width: 4, color: Colors.white60)
                           : null,
                     ),
                     child: FilledImageContainer(
-                      borderRadius: kCircularBorder12,
+                      borderRadius: kCircularBorder4,
                       imageUrl: images.elementAt(i),
                     ),
                   ),
