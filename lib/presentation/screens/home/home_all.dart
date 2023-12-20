@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:comics_center/presentation/screen_sections/home_all_characters.dart';
 import 'package:comics_center/presentation/screen_sections/home_all_comics.dart';
 import 'package:comics_center/presentation/screen_sections/home_all_stories.dart';
+import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,15 +27,19 @@ class _HomeAllScreenState extends ConsumerState<HomeAllScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      controller: _scrollController,
-      children: const [
-        HomeAllCharactersSection(),
-        SizedBox(height: 20),
-        HomeAllComicsSection(),
-        SizedBox(height: 20),
-        HomeAllStoriesSection()
-      ],
+    return Scaffold(
+      appBar: const HomeAppBar(),
+      body: ListView(
+        controller: _scrollController,
+        children: const [
+          SizedBox(height: 10),
+          HomeAllCharactersSection(),
+          SizedBox(height: 20),
+          HomeAllComicsSection(),
+          SizedBox(height: 20),
+          HomeAllStoriesSection()
+        ],
+      ),
     );
   }
 

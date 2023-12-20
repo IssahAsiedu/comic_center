@@ -31,6 +31,7 @@ class MyApp extends HookConsumerWidget {
 
     return MaterialApp.router(
       theme: ThemeData(
+        fontFamily: 'Manrope',
         scaffoldBackgroundColor: Colors.white12,
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(

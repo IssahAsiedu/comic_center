@@ -2,6 +2,7 @@ import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/character/widgets/character_card.dart';
+import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
@@ -32,57 +33,60 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned.fill(
-        child: Stack(
-      children: [
-        //Characters
-        Positioned.fill(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 54),
-            child: PagedGridView<int, Character>(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                pagingController: _characterPagingController,
-                builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
-                  BuildContext context,
-                  Character item,
-                  int index,
-                ) {
-                  return CharacterCard(
-                    thumbnailUrl: item.thumbnail!,
-                    characterName: item.name,
-                    itemWidth: 200,
-                    itemHeight: 200,
-                    onTap: () {
-                      GoRouter.of(context).push(
-                        AppRouteNotifier.characterRouteWithParam("${item.id}"),
-                      );
-                    },
-                  );
-                })),
+    return Scaffold(
+      appBar: const HomeAppBar(),
+      body: Stack(
+        children: [
+          //Characters
+          Positioned.fill(
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 54),
+              child: PagedGridView<int, Character>(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                  pagingController: _characterPagingController,
+                  builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
+                    BuildContext context,
+                    Character item,
+                    int index,
+                  ) {
+                    return CharacterCard(
+                      thumbnailUrl: item.thumbnail!,
+                      characterName: item.name,
+                      itemWidth: 200,
+                      itemHeight: 200,
+                      onTap: () {
+                        GoRouter.of(context).push(
+                          AppRouteNotifier.characterRouteWithParam(
+                              "${item.id}"),
+                        );
+                      },
+                    );
+                  })),
+            ),
           ),
-        ),
 
-        //search input
-        Positioned(
-          left: 0,
-          right: 0,
-          child: Container(
-            margin: const EdgeInsets.only(
-              left: 24,
-              right: 24,
+          //search input
+          Positioned(
+            left: 0,
+            right: 0,
+            child: Container(
+              margin: const EdgeInsets.only(
+                left: 24,
+                right: 24,
+              ),
+              child: SearchField(
+                textController: _searchController,
+                onSubmit: () => _characterPagingController.refresh(),
+              ),
             ),
-            child: SearchField(
-              textController: _searchController,
-              onSubmit: () => _characterPagingController.refresh(),
-            ),
-          ),
-        )
-      ],
-    ));
+          )
+        ],
+      ),
+    );
   }
 
   Future<void> fetchCharacters(int pageKey) async {

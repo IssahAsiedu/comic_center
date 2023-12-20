@@ -63,16 +63,7 @@ class _UserDetails extends HookConsumerWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 30,
-                height: 30,
-                margin: const EdgeInsets.only(right: 10),
-                clipBehavior: Clip.antiAlias,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
-                ),
-                child: Image.network(authState.user.avatarUrl),
-              ),
+              RoundedNetworkImage(size: 30, url: authState.user.avatarUrl),
               Text('Hey, ${authState.user.displayName}'),
             ],
           ),
@@ -93,6 +84,34 @@ class _UserDetails extends HookConsumerWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class RoundedNetworkImage extends StatelessWidget {
+  const RoundedNetworkImage({
+    super.key,
+    required this.size,
+    required this.url,
+  });
+
+  final double size;
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      margin: const EdgeInsets.only(right: 10),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(size / 2),
+      ),
+      child: Image.network(
+        url,
+        fit: BoxFit.cover,
       ),
     );
   }

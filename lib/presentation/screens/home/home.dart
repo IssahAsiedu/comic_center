@@ -1,4 +1,5 @@
 import 'package:comics_center/presentation/screens/home/home_all.dart';
+import 'package:comics_center/presentation/screens/home/home_bookmarks.dart';
 import 'package:comics_center/presentation/screens/home/home_characters.dart';
 import 'package:comics_center/presentation/screens/home/home_comics.dart';
 import 'package:comics_center/presentation/screens/home/home_stories.dart';
@@ -18,16 +19,14 @@ class HomeScreen extends HookConsumerWidget {
     return FocusScope(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: const HomeAppBar(),
-          body: Stack(children: [
+        child: Stack(
+          children: [
             const [
               HomeAllScreen(),
               HomeCharactersScreen(),
               HomeComicsScreen(),
               HomeStoriesScreen(),
-              Placeholder(),
+              HomeBookmarksScreen(),
             ][selectedOption],
             const Positioned(
               left: 0,
@@ -35,7 +34,7 @@ class HomeScreen extends HookConsumerWidget {
               bottom: 0,
               child: AppBottomNavigationBar(),
             ),
-          ]),
+          ],
         ),
       ),
     );

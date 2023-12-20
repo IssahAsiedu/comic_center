@@ -55,4 +55,6 @@ flutter:
      - family: Bangers
        fonts:
          - asset: fonts/Bangers-Regular.ttf
-
+     - family: Manrope
+       fonts:
+         - asset: fonts/Manrope-Regular.ttf
