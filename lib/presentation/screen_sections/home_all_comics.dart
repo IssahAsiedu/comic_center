@@ -37,6 +37,10 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
   Widget build(BuildContext context) {
     var listHeight = MediaQuery.of(context).size.height * 0.3;
 
+    ref.listen(authProvider, (previous, next) {
+      _comicsPagingController.refresh();
+    });
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
