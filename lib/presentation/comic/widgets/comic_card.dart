@@ -24,7 +24,8 @@ class ComicCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         margin: margin,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(4),
+          border: Border.all(color: Colors.white12),
         ),
         child: Row(
           children: [

@@ -1,6 +1,10 @@
-import 'package:comics_center/presentation/widgets/search_app_bar.dart';
 import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
+
+var border = OutlineInputBorder(
+  borderSide: const BorderSide(color: Colors.transparent, width: 0),
+  borderRadius: BorderRadius.circular(4),
+);
 
 class SearchField extends StatelessWidget {
   const SearchField({

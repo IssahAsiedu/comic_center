@@ -27,6 +27,7 @@ class HomeComicCard extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
+            border: Border.all(color: Colors.white12),
           ),
           child: Stack(
             children: [
