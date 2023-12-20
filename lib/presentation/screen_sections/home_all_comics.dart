@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
@@ -25,11 +27,14 @@ class HomeAllComicsSection extends ConsumerStatefulWidget {
 class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
   final PagingController<int, Comic> _comicsPagingController =
       PagingController(firstPageKey: 0);
-
+  StreamSubscription? _subscription;
   int limit = 7;
 
   @override
   void initState() {
+    _subscription = ref.read(homeRefreshStreamProvider).stream.listen((event) {
+      if (event == "home") _comicsPagingController.refresh();
+    });
     _comicsPagingController.addPageRequestListener(fetchComics);
     super.initState();
   }
@@ -161,6 +166,7 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
 
   @override
   void dispose() {
+    _subscription?.cancel();
     _comicsPagingController.dispose();
     super.dispose();
   }

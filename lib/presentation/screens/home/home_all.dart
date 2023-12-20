@@ -4,6 +4,7 @@ import 'package:comics_center/presentation/screen_sections/home_all_characters.d
 import 'package:comics_center/presentation/screen_sections/home_all_comics.dart';
 import 'package:comics_center/presentation/screen_sections/home_all_stories.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
+import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,16 +30,21 @@ class _HomeAllScreenState extends ConsumerState<HomeAllScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const HomeAppBar(),
-      body: ListView(
-        controller: _scrollController,
-        children: const [
-          SizedBox(height: 10),
-          HomeAllCharactersSection(),
-          SizedBox(height: 20),
-          HomeAllComicsSection(),
-          SizedBox(height: 20),
-          HomeAllStoriesSection()
-        ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          ref.read(homeRefreshStreamProvider).sink.add("home");
+        },
+        child: ListView(
+          controller: _scrollController,
+          children: const [
+            SizedBox(height: 10),
+            HomeAllCharactersSection(),
+            SizedBox(height: 20),
+            HomeAllComicsSection(),
+            SizedBox(height: 20),
+            HomeAllStoriesSection()
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/exceptions.dart';
 import 'package:comics_center/infrastructure/download/downloader.dart';
@@ -11,6 +13,12 @@ final downloaderProvider =
     p.NotifierProvider<Downloader, Map<String, double>>(Downloader.new);
 
 final supabaseClientProvider = p.Provider((ref) => Supabase.instance.client);
+
+final homeRefreshStreamProvider = p.Provider((ref) {
+  final controller = StreamController<String>.broadcast();
+  ref.onDispose(controller.close);
+  return controller;
+});
 
 final bookmarkingProvider =
     p.FutureProvider.autoDispose.family<void, BookMarkable>(

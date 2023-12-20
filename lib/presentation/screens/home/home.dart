@@ -3,7 +3,6 @@ import 'package:comics_center/presentation/screens/home/home_bookmarks.dart';
 import 'package:comics_center/presentation/screens/home/home_characters.dart';
 import 'package:comics_center/presentation/screens/home/home_comics.dart';
 import 'package:comics_center/presentation/screens/home/home_stories.dart';
-import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/presentation/widgets/bottom_%20bar/app_bottom_nav.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';

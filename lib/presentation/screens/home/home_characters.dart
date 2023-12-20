@@ -22,7 +22,6 @@ class HomeCharactersScreen extends ConsumerStatefulWidget {
 class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
   final PagingController<int, Character> _characterPagingController =
       PagingController(firstPageKey: 0);
-
   final TextEditingController _searchController = TextEditingController();
   final int limit = 10;
 

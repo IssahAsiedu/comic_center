@@ -1,27 +1,35 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/story/story.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/story/home_story_card.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
+import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class HomeAllStoriesSection extends StatefulWidget {
+class HomeAllStoriesSection extends ConsumerStatefulWidget {
   const HomeAllStoriesSection({super.key});
 
   @override
-  State<HomeAllStoriesSection> createState() => _HomeAllStoriesSectionState();
+  ConsumerState<HomeAllStoriesSection> createState() =>
+      _HomeAllStoriesSectionState();
 }
 
-class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
+class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
   final PagingController<int, Story> _storyPagingController =
       PagingController(firstPageKey: 0);
-
+  StreamSubscription? _subscription;
   int limit = 10;
 
   @override
   void initState() {
+    _subscription = ref.read(homeRefreshStreamProvider).stream.listen((event) {
+      if (event == "home") _storyPagingController.refresh();
+    });
     _storyPagingController.addPageRequestListener(fetchStories);
     super.initState();
   }
@@ -127,6 +135,7 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
 
   @override
   void dispose() {
+    _subscription?.cancel();
     _storyPagingController.dispose();
     super.dispose();
   }

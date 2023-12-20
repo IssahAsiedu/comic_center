@@ -1,31 +1,40 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/character/widgets/character_card.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
+import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class HomeAllCharactersSection extends StatefulWidget {
+class HomeAllCharactersSection extends ConsumerStatefulWidget {
   const HomeAllCharactersSection({super.key});
 
   @override
-  State<HomeAllCharactersSection> createState() =>
+  ConsumerState<HomeAllCharactersSection> createState() =>
       _HomeAllCharactersSectionState();
 }
 
-class _HomeAllCharactersSectionState extends State<HomeAllCharactersSection> {
+class _HomeAllCharactersSectionState
+    extends ConsumerState<HomeAllCharactersSection> {
   final PagingController<int, Character> _characterPagingController =
       PagingController(firstPageKey: 0);
-
+  StreamSubscription? _subscription;
   int limit = 10;
 
   @override
   void initState() {
+    _subscription = ref.read(homeRefreshStreamProvider).stream.listen((event) {
+      if (event == "home") _characterPagingController.refresh();
+    });
     _characterPagingController.addPageRequestListener(fetchCharacters);
+    ref.read(homeRefreshStreamProvider).stream.listen((event) {});
     super.initState();
   }
 
@@ -134,6 +143,7 @@ class _HomeAllCharactersSectionState extends State<HomeAllCharactersSection> {
   @override
   void dispose() {
     _characterPagingController.dispose();
+    _subscription?.cancel();
     super.dispose();
   }
 }
