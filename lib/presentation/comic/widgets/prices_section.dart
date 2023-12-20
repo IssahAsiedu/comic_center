@@ -10,9 +10,8 @@ class PricesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.black,
-      height: 50,
+    return SizedBox(
+      height: 138,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,
           physics: const ClampingScrollPhysics(),
@@ -25,26 +24,49 @@ class PricesSection extends StatelessWidget {
               imgSrc = AppAssets.paperImage;
             }
 
-            return Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  imgSrc,
-                  width: 30,
-                  height: 30,
-                ),
-                const SizedBox(
-                  width: 3,
-                ),
-                Text("${price.displayString}: "),
-                Text("\$ ${price.price}")
-              ],
+            return Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.black87,
+                border: Border.all(color: Colors.white54),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.redAccent,
+                    child: Image.asset(
+                      imgSrc,
+                      width: 30,
+                      height: 30,
+                    ),
+                  ),
+                  const SizedBox(width: 3),
+                  SizedBox(
+                    width: 100,
+                    child: Text(
+                      price.displayString,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w400,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Text(
+                    "\$ ${price.price}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  )
+                ],
+              ),
             );
           },
           separatorBuilder: (_, i) {
-            return const SizedBox(
-              width: 20,
-            );
+            return const SizedBox(width: 20);
           },
           itemCount: prices.length),
     );
