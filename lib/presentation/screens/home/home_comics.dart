@@ -3,6 +3,7 @@ import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/comic_card.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
+import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
@@ -58,6 +59,18 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                       GoRouter.of(context).push(
                         AppRouteNotifier.comicRouteWithParam("${item.id}"),
                       );
+                    },
+                  );
+                }, firstPageErrorIndicatorBuilder: (_) {
+                  return PagedErrorIndicator(
+                    onTap: () {
+                      _comicsPagingController.retryLastFailedRequest();
+                    },
+                  );
+                }, newPageErrorIndicatorBuilder: (_) {
+                  return PagedErrorIndicator(
+                    onTap: () {
+                      _comicsPagingController.retryLastFailedRequest();
                     },
                   );
                 }),

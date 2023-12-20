@@ -2,6 +2,7 @@ import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/home_comic_card.dart';
+import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
@@ -60,10 +61,11 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
         SizedBox(
           height: listHeight,
           child: PagedListView<int, Comic>.separated(
-              scrollDirection: Axis.horizontal,
-              clipBehavior: Clip.antiAlias,
-              pagingController: _comicsPagingController,
-              builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
+            scrollDirection: Axis.horizontal,
+            clipBehavior: Clip.antiAlias,
+            pagingController: _comicsPagingController,
+            builderDelegate: PagedChildBuilderDelegate(
+              itemBuilder: (
                 context,
                 item,
                 index,
@@ -86,10 +88,26 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
                     GoRouter.of(context).push(route);
                   },
                 );
-              }),
-              separatorBuilder: (_, i) {
-                return const SizedBox(width: 20);
-              }),
+              },
+              firstPageErrorIndicatorBuilder: (_) {
+                return PagedErrorIndicator(
+                  onTap: () {
+                    _comicsPagingController.retryLastFailedRequest();
+                  },
+                );
+              },
+              newPageErrorIndicatorBuilder: (_) {
+                return PagedErrorIndicator(
+                  onTap: () {
+                    _comicsPagingController.retryLastFailedRequest();
+                  },
+                );
+              },
+            ),
+            separatorBuilder: (_, i) {
+              return const SizedBox(width: 20);
+            },
+          ),
         )
       ],
     );
