@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/comic/comic_details.dart';
+import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:comics_center/presentation/widgets/filled_image_container.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/utils.dart';
@@ -8,7 +9,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class ComicImages extends StatefulWidget {
   final ComicDetails comicDetails;
 
-  const ComicImages({Key? key, required this.comicDetails}) : super(key: key);
+  const ComicImages({
+    Key? key,
+    required this.comicDetails,
+  }) : super(key: key);
 
   @override
   State<ComicImages> createState() => _ComicImagesState();
@@ -45,16 +49,28 @@ class _ComicImagesState extends State<ComicImages> {
             ),
             child: Stack(
               children: [
+                //filled image
                 Positioned.fill(
                   child: FilledImageContainer(
                     imageUrl: selectedImage,
                   ),
                 ),
+
+                //download image button
                 Positioned(
                   right: 20,
                   bottom: 5,
                   child: DownloadButton(
                     selectedImage: selectedImage,
+                  ),
+                ),
+
+                //bookmark button
+                Positioned(
+                  top: 10,
+                  right: 20,
+                  child: BookMarkButton(
+                    bookMarkable: widget.comicDetails,
                   ),
                 )
               ],

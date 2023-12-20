@@ -2,21 +2,31 @@ import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/comic_detail_body.dart';
+import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/shared/app_assets.dart';
+import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-class ComicDetailPage extends StatelessWidget {
+class ComicDetailPage extends ConsumerStatefulWidget {
   final String id;
 
   const ComicDetailPage({Key? key, required this.id}) : super(key: key);
 
   @override
+  ConsumerState<ComicDetailPage> createState() => _ComicDetailPageState();
+}
+
+class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white12,
-      body: FutureBuilder<ApiResponse<ComicDetails>>(
-        future: MarvelRestClient().getComicDetails(id),
+      body: FutureBuilder<ComicDetails>(
+        future: getComic(),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
@@ -30,13 +40,34 @@ class ComicDetailPage extends StatelessWidget {
             );
           }
 
-          if (snapshot.hasError || snapshot.data!.status == Status.error) {
+          if (snapshot.hasError) {
             return const Center(child: Text("An error occurred"));
           }
 
-          return ComicDetailBody(comicDetails: snapshot.data!.data!);
+          return ComicDetailBody(comicDetails: snapshot.data!);
         },
       ),
     );
+  }
+
+  Future<ComicDetails> getComic() async {
+    var response = await MarvelRestClient().getComicDetails(widget.id);
+
+    final table =
+        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+    final authState = ref.read(authProvider);
+
+    if (response.status != Status.success) throw Error();
+
+    if (authState is AuthSuccess) {
+      List<dynamic>? result = await table
+          .select()
+          .eq("userid", authState.user.id)
+          .eq('id', widget.id);
+
+      if (result != null && result.isNotEmpty) response.data!.bookMarked = true;
+    }
+
+    return response.data!;
   }
 }
