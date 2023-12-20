@@ -49,7 +49,12 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
               pagingController: _bookmarksPagingController,
               builderDelegate: PagedChildBuilderDelegate(
                 itemBuilder: (_, bookmark, index) {
-                  return BookmarkCard(bookmark: bookmark);
+                  return Container(
+                    margin: EdgeInsets.only(
+                        top: index == 0 ? 20 : 0,
+                        bottom: _isLastItem(index) ? 50 : 0),
+                    child: BookmarkCard(bookmark: bookmark),
+                  );
                 },
               ),
             ),
@@ -83,6 +88,10 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
 
     var bookmarks = result.map((e) => Bookmark.fromMap(e)).toList();
     _bookmarksPagingController.appendPage(bookmarks, key + 1);
+  }
+
+  bool _isLastItem(int index) {
+    return index == _bookmarksPagingController.itemList!.length - 1;
   }
 
   @override
