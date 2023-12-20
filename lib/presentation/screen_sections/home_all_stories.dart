@@ -2,6 +2,7 @@ import 'package:comics_center/domain/story/story.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/story/home_story_card.dart';
+import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -75,6 +76,20 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
                       // GoRouter.of(context).push(
                       //   AppRoute.characterRouteWithParam("${item.id}"),
                       // );
+                    },
+                  );
+                },
+                firstPageErrorIndicatorBuilder: (_) {
+                  return PagedErrorIndicator(
+                    onTap: () {
+                      _storyPagingController.retryLastFailedRequest();
+                    },
+                  );
+                },
+                newPageErrorIndicatorBuilder: (_) {
+                  return PagedErrorIndicator(
+                    onTap: () {
+                      _storyPagingController.retryLastFailedRequest();
                     },
                   );
                 }),
