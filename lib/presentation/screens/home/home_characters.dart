@@ -41,41 +41,48 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
           Positioned.fill(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 54),
-              child: PagedGridView<int, Character>(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 10,
-                    crossAxisSpacing: 10,
-                  ),
-                  pagingController: _characterPagingController,
-                  builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
-                    BuildContext context,
-                    Character item,
-                    int index,
-                  ) {
-                    return CharacterCard(
-                      thumbnailUrl: item.thumbnail!,
-                      characterName: item.name,
-                      itemWidth: 200,
-                      itemHeight: 200,
-                      onTap: () {
-                        context.push(
-                          AppRouteNotifier.characterRouteWithParam(
-                              "${item.id}"),
-                        );
-                      },
-                    );
-                  }, firstPageErrorIndicatorBuilder: (_) {
-                    return PagedErrorIndicator(
-                      onTap: () =>
-                          _characterPagingController.retryLastFailedRequest(),
-                    );
-                  }, newPageErrorIndicatorBuilder: (_) {
-                    return PagedErrorIndicator(
-                      onTap: () =>
-                          _characterPagingController.retryLastFailedRequest(),
-                    );
-                  })),
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  _searchController.text = "";
+                  _characterPagingController.refresh();
+                },
+                child: PagedGridView<int, Character>(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 10,
+                      crossAxisSpacing: 10,
+                    ),
+                    pagingController: _characterPagingController,
+                    builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
+                      BuildContext context,
+                      Character item,
+                      int index,
+                    ) {
+                      return CharacterCard(
+                        thumbnailUrl: item.thumbnail!,
+                        characterName: item.name,
+                        itemWidth: 200,
+                        itemHeight: 200,
+                        onTap: () {
+                          context.push(
+                            AppRouteNotifier.characterRouteWithParam(
+                                "${item.id}"),
+                          );
+                        },
+                      );
+                    }, firstPageErrorIndicatorBuilder: (_) {
+                      return PagedErrorIndicator(
+                        onTap: () =>
+                            _characterPagingController.retryLastFailedRequest(),
+                      );
+                    }, newPageErrorIndicatorBuilder: (_) {
+                      return PagedErrorIndicator(
+                        onTap: () =>
+                            _characterPagingController.retryLastFailedRequest(),
+                      );
+                    })),
+              ),
             ),
           ),
 

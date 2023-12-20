@@ -40,43 +40,49 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
         children: [
           //comics
           Positioned.fill(
-            child: PagedListView<int, Comic>.separated(
-                clipBehavior: Clip.antiAlias,
-                pagingController: _comicsPagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                    itemBuilder: (context, item, index) {
-                  final margin = EdgeInsets.only(
-                    top: index == 0 ? 70 : 0,
-                    left: 24,
-                    right: 24,
-                    bottom: _isLastItem(index) ? 100 : 0,
-                  );
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _searchController.text = "";
+                _comicsPagingController.refresh();
+              },
+              child: PagedListView<int, Comic>.separated(
+                  clipBehavior: Clip.antiAlias,
+                  pagingController: _comicsPagingController,
+                  builderDelegate: PagedChildBuilderDelegate(
+                      itemBuilder: (context, item, index) {
+                    final margin = EdgeInsets.only(
+                      top: index == 0 ? 70 : 0,
+                      left: 24,
+                      right: 24,
+                      bottom: _isLastItem(index) ? 100 : 0,
+                    );
 
-                  return ComicCard(
-                    comic: item,
-                    margin: margin,
-                    onTap: () {
-                      context.push(
-                        AppRouteNotifier.comicRouteWithParam("${item.id}"),
-                      );
-                    },
-                  );
-                }, firstPageErrorIndicatorBuilder: (_) {
-                  return PagedErrorIndicator(
-                    onTap: () {
-                      _comicsPagingController.retryLastFailedRequest();
-                    },
-                  );
-                }, newPageErrorIndicatorBuilder: (_) {
-                  return PagedErrorIndicator(
-                    onTap: () {
-                      _comicsPagingController.retryLastFailedRequest();
-                    },
-                  );
-                }),
-                separatorBuilder: (_, i) {
-                  return const SizedBox(height: 10);
-                }),
+                    return ComicCard(
+                      comic: item,
+                      margin: margin,
+                      onTap: () {
+                        context.push(
+                          AppRouteNotifier.comicRouteWithParam("${item.id}"),
+                        );
+                      },
+                    );
+                  }, firstPageErrorIndicatorBuilder: (_) {
+                    return PagedErrorIndicator(
+                      onTap: () {
+                        _comicsPagingController.retryLastFailedRequest();
+                      },
+                    );
+                  }, newPageErrorIndicatorBuilder: (_) {
+                    return PagedErrorIndicator(
+                      onTap: () {
+                        _comicsPagingController.retryLastFailedRequest();
+                      },
+                    );
+                  }),
+                  separatorBuilder: (_, i) {
+                    return const SizedBox(height: 10);
+                  }),
+            ),
           ),
 
           //search input
