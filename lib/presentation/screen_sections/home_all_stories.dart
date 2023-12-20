@@ -73,7 +73,7 @@ class _HomeAllStoriesSectionState extends State<HomeAllStoriesSection> {
                     story: item,
                     width: itemWidth,
                     onTap: () {
-                      // GoRouter.of(context).push(
+                      // context.push(
                       //   AppRoute.characterRouteWithParam("${item.id}"),
                       // );
                     },

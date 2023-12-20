@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/comic/comic.dart';
+import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/home_comic_card.dart';
@@ -86,10 +87,12 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
                   comic: item,
                   width: itemWidth,
                   height: listHeight,
-                  onTap: () {
+                  onTap: () async {
                     var route =
                         AppRouteNotifier.comicRouteWithParam("${item.id}");
-                    GoRouter.of(context).push(route);
+                    final result = await context.push(route);
+                    if (result is! ComicDetails) return;
+                    setState(() => item.bookMarked = result.bookMarked);
                   },
                 );
               },

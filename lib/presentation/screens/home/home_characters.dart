@@ -60,7 +60,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                       itemWidth: 200,
                       itemHeight: 200,
                       onTap: () {
-                        GoRouter.of(context).push(
+                        context.push(
                           AppRouteNotifier.characterRouteWithParam(
                               "${item.id}"),
                         );

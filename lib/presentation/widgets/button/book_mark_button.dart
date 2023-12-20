@@ -60,4 +60,10 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
       ),
     );
   }
+
+  @override
+  void didUpdateWidget(covariant BookMarkButton oldWidget) {
+    bookMarked = widget.bookMarkable.bookMarked;
+    super.didUpdateWidget(oldWidget);
+  }
 }

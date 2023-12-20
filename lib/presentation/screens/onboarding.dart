@@ -26,7 +26,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       }
 
       if (next is AuthSuccess) {
-        GoRouter.of(context).pushReplacement(AppRouteNotifier.home);
+        context.pushReplacement(AppRouteNotifier.home);
       }
     });
 
@@ -116,7 +116,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 //dive in button
                 InkWell(
                   onTap: () {
-                    GoRouter.of(context).pushReplacement(AppRouteNotifier.home);
+                    context.pushReplacement(AppRouteNotifier.home);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(15),

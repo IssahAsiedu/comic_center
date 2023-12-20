@@ -82,7 +82,7 @@ class _HomeAllCharactersSectionState extends State<HomeAllCharactersSection> {
                     characterName: item.name,
                     margin: margin,
                     onTap: () {
-                      GoRouter.of(context).push(
+                      context.push(
                         AppRouteNotifier.characterRouteWithParam("${item.id}"),
                       );
                     },

@@ -8,6 +8,7 @@ import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/shared/app_assets.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
@@ -21,31 +22,39 @@ class ComicDetailPage extends ConsumerStatefulWidget {
 }
 
 class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
+  ComicDetails? comicDetails;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white12,
-      body: FutureBuilder<ComicDetails>(
-        future: getComic(),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Lottie.asset(AppAssets.drStrangeLottieFile),
-            );
-          }
+    return WillPopScope(
+      onWillPop: () async {
+        context.pop(comicDetails);
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white12,
+        body: FutureBuilder<ComicDetails>(
+          future: getComic(),
+          builder: (_, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: Lottie.asset(AppAssets.drStrangeLottieFile),
+              );
+            }
 
-          if (!snapshot.hasData) {
-            return const Center(
-              child: Text('No data was received'),
-            );
-          }
+            if (!snapshot.hasData) {
+              return const Center(
+                child: Text('No data was received'),
+              );
+            }
 
-          if (snapshot.hasError) {
-            return const Center(child: Text("An error occurred"));
-          }
+            if (snapshot.hasError) {
+              return const Center(child: Text("An error occurred"));
+            }
 
-          return ComicDetailBody(comicDetails: snapshot.data!);
-        },
+            return ComicDetailBody(comicDetails: snapshot.data!);
+          },
+        ),
       ),
     );
   }
@@ -68,6 +77,7 @@ class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
       if (result != null && result.isNotEmpty) response.data!.bookMarked = true;
     }
 
+    comicDetails = response.data;
     return response.data!;
   }
 }

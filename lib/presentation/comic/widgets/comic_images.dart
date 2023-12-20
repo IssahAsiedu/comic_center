@@ -77,9 +77,7 @@ class _ComicImagesState extends State<ComicImages> {
             ),
           ),
         ),
-        const SizedBox(
-          height: 24,
-        ),
+        const SizedBox(height: 24),
         if (images.length > 1)
           SizedBox(
             height: 80,

@@ -3,6 +3,7 @@ import 'package:comics_center/presentation/comic/widgets/prices_section.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
 import 'package:comics_center/presentation/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'comic_images.dart';
 import 'description.dart';
@@ -18,7 +19,15 @@ class ComicDetailBody extends StatelessWidget {
     return SafeArea(
       child: Stack(
         children: [
-          const Positioned(top: 30, left: 10, child: AppBackButton()),
+          Positioned(
+            top: 30,
+            left: 10,
+            child: AppBackButton(
+              onTap: () {
+                context.pop(comicDetails);
+              },
+            ),
+          ),
           Positioned.fill(
               top: 110,
               child: SingleChildScrollView(
