@@ -1,8 +1,10 @@
 import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/bookmark/bookmark_card.dart';
+import 'package:comics_center/presentation/widgets/back_button.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
+import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,6 +33,19 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Transform.scale(
+          scale: 0.7,
+          child: AppBackButton(
+            onTap: () {
+              var currentState = ref.read(homeViewProvider);
+
+              ref.read(homeViewProvider.notifier).state = HomePageState(
+                current: currentState.previous,
+                previous: currentState.previous,
+              );
+            },
+          ),
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: const Text(
@@ -42,21 +57,26 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: PagedListView<int, Bookmark>.separated(
-              separatorBuilder: (_, i) {
-                return const Divider(color: Colors.white);
+            child: RefreshIndicator(
+              onRefresh: () async {
+                _bookmarksPagingController.refresh();
               },
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              pagingController: _bookmarksPagingController,
-              builderDelegate: PagedChildBuilderDelegate(
-                itemBuilder: (_, bookmark, index) {
-                  return Container(
-                    margin: EdgeInsets.only(
-                        top: index == 0 ? 20 : 0,
-                        bottom: _isLastItem(index) ? 50 : 0),
-                    child: BookmarkCard(bookmark: bookmark),
-                  );
+              child: PagedListView<int, Bookmark>.separated(
+                separatorBuilder: (_, i) {
+                  return const Divider(color: Colors.white);
                 },
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                pagingController: _bookmarksPagingController,
+                builderDelegate: PagedChildBuilderDelegate(
+                  itemBuilder: (_, bookmark, index) {
+                    return Container(
+                      margin: EdgeInsets.only(
+                          top: index == 0 ? 20 : 0,
+                          bottom: _isLastItem(index) ? 50 : 0),
+                      child: BookmarkCard(bookmark: bookmark),
+                    );
+                  },
+                ),
               ),
             ),
           ),
