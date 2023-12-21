@@ -25,7 +25,7 @@ class HomeAllSeriesSection extends ConsumerStatefulWidget {
 }
 
 class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
-  final PagingController<int, Series> _storyPagingController =
+  final PagingController<int, Series> _seriesPagingController =
       PagingController(firstPageKey: 0);
   StreamSubscription? _subscription;
   int limit = 10;
@@ -33,14 +33,18 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
   @override
   void initState() {
     _subscription = ref.read(homeRefreshStreamProvider).stream.listen((event) {
-      if (event == "home") _storyPagingController.refresh();
+      if (event == "home") _seriesPagingController.refresh();
     });
-    _storyPagingController.addPageRequestListener(fetchSeries);
+    _seriesPagingController.addPageRequestListener(fetchSeries);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authProvider, (previous, next) {
+      _seriesPagingController.refresh();
+    });
+
     return Column(
       children: [
         Padding(
@@ -61,9 +65,9 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 183,
+          height: 120,
           child: PagedListView<int, Series>.separated(
-            pagingController: _storyPagingController,
+            pagingController: _seriesPagingController,
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
             separatorBuilder: (context, index) => const SizedBox(width: 20),
@@ -97,14 +101,14 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
                 firstPageErrorIndicatorBuilder: (_) {
                   return PagedErrorIndicator(
                     onTap: () {
-                      _storyPagingController.retryLastFailedRequest();
+                      _seriesPagingController.retryLastFailedRequest();
                     },
                   );
                 },
                 newPageErrorIndicatorBuilder: (_) {
                   return PagedErrorIndicator(
                     onTap: () {
-                      _storyPagingController.retryLastFailedRequest();
+                      _seriesPagingController.retryLastFailedRequest();
                     },
                   );
                 }),
@@ -121,7 +125,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
     var response = await MarvelRestClient().getSeries(query);
 
     if (response.status == Status.error) {
-      _storyPagingController.error = Error();
+      _seriesPagingController.error = Error();
       return;
     }
 
@@ -143,22 +147,22 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
     var pages = (response.data!.total / limit).ceil();
 
     if (pageKey == pages && mounted) {
-      _storyPagingController.appendLastPage(series);
+      _seriesPagingController.appendLastPage(series);
       return;
     }
 
     if (!mounted) return;
-    _storyPagingController.appendPage(series, ++pageKey);
+    _seriesPagingController.appendPage(series, ++pageKey);
   }
 
   bool _isLastItem(int index) {
-    return index == _storyPagingController.itemList!.length - 1;
+    return index == _seriesPagingController.itemList!.length - 1;
   }
 
   @override
   void dispose() {
     _subscription?.cancel();
-    _storyPagingController.dispose();
+    _seriesPagingController.dispose();
     super.dispose();
   }
 }

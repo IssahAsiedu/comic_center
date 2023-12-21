@@ -63,15 +63,8 @@ class HomeSeriesCard extends StatelessWidget {
             const SizedBox(height: 20),
             Text(
               series.name,
-              style: const TextStyle(decoration: TextDecoration.underline),
-            ),
-            const SizedBox(height: 5),
-            SizedBox(
-              height: 60,
-              child: Text(
-                series.name,
-                overflow: TextOverflow.clip,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              overflow: TextOverflow.fade,
             ),
           ],
         ),
