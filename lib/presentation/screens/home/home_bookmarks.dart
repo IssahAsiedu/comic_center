@@ -76,34 +76,54 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                       margin: EdgeInsets.only(
                           top: index == 0 ? 20 : 0,
                           bottom: _isLastItem(index) ? 50 : 0),
-                      child: BookmarkCard(
-                        bookmark: bookmark,
-                        onTap: () async {
-                          Bookmarkable? value;
-                          if (bookmark.type.toLowerCase() == "series") {
-                            var route = AppRouteNotifier.generateSeriesRoute(
-                                bookmark.id);
-                            value = await context.push(route);
+                      child: Dismissible(
+                        key: ValueKey(bookmark.pk),
+                        onDismissed: (_) async {
+                          try {
+                            final table = ref
+                                .read(supabaseClientProvider)
+                                .from(AppStrings.bookmarksTable);
+                            await table.delete().match({"pk": bookmark.pk});
+                            _removeItemWithId(bookmark.pk);
+                          } catch (e) {
+                            print(e);
                           }
-
-                          if (bookmark.type.toLowerCase() == "comic" &&
-                              mounted) {
-                            var route = AppRouteNotifier.generateComicRoute(
-                                bookmark.id);
-                            value = await context.push(route);
-                          }
-
-                          if (value == null) return;
-                          if (value.bookMarked) return;
-
-                          var items = _bookmarksPagingController.itemList
-                              ?.where((element) {
-                            return element.pk != bookmark.pk;
-                          }).toList();
-
-                          if (items == null) return;
-                          _bookmarksPagingController.itemList = items;
                         },
+                        background: ColoredBox(
+                          color: Colors.redAccent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(
+                                Icons.delete,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
+                        ),
+                        child: BookmarkCard(
+                          bookmark: bookmark,
+                          onTap: () async {
+                            Bookmarkable? value;
+                            if (bookmark.type.toLowerCase() == "series") {
+                              var route = AppRouteNotifier.generateSeriesRoute(
+                                  bookmark.id);
+                              value = await context.push(route);
+                            }
+
+                            if (bookmark.type.toLowerCase() == "comic" &&
+                                mounted) {
+                              var route = AppRouteNotifier.generateComicRoute(
+                                  bookmark.id);
+                              value = await context.push(route);
+                            }
+
+                            if (value == null) return;
+                            if (value.bookMarked) return;
+
+                            _removeItemWithId(bookmark.pk);
+                          },
+                        ),
                       ),
                     );
                   },
@@ -114,6 +134,15 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         ],
       ),
     );
+  }
+
+  void _removeItemWithId(String id) {
+    var items = _bookmarksPagingController.itemList?.where((element) {
+      return element.pk != id;
+    }).toList();
+
+    if (items == null) return;
+    _bookmarksPagingController.itemList = items;
   }
 
   Future<void> _onPageRequest(int key) async {
