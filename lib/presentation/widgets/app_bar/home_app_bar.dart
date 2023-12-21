@@ -10,7 +10,7 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var options = ['All', 'Characters', 'Comics', 'Stories'];
+    var options = ['All', 'Characters', 'Comics', 'Series'];
     final selectedOption = ref.watch(homeViewProvider);
 
     return SafeArea(
