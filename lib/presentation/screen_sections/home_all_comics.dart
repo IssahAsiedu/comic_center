@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/comic/comic.dart';
-import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/home_comic_card.dart';

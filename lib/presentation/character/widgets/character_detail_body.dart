@@ -17,9 +17,9 @@ class CharacterDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _CharacterDetailAppBar(
+      appBar: ImageAppBar(
         thumbnail: characterDetails.thumbnail!,
-        characterName: characterDetails.name,
+        title: characterDetails.name,
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -30,14 +30,17 @@ class CharacterDetailBody extends StatelessWidget {
             items: characterDetails.comics,
             title: "Comics",
             onTap: (e) {
-              GoRouter.of(context).pushReplacement(
-                AppRouteNotifier.generateComicRoute("${e.id}"),
-              );
+              var route = AppRouteNotifier.generateComicRoute("${e.id}");
+              context.push(route);
             },
           ),
           DetailList(
             items: characterDetails.series,
             title: "Series",
+            onTap: (e) {
+              var route = AppRouteNotifier.generateSeriesRoute("${e.id}");
+              context.push(route);
+            },
           ),
         ],
       ),
@@ -45,15 +48,17 @@ class CharacterDetailBody extends StatelessWidget {
   }
 }
 
-class _CharacterDetailAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  const _CharacterDetailAppBar({
+class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ImageAppBar({
+    super.key,
     required this.thumbnail,
-    required this.characterName,
+    required this.title,
+    this.onBack,
   });
 
   final String thumbnail;
-  final String characterName;
+  final String title;
+  final void Function()? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +87,7 @@ class _CharacterDetailAppBar extends StatelessWidget
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
-                  characterName,
+                  title,
                   style: const TextStyle(
                     fontFamily: 'Bangers',
                     fontSize: 25,
@@ -92,10 +97,12 @@ class _CharacterDetailAppBar extends StatelessWidget
             ],
           ),
         ),
-        const Positioned(
+        Positioned(
           top: 30,
           left: 10,
-          child: AppBackButton(),
+          child: AppBackButton(
+            onTap: onBack,
+          ),
         )
       ],
     );

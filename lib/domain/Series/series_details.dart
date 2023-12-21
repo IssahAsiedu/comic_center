@@ -1,5 +1,5 @@
 import 'package:comics_center/domain/Series/series.dart';
-import 'package:comics_center/domain/comic/comic.dart';
+import 'package:comics_center/domain/item.dart';
 
 class SeriesDetails extends Series {
   SeriesDetails({
@@ -10,22 +10,26 @@ class SeriesDetails extends Series {
     super.description,
   });
 
-  final List<Comic> comics;
+  final List<Item> comics;
 
-  factory SeriesDetails.fromMap(Map<String, dynamic> json) {
+  factory SeriesDetails.fromMap(Map<String, dynamic> map) {
     String? thumbnail;
 
-    if (json["thumbnail"] != null) {
+    if (map["thumbnail"] != null) {
       thumbnail =
-          '${json["thumbnail"]["path"]}/detail.${json["thumbnail"]["extension"]}';
+          '${map["thumbnail"]["path"]}/detail.${map["thumbnail"]["extension"]}';
     }
 
+    var comics = (map["comics"]["items"] as List<dynamic>)
+        .map((i) => Item.fromMap(i))
+        .toList();
+
     return SeriesDetails(
-      id: json["id"],
-      name: json["title"],
+      id: map["id"],
+      name: map["title"],
       thumbnail: thumbnail,
-      description: json['description'],
-      comics: [],
+      description: map['description'],
+      comics: comics,
     );
   }
 }

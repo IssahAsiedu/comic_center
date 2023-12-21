@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/item.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetailList<T extends Item> extends StatelessWidget {
@@ -22,9 +23,9 @@ class DetailList<T extends Item> extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const Icon(
-            Icons.how_to_vote,
-            color: Colors.white,
-            size: 150,
+            CupertinoIcons.ant_circle,
+            color: Colors.redAccent,
+            size: 70,
           ),
           Text("No $title available")
         ],

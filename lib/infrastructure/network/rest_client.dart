@@ -74,6 +74,7 @@ class MarvelRestClient {
     try {
       var response = await _dio.get("series/$id");
       var map = response.data["data"]["results"][0];
+      print(map);
       var details = SeriesDetails.fromMap(map);
       return ApiResponse.success(data: details);
     } catch (e) {
