@@ -46,7 +46,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
             },
           ),
         ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Colors.black12,
         centerTitle: true,
         title: const Text(
           'Bookmarks',
