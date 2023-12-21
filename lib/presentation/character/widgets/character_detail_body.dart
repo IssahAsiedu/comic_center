@@ -1,5 +1,8 @@
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/character/character_detail.dart';
+import 'package:comics_center/domain/item.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:comics_center/presentation/widgets/detail_list.dart';
 import 'package:comics_center/presentation/widgets/slide_widget.dart';
 import 'package:comics_center/routing/route_config.dart';
@@ -54,11 +57,13 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.thumbnail,
     required this.title,
+    this.item,
     this.onBack,
   });
 
   final String thumbnail;
   final String title;
+  final Bookmarkable? item;
   final void Function()? onBack;
 
   @override
@@ -101,8 +106,15 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
         Positioned(
           top: 30,
           left: 10,
-          child: AppBackButton(
-            onTap: onBack,
+          right: 10,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AppBackButton(
+                onTap: onBack,
+              ),
+              if (item != null) BookMarkButton(bookmarkable: item!),
+            ],
           ),
         )
       ],

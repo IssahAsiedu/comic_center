@@ -23,6 +23,10 @@ class _SeriesDetailBodyState extends State<SeriesDetailBody> {
       appBar: ImageAppBar(
         thumbnail: widget.seriesDetails.thumbnail!,
         title: widget.seriesDetails.name,
+        item: widget.seriesDetails,
+        onBack: () {
+          context.pop(widget.seriesDetails);
+        },
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24),

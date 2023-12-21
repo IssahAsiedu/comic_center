@@ -7,6 +7,8 @@ import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/Series/home_series_card.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
     _subscription = ref.read(homeRefreshStreamProvider).stream.listen((event) {
       if (event == "home") _storyPagingController.refresh();
     });
-    _storyPagingController.addPageRequestListener(fetchStories);
+    _storyPagingController.addPageRequestListener(fetchSeries);
     super.initState();
   }
 
@@ -113,7 +115,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
     );
   }
 
-  Future<void> fetchStories(int pageKey) async {
+  Future<void> fetchSeries(int pageKey) async {
     var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
 
     var response = await MarvelRestClient().getSeries(query);
@@ -123,15 +125,30 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
       return;
     }
 
+    final series = response.data!.data;
+
+    if (!mounted) return;
+    final table =
+        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+    final authState = ref.read(authProvider);
+
+    if (authState is AuthSuccess) {
+      for (var s in series) {
+        List<dynamic>? result =
+            await table.select().eq("userid", authState.user.id).eq('id', s.id);
+        if (result != null && result.isNotEmpty) s.bookMarked = true;
+      }
+    }
+
     var pages = (response.data!.total / limit).ceil();
 
     if (pageKey == pages && mounted) {
-      _storyPagingController.appendLastPage(response.data!.data);
+      _storyPagingController.appendLastPage(series);
       return;
     }
 
     if (!mounted) return;
-    _storyPagingController.appendPage(response.data!.data, ++pageKey);
+    _storyPagingController.appendPage(series, ++pageKey);
   }
 
   bool _isLastItem(int index) {

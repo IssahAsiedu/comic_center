@@ -37,6 +37,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
           'Bookmarks',
           style: TextStyle(fontFamily: 'Bangers'),
         ),
+        elevation: 0,
       ),
       body: Stack(
         children: [
