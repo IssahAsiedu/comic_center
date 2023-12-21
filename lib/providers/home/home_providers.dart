@@ -1,7 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final homeViewProvider = StateProvider<int>((ref) {
-  return 0;
+class HomePageState {
+  const HomePageState({
+    this.previous = 0,
+    this.current = 0,
+  });
+
+  final int previous;
+  final int current;
+}
+
+final homeViewProvider = StateProvider<HomePageState>((ref) {
+  return const HomePageState();
 });
 
 final homeScrollingProvider = StateProvider<bool>((ref) {

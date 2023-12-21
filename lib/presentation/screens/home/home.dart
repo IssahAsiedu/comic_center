@@ -18,22 +18,37 @@ class HomeScreen extends HookConsumerWidget {
     return FocusScope(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Stack(
-          children: [
-            const [
-              HomeAllScreen(),
-              HomeCharactersScreen(),
-              HomeComicsScreen(),
-              HomeSeriesScreen(),
-              HomeBookmarksScreen(),
-            ][selectedOption],
-            const Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: AppBottomNavigationBar(),
-            ),
-          ],
+        child: WillPopScope(
+          onWillPop: () async {
+            if (selectedOption.current == 0) return true;
+
+            if (selectedOption.current == 4) {
+              ref.read(homeViewProvider.notifier).state = HomePageState(
+                  current: selectedOption.previous,
+                  previous: selectedOption.previous);
+              return false;
+            }
+
+            ref.read(homeViewProvider.notifier).state = const HomePageState();
+            return false;
+          },
+          child: Stack(
+            children: [
+              const [
+                HomeAllScreen(),
+                HomeCharactersScreen(),
+                HomeComicsScreen(),
+                HomeSeriesScreen(),
+                HomeBookmarksScreen(),
+              ][selectedOption.current],
+              const Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: AppBottomNavigationBar(),
+              ),
+            ],
+          ),
         ),
       ),
     );

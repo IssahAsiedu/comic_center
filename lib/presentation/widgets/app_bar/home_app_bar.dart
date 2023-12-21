@@ -25,9 +25,13 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, i) {
                     return SelectionButton(
-                      selected: selectedOption == i,
-                      onTap: () =>
-                          ref.read(homeViewProvider.notifier).state = i,
+                      selected: selectedOption.current == i,
+                      onTap: () {
+                        final currentState = ref.read(homeViewProvider);
+                        ref.read(homeViewProvider.notifier).state =
+                            HomePageState(
+                                current: i, previous: currentState.current);
+                      },
                       text: options[i],
                     );
                   },

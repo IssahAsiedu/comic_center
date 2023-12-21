@@ -37,14 +37,23 @@ class _AppBottomNavigationBarState
             children: [
               _BottomButton(
                 selected: getSelectedIndex(0),
-                onTap: () => ref.read(homeViewProvider.notifier).state = 0,
+                onTap: () {
+                  var currentState = ref.read(homeViewProvider);
+
+                  ref.read(homeViewProvider.notifier).state =
+                      HomePageState(current: 0, previous: currentState.current);
+                },
               ),
               const SizedBox(width: 20),
               _BottomButton(
-                iconData: CupertinoIcons.bookmark,
-                selected: getSelectedIndex(4),
-                onTap: () => ref.read(homeViewProvider.notifier).state = 4,
-              )
+                  iconData: CupertinoIcons.bookmark,
+                  selected: getSelectedIndex(4),
+                  onTap: () {
+                    var currentState = ref.read(homeViewProvider);
+
+                    ref.read(homeViewProvider.notifier).state = HomePageState(
+                        current: 4, previous: currentState.current);
+                  })
             ],
           ),
         ),
@@ -55,10 +64,10 @@ class _AppBottomNavigationBarState
   bool getSelectedIndex(int index) {
     final selectedHomeOption = ref.read(homeViewProvider);
     if (index == 0) {
-      return selectedHomeOption < 4;
+      return selectedHomeOption.current < 4;
     }
 
-    return selectedHomeOption == 4;
+    return selectedHomeOption.current == 4;
   }
 }
 
