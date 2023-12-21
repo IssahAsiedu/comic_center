@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:comics_center/presentation/Series/series_details_screen.dart';
 import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
 import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
 import 'package:comics_center/presentation/screens/home/home.dart';
@@ -16,30 +17,39 @@ class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
   static const characters = "/characters";
   static const comics = "/comics";
   static const home = "/home";
+  static const series = "/series";
 
   VoidCallback? _routerListener;
 
-  static characterRouteWithParam([String? id]) => "$characters/${id ?? ':id'}";
+  static generateCharacterRoute([String? id]) => "$characters/${id ?? ':id'}";
 
-  static comicRouteWithParam([String? id]) => "$comics/${id ?? ':id'}";
+  static generateComicRoute([String? id]) => "$comics/${id ?? ':id'}";
 
-  static Widget _homePageRouteBuilder(BuildContext context, GoRouterState _) {
+  static generateSeriesRoute([String? id]) => "$series/${id ?? ':id'}";
+
+  static Widget _rootPageBuilder(BuildContext context, GoRouterState _) {
     return const OnboardingScreen();
   }
 
-  static Widget _characterWithParam(BuildContext context, GoRouterState state) {
+  static Widget _characterPageBuilder(
+      BuildContext context, GoRouterState state) {
     return CharacterDetailPage(id: state.pathParameters["id"]!);
   }
 
-  static Widget _comicWithParam(BuildContext context, GoRouterState state) {
+  static Widget _comicPageBuilder(BuildContext context, GoRouterState state) {
     return ComicDetailPage(id: state.pathParameters["id"]!);
   }
 
+  static Widget _seriesPageBuilder(BuildContext context, GoRouterState state) {
+    return SeriesDetailPage(id: state.pathParameters["id"]!);
+  }
+
   final _router = <GoRoute>[
-    GoRoute(path: root, builder: _homePageRouteBuilder),
+    GoRoute(path: root, builder: _rootPageBuilder),
     GoRoute(path: home, builder: (_, state) => const HomeScreen()),
-    GoRoute(path: characterRouteWithParam(), builder: _characterWithParam),
-    GoRoute(path: comicRouteWithParam(), builder: _comicWithParam)
+    GoRoute(path: generateCharacterRoute(), builder: _characterPageBuilder),
+    GoRoute(path: generateComicRoute(), builder: _comicPageBuilder),
+    GoRoute(path: generateSeriesRoute(), builder: _seriesPageBuilder),
   ];
 
   List<GoRoute> get router => _router;

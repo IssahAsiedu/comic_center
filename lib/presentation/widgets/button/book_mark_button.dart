@@ -10,10 +10,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 class BookMarkButton extends ConsumerStatefulWidget {
   const BookMarkButton({
     super.key,
-    required this.bookMarkable,
+    required this.bookmarkable,
   });
 
-  final BookMarkable bookMarkable;
+  final Bookmarkable bookmarkable;
 
   @override
   ConsumerState<BookMarkButton> createState() => _BookMarkButtonState();
@@ -24,7 +24,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
 
   @override
   void initState() {
-    bookMarked = widget.bookMarkable.bookMarked;
+    bookMarked = widget.bookmarkable.bookMarked;
     super.initState();
   }
 
@@ -34,7 +34,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
       onTap: () async {
         try {
           setState(() => bookMarked = !bookMarked);
-          await ref.read(bookmarkingProvider(widget.bookMarkable).future);
+          await ref.read(bookmarkingProvider(widget.bookmarkable).future);
         } catch (e) {
           setState(() => bookMarked = !bookMarked);
           if (e is! UserNotFoundException) return;
@@ -63,7 +63,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
 
   @override
   void didUpdateWidget(covariant BookMarkButton oldWidget) {
-    bookMarked = widget.bookMarkable.bookMarked;
+    bookMarked = widget.bookmarkable.bookMarked;
     super.didUpdateWidget(oldWidget);
   }
 }

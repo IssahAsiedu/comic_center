@@ -21,7 +21,7 @@ final homeRefreshStreamProvider = p.Provider((ref) {
 });
 
 final bookmarkingProvider =
-    p.FutureProvider.autoDispose.family<void, BookMarkable>(
+    p.FutureProvider.autoDispose.family<void, Bookmarkable>(
   (ref, bookMarkable) async {
     final authState = ref.read(authProvider);
 

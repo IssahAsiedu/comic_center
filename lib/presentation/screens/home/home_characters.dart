@@ -66,7 +66,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                         itemHeight: 200,
                         onTap: () {
                           context.push(
-                            AppRouteNotifier.characterRouteWithParam(
+                            AppRouteNotifier.generateCharacterRoute(
                                 "${item.id}"),
                           );
                         },

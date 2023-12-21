@@ -70,7 +70,7 @@ class _ComicImagesState extends State<ComicImages> {
                   top: 10,
                   right: 20,
                   child: BookMarkButton(
-                    bookMarkable: widget.comicDetails,
+                    bookmarkable: widget.comicDetails,
                   ),
                 )
               ],

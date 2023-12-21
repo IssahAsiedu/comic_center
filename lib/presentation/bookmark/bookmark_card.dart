@@ -18,7 +18,7 @@ class BookmarkCard extends StatelessWidget {
       onTap: () {
         if (bookmark.type.toLowerCase() != "comic") return;
         var routeWithParam =
-            AppRouteNotifier.comicRouteWithParam("${bookmark.id}");
+            AppRouteNotifier.generateComicRoute("${bookmark.id}");
         context.push(routeWithParam);
       },
       child: Row(

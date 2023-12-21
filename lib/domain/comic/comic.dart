@@ -2,7 +2,7 @@ import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/item.dart';
 import 'package:uuid/uuid.dart';
 
-class Comic extends Item implements BookMarkable {
+class Comic extends Item implements Bookmarkable {
   final int issueNumber;
   final String format;
   final String thumbnail;

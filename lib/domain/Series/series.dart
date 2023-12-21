@@ -1,6 +1,8 @@
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/item.dart';
+import 'package:uuid/uuid.dart';
 
-class Series extends Item {
+class Series extends Item implements Bookmarkable {
   final String? thumbnail;
   final String? description;
 
@@ -9,6 +11,7 @@ class Series extends Item {
     required super.name,
     required this.thumbnail,
     this.description,
+    this.bookMarked = false,
   });
 
   factory Series.fromMap(Map<String, dynamic> json) {
@@ -26,4 +29,16 @@ class Series extends Item {
       description: json['description'],
     );
   }
+
+  @override
+  bool bookMarked;
+
+  @override
+  get bookmarkData => {
+        "pk": const Uuid().v4(),
+        "name": name,
+        "thumbnail": thumbnail,
+        "id": id,
+        "type": "Series"
+      };
 }

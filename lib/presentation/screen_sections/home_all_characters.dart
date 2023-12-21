@@ -92,7 +92,7 @@ class _HomeAllCharactersSectionState
                     margin: margin,
                     onTap: () {
                       context.push(
-                        AppRouteNotifier.characterRouteWithParam("${item.id}"),
+                        AppRouteNotifier.generateCharacterRoute("${item.id}"),
                       );
                     },
                   );

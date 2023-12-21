@@ -1,4 +1,4 @@
-abstract class BookMarkable {
+abstract class Bookmarkable {
   bool bookMarked = false;
 
   get bookmarkData => throw Error();

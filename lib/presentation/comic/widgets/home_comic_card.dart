@@ -88,7 +88,7 @@ class HomeComicCard extends StatelessWidget {
               Positioned(
                 top: 10,
                 right: 10,
-                child: BookMarkButton(bookMarkable: comic),
+                child: BookMarkButton(bookmarkable: comic),
               )
             ],
           )),

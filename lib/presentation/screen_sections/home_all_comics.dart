@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
@@ -94,9 +95,9 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
                   height: listHeight,
                   onTap: () async {
                     var route =
-                        AppRouteNotifier.comicRouteWithParam("${item.id}");
+                        AppRouteNotifier.generateComicRoute("${item.id}");
                     final result = await context.push(route);
-                    if (result is! ComicDetails) return;
+                    if (result is! Bookmarkable) return;
                     setState(() => item.bookMarked = result.bookMarked);
                   },
                 );
@@ -136,6 +137,8 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
     }
 
     final comics = response.data!.data;
+
+    if (!mounted) return;
     final table =
         ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
     final authState = ref.read(authProvider);

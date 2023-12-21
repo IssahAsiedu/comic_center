@@ -1,13 +1,16 @@
 import 'dart:async';
 
 import 'package:comics_center/domain/Series/series.dart';
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/Series/home_series_card.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/routing/route_config.dart';
 import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -80,10 +83,12 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
                     margin: margin,
                     series: item,
                     width: itemWidth,
-                    onTap: () {
-                      // context.push(
-                      //   AppRoute.characterRouteWithParam("${item.id}"),
-                      // );
+                    onTap: () async {
+                      var route =
+                          AppRouteNotifier.generateSeriesRoute("${item.id}");
+                      final result = await context.push(route);
+                      if (result is! Bookmarkable) return;
+                      setState(() => item.bookMarked = result.bookMarked);
                     },
                   );
                 },

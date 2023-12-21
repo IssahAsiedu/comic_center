@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/Series/series.dart';
+import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:flutter/material.dart';
 
 class HomeSeriesCard extends StatelessWidget {
@@ -19,48 +20,61 @@ class HomeSeriesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      width: width,
-      margin: margin,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(2),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (series.thumbnail == null)
-            const Align(
-              child: Icon(
-                Icons.not_interested,
-                size: 40,
-                color: Colors.orangeAccent,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        width: width,
+        margin: margin,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(2),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (series.thumbnail == null)
+              const Align(
+                child: Icon(
+                  Icons.not_interested,
+                  size: 40,
+                  color: Colors.orangeAccent,
+                ),
+              ),
+            if (series.thumbnail != null)
+              Stack(
+                children: [
+                  Container(
+                    height: 60,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: NetworkImage(series.thumbnail!),
+                    )),
+                  ),
+
+                  //bookmark button
+                  Transform.scale(
+                    scale: 0.7,
+                    child: BookMarkButton(bookmarkable: series),
+                  )
+                ],
+              ),
+            const SizedBox(height: 20),
+            Text(
+              series.name,
+              style: const TextStyle(decoration: TextDecoration.underline),
+            ),
+            const SizedBox(height: 5),
+            SizedBox(
+              height: 60,
+              child: Text(
+                series.name,
+                overflow: TextOverflow.clip,
               ),
             ),
-          if (series.thumbnail != null)
-            Container(
-              height: 60,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(series.thumbnail!),
-              )),
-            ),
-          const SizedBox(height: 20),
-          Text(
-            series.name,
-            style: const TextStyle(decoration: TextDecoration.underline),
-          ),
-          const SizedBox(height: 5),
-          SizedBox(
-            height: 60,
-            child: Text(
-              series.name,
-              overflow: TextOverflow.clip,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

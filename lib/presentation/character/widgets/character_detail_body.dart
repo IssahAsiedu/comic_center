@@ -31,7 +31,7 @@ class CharacterDetailBody extends StatelessWidget {
             title: "Comics",
             onTap: (e) {
               GoRouter.of(context).pushReplacement(
-                AppRouteNotifier.comicRouteWithParam("${e.id}"),
+                AppRouteNotifier.generateComicRoute("${e.id}"),
               );
             },
           ),

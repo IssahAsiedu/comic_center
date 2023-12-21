@@ -1,4 +1,5 @@
 import 'package:comics_center/domain/Series/series.dart';
+import 'package:comics_center/domain/Series/series_details.dart';
 import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/domain/character/character_detail.dart';
 import 'package:comics_center/domain/comic/comic.dart';
@@ -63,6 +64,17 @@ class MarvelRestClient {
       var response = await _dio.get("comics/$id");
       var map = response.data["data"]["results"][0];
       var details = ComicDetails.fromMap(map);
+      return ApiResponse.success(data: details);
+    } catch (e) {
+      return ApiResponse.error();
+    }
+  }
+
+  Future<ApiResponse<SeriesDetails>> getSeriesDetails(String id) async {
+    try {
+      var response = await _dio.get("series/$id");
+      var map = response.data["data"]["results"][0];
+      var details = SeriesDetails.fromMap(map);
       return ApiResponse.success(data: details);
     } catch (e) {
       return ApiResponse.error();
