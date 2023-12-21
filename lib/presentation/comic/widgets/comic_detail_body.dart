@@ -13,8 +13,10 @@ import 'description.dart';
 class ComicDetailBody extends StatefulWidget {
   final ComicDetails comicDetails;
 
-  const ComicDetailBody({Key? key, required this.comicDetails})
-      : super(key: key);
+  const ComicDetailBody({
+    Key? key,
+    required this.comicDetails,
+  }) : super(key: key);
 
   @override
   State<ComicDetailBody> createState() => _ComicDetailBodyState();
@@ -68,10 +70,7 @@ class _ComicDetailBodyState extends State<ComicDetailBody> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
-                                  Icon(
-                                    Icons.link,
-                                    color: Colors.blueAccent,
-                                  ),
+                                  Icon(Icons.link, color: Colors.blueAccent),
                                   SizedBox(width: 5),
                                   Text('Details'),
                                 ],

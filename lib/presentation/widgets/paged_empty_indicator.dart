@@ -24,7 +24,7 @@ class PagedEmptyIndicator extends StatelessWidget {
         // spacer
         const SizedBox(height: 20),
 
-        //empty
+        //empty text
         const Text('The list is Empty'),
 
         // button

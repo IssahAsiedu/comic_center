@@ -38,7 +38,10 @@ class _ComicDetailPageState extends ConsumerState<SeriesDetailPage> {
           builder: (_, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(
-                child: Lottie.asset(AppAssets.drStrangeLottieFile),
+                child: Transform.scale(
+                  scale: 0.7,
+                  child: Lottie.asset(AppAssets.drStrangeLottieFile),
+                ),
               );
             }
 
