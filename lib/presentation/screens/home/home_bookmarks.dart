@@ -2,6 +2,7 @@ import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/bookmark/bookmark_card.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
@@ -41,7 +42,6 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
           child: AppBackButton(
             onTap: () {
               var currentState = ref.read(homeViewProvider);
-
               ref.read(homeViewProvider.notifier).state = HomePageState(
                 current: currentState.previous,
                 previous: currentState.previous,
@@ -71,6 +71,13 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 pagingController: _bookmarksPagingController,
                 builderDelegate: PagedChildBuilderDelegate(
+                  noItemsFoundIndicatorBuilder: (_) {
+                    return PagedEmptyIndicator(
+                      onRetry: () {
+                        _bookmarksPagingController.refresh();
+                      },
+                    );
+                  },
                   itemBuilder: (_, bookmark, index) {
                     return Container(
                       margin: EdgeInsets.only(
@@ -94,10 +101,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: const [
-                              Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                              )
+                              Icon(Icons.delete, color: Colors.white)
                             ],
                           ),
                         ),
@@ -106,14 +110,15 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                           onTap: () async {
                             Bookmarkable? value;
                             if (bookmark.type.toLowerCase() == "series") {
-                              var route = AppRouteNotifier.generateSeriesRoute(
-                                  bookmark.id);
+                              final route =
+                                  AppRouteNotifier.generateSeriesRoute(
+                                      bookmark.id);
                               value = await context.push(route);
                             }
 
                             if (bookmark.type.toLowerCase() == "comic" &&
                                 mounted) {
-                              var route = AppRouteNotifier.generateComicRoute(
+                              final route = AppRouteNotifier.generateComicRoute(
                                   bookmark.id);
                               value = await context.push(route);
                             }
@@ -137,8 +142,8 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
   }
 
   void _removeItemWithId(String id) {
-    var items = _bookmarksPagingController.itemList?.where((element) {
-      return element.pk != id;
+    var items = _bookmarksPagingController.itemList?.where((e) {
+      return e.pk != id;
     }).toList();
 
     if (items == null) return;

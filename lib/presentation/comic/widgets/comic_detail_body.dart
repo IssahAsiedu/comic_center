@@ -10,12 +10,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'comic_images.dart';
 import 'description.dart';
 
-class ComicDetailBody extends StatelessWidget {
+class ComicDetailBody extends StatefulWidget {
   final ComicDetails comicDetails;
 
   const ComicDetailBody({Key? key, required this.comicDetails})
       : super(key: key);
 
+  @override
+  State<ComicDetailBody> createState() => _ComicDetailBodyState();
+}
+
+class _ComicDetailBodyState extends State<ComicDetailBody> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -26,7 +31,7 @@ class ComicDetailBody extends StatelessWidget {
             left: 10,
             child: AppBackButton(
               onTap: () {
-                context.pop(comicDetails);
+                context.pop(widget.comicDetails);
               },
             ),
           ),
@@ -38,24 +43,26 @@ class ComicDetailBody extends StatelessWidget {
                   child: Column(
                     children: [
                       SlideWidget(
-                        child: ComicImages(comicDetails: comicDetails),
+                        child: ComicImages(comicDetails: widget.comicDetails),
                       ),
                       const SizedBox(height: 15),
                       Row(
                         children: [
-                          Text("Page Count: ${comicDetails.pageCount}"),
+                          Text("Page Count: ${widget.comicDetails.pageCount}"),
                           const SizedBox(width: 20),
 
                           //link
-                          if (comicDetails.resourceURI != null)
+                          if (widget.comicDetails.resourceURI != null)
                             InkWell(
                               onTap: () async {
                                 final uri =
-                                    Uri.parse(comicDetails.resourceURI!);
+                                    Uri.parse(widget.comicDetails.resourceURI!);
 
                                 if (!await launchUrl(uri)) {
-                                  Navigator.of(context).push(ErrorDialog(
-                                      message: "Could not open link"));
+                                  if (!mounted) return;
+                                  await Navigator.of(context).push(
+                                    ErrorDialog(message: "Could not open link"),
+                                  );
                                 }
                               },
                               child: Row(
@@ -75,15 +82,15 @@ class ComicDetailBody extends StatelessWidget {
                       Container(
                           margin: const EdgeInsets.only(top: 12),
                           child: PricesSection(
-                            prices: comicDetails.prices,
+                            prices: widget.comicDetails.prices,
                           )),
-                      if (comicDetails.description != null &&
-                          comicDetails.description!.isNotEmpty)
+                      if (widget.comicDetails.description != null &&
+                          widget.comicDetails.description!.isNotEmpty)
                         Container(
                           margin: const EdgeInsets.only(top: 25),
                           child: DescriptionSection(
                             title: "Description",
-                            content: comicDetails.description!,
+                            content: widget.comicDetails.description!,
                           ),
                         )
                     ],
@@ -96,7 +103,7 @@ class ComicDetailBody extends StatelessWidget {
             right: 0,
             child: SlideWidget(
                 child: Text(
-              comicDetails.name,
+              widget.comicDetails.name,
               style: const TextStyle(fontFamily: 'Bangers', fontSize: 25),
             )),
           ),
