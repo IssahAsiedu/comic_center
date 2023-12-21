@@ -38,9 +38,27 @@ class ComicDetailBody extends StatelessWidget {
                       SlideWidget(
                         child: ComicImages(comicDetails: comicDetails),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 15),
-                        child: Text("PAGE COUNT: ${comicDetails.pageCount}"),
+                      const SizedBox(height: 15),
+                      Row(
+                        children: [
+                          Text("Page Count: ${comicDetails.pageCount}"),
+                          const SizedBox(width: 20),
+
+                          //link
+                          InkWell(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(
+                                  Icons.link,
+                                  color: Colors.blueAccent,
+                                ),
+                                SizedBox(width: 5),
+                                Text('Details'),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                       Container(
                           margin: const EdgeInsets.only(top: 12),

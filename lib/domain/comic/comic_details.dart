@@ -6,6 +6,7 @@ class ComicDetails extends Comic {
   final int pageCount;
   final List<String> images;
   final List<ComicPrice> prices;
+  final String? resourceURI;
 
   ComicDetails({
     required super.id,
@@ -13,6 +14,7 @@ class ComicDetails extends Comic {
     required super.issueNumber,
     required super.format,
     required super.thumbnail,
+    this.resourceURI,
     this.description = "",
     this.pageCount = 0,
     this.prices = const <ComicPrice>[],
@@ -31,15 +33,29 @@ class ComicDetails extends Comic {
     var thumbnail =
         '${map["thumbnail"]["path"]}/detail.${map["thumbnail"]["extension"]}';
 
+    String? resourceURI;
+
+    List<dynamic>? urls = map["urls"];
+
+    if (urls != null && urls.isNotEmpty) {
+      for (var element in urls) {
+        if (element["type"]!.toLowerCase() != "detail") continue;
+        resourceURI = element["url"];
+        break;
+      }
+    }
+
     return ComicDetails(
-        id: map["id"],
-        name: map["title"],
-        issueNumber: map["issueNumber"],
-        thumbnail: thumbnail,
-        format: map["format"],
-        images: images,
-        prices: prices,
-        pageCount: map["pageCount"],
-        description: map["description"]);
+      id: map["id"],
+      name: map["title"],
+      issueNumber: map["issueNumber"],
+      thumbnail: thumbnail,
+      format: map["format"],
+      images: images,
+      prices: prices,
+      resourceURI: resourceURI,
+      pageCount: map["pageCount"],
+      description: map["description"],
+    );
   }
 }

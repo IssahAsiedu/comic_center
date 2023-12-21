@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/domain/character/character_detail.dart';
 import 'package:comics_center/domain/comic/comic.dart';
@@ -64,10 +62,10 @@ class MarvelRestClient {
     try {
       var response = await _dio.get("comics/$id");
       var map = response.data["data"]["results"][0];
-      print(map);
       var details = ComicDetails.fromMap(map);
       return ApiResponse.success(data: details);
     } catch (e) {
+      print('error: $e');
       return ApiResponse.error();
     }
   }
@@ -89,7 +87,6 @@ class MarvelRestClient {
 
       return ApiResponse.success(data: paginatedData);
     } catch (e) {
-      print(e);
       return ApiResponse.error();
     }
   }

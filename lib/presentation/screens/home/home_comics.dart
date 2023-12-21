@@ -61,9 +61,9 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                       comic: item,
                       margin: margin,
                       onTap: () {
-                        var routeWithParam =
+                        var route =
                             AppRouteNotifier.comicRouteWithParam("${item.id}");
-                        context.push(routeWithParam);
+                        context.push(route);
                       },
                     );
                   }, firstPageErrorIndicatorBuilder: (_) {

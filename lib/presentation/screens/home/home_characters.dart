@@ -120,11 +120,12 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
 
     var pages = (response.data!.total / limit).ceil();
 
-    if (pageKey == pages) {
+    if (pageKey == pages && mounted) {
       _characterPagingController.appendLastPage(response.data!.data);
       return;
     }
 
+    if (!mounted) return;
     _characterPagingController.appendPage(response.data!.data, ++pageKey);
   }
 
