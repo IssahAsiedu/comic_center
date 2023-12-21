@@ -48,14 +48,14 @@ flutter:
   uses-material-design: true
 
   assets:
-     - .env
-     - assets/images/
-     - assets/lottie/
+    - .env
+    - assets/images/
+    - assets/lottie/
 
   fonts:
-     - family: Bangers
-       fonts:
-         - asset: fonts/Bangers-Regular.ttf
-     - family: Manrope
-       fonts:
-         - asset: fonts/Manrope-Regular.ttf
+    - family: Bangers
+      fonts:
+        - asset: fonts/Bangers-Regular.ttf
+    - family: Manrope
+      fonts:
+        - asset: fonts/Manrope-Regular.ttf

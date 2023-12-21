@@ -1,4 +1,5 @@
 import 'package:comics_center/providers/home/home_providers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -40,7 +41,7 @@ class _AppBottomNavigationBarState
               ),
               const SizedBox(width: 20),
               _BottomButton(
-                iconData: Icons.bookmark_border_rounded,
+                iconData: CupertinoIcons.bookmark,
                 selected: getSelectedIndex(4),
                 onTap: () => ref.read(homeViewProvider.notifier).state = 4,
               )
@@ -64,7 +65,7 @@ class _AppBottomNavigationBarState
 class _BottomButton extends StatelessWidget {
   const _BottomButton({
     this.selected = false,
-    this.iconData = Icons.home_mini,
+    this.iconData = CupertinoIcons.circle_grid_hex_fill,
     this.onTap,
   });
 

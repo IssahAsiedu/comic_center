@@ -65,7 +65,6 @@ class MarvelRestClient {
       var details = ComicDetails.fromMap(map);
       return ApiResponse.success(data: details);
     } catch (e) {
-      print('error: $e');
       return ApiResponse.error();
     }
   }
