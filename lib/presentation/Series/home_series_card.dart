@@ -1,20 +1,20 @@
-import 'package:comics_center/domain/story/story.dart';
+import 'package:comics_center/domain/Series/series.dart';
 import 'package:flutter/material.dart';
 
-class HomeStoryCard extends StatelessWidget {
-  const HomeStoryCard({
+class HomeSeriesCard extends StatelessWidget {
+  const HomeSeriesCard({
     super.key,
     this.onTap,
     this.width,
     this.height,
-    required this.story,
+    required this.series,
     this.margin,
   });
 
   final void Function()? onTap;
   final double? width;
   final double? height;
-  final Story story;
+  final Series series;
   final EdgeInsets? margin;
 
   @override
@@ -30,7 +30,7 @@ class HomeStoryCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (story.thumbnail == null)
+          if (series.thumbnail == null)
             const Align(
               child: Icon(
                 Icons.not_interested,
@@ -38,26 +38,26 @@ class HomeStoryCard extends StatelessWidget {
                 color: Colors.orangeAccent,
               ),
             ),
-          if (story.thumbnail != null)
+          if (series.thumbnail != null)
             Container(
               height: 60,
               decoration: BoxDecoration(
                   image: DecorationImage(
                 fit: BoxFit.cover,
-                image: NetworkImage(story.thumbnail!),
+                image: NetworkImage(series.thumbnail!),
               )),
             ),
           const SizedBox(height: 20),
           Text(
-            '${story.type}',
+            series.name,
             style: const TextStyle(decoration: TextDecoration.underline),
           ),
           const SizedBox(height: 5),
           SizedBox(
             height: 60,
             child: Text(
-              story.name,
-              overflow: TextOverflow.fade,
+              series.name,
+              overflow: TextOverflow.clip,
             ),
           ),
         ],

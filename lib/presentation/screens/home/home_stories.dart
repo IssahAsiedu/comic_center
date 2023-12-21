@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeStoriesScreen extends ConsumerStatefulWidget {
-  const HomeStoriesScreen({super.key});
+class HomeSeriesScreen extends ConsumerStatefulWidget {
+  const HomeSeriesScreen({super.key});
 
   @override
-  ConsumerState<HomeStoriesScreen> createState() => _HomeStoriesScreenState();
+  ConsumerState<HomeSeriesScreen> createState() => _HomeStoriesScreenState();
 }
 
-class _HomeStoriesScreenState extends ConsumerState<HomeStoriesScreen> {
+class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();

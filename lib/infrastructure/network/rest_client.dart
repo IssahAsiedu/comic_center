@@ -1,8 +1,8 @@
+import 'package:comics_center/domain/Series/series.dart';
 import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/domain/character/character_detail.dart';
 import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/domain/comic/comic_details.dart';
-import 'package:comics_center/domain/story/story.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_interceptor.dart';
 import 'package:dio/dio.dart';
@@ -69,16 +69,16 @@ class MarvelRestClient {
     }
   }
 
-  Future<ApiResponse<PaginatedData<Story>>> getStories(
+  Future<ApiResponse<PaginatedData<Series>>> getSeries(
       Map<String, dynamic> query) async {
     try {
-      var result = await _dio.get('stories', queryParameters: query);
+      var result = await _dio.get('series', queryParameters: query);
 
       var storyList = (result.data["data"]["results"] as List).map((e) {
-        return Story.fromMap(e);
+        return Series.fromMap(e);
       }).toList();
 
-      var paginatedData = PaginatedData<Story>(
+      var paginatedData = PaginatedData<Series>(
         offset: result.data["data"]["offset"],
         total: result.data["data"]["total"],
         data: storyList,

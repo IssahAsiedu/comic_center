@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:comics_center/presentation/screen_sections/home_all_characters.dart';
 import 'package:comics_center/presentation/screen_sections/home_all_comics.dart';
-import 'package:comics_center/presentation/screen_sections/home_all_stories.dart';
+import 'package:comics_center/presentation/screen_sections/home_all_series.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
@@ -42,7 +42,7 @@ class _HomeAllScreenState extends ConsumerState<HomeAllScreen> {
             SizedBox(height: 20),
             HomeAllComicsSection(),
             SizedBox(height: 20),
-            HomeAllStoriesSection()
+            HomeAllSeriesSection()
           ],
         ),
       ),

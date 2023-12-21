@@ -24,7 +24,7 @@ class HomeScreen extends HookConsumerWidget {
               HomeAllScreen(),
               HomeCharactersScreen(),
               HomeComicsScreen(),
-              HomeStoriesScreen(),
+              HomeSeriesScreen(),
               HomeBookmarksScreen(),
             ][selectedOption],
             const Positioned(

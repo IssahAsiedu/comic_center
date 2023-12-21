@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:comics_center/domain/story/story.dart';
+import 'package:comics_center/domain/Series/series.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
-import 'package:comics_center/presentation/story/home_story_card.dart';
+import 'package:comics_center/presentation/Series/home_series_card.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/app_strings.dart';
@@ -11,16 +11,16 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class HomeAllStoriesSection extends ConsumerStatefulWidget {
-  const HomeAllStoriesSection({super.key});
+class HomeAllSeriesSection extends ConsumerStatefulWidget {
+  const HomeAllSeriesSection({super.key});
 
   @override
-  ConsumerState<HomeAllStoriesSection> createState() =>
+  ConsumerState<HomeAllSeriesSection> createState() =>
       _HomeAllStoriesSectionState();
 }
 
-class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
-  final PagingController<int, Story> _storyPagingController =
+class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
+  final PagingController<int, Series> _storyPagingController =
       PagingController(firstPageKey: 0);
   StreamSubscription? _subscription;
   int limit = 10;
@@ -48,7 +48,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
               ),
               const SizedBox(width: 20),
               Text(
-                AppStrings.storiesTitle,
+                AppStrings.seriesTitle,
                 style: const TextStyle(fontFamily: 'Bangers', fontSize: 24),
               ),
             ],
@@ -56,8 +56,8 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
         ),
         const SizedBox(height: 20),
         SizedBox(
-          height: 170,
-          child: PagedListView<int, Story>.separated(
+          height: 183,
+          child: PagedListView<int, Series>.separated(
             pagingController: _storyPagingController,
             scrollDirection: Axis.horizontal,
             physics: const BouncingScrollPhysics(),
@@ -76,9 +76,9 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
                     right: _isLastItem(index) ? 24 : 0,
                   );
 
-                  return HomeStoryCard(
+                  return HomeSeriesCard(
                     margin: margin,
-                    story: item,
+                    series: item,
                     width: itemWidth,
                     onTap: () {
                       // context.push(
@@ -111,7 +111,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllStoriesSection> {
   Future<void> fetchStories(int pageKey) async {
     var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
 
-    var response = await MarvelRestClient().getStories(query);
+    var response = await MarvelRestClient().getSeries(query);
 
     if (response.status == Status.error) {
       _storyPagingController.error = Error();

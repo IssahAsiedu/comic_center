@@ -1,9 +1,11 @@
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/presentation/comic/widgets/prices_section.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/dialog/error_dialog.dart';
 import 'package:comics_center/presentation/widgets/slide_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'comic_images.dart';
 import 'description.dart';
@@ -45,19 +47,29 @@ class ComicDetailBody extends StatelessWidget {
                           const SizedBox(width: 20),
 
                           //link
-                          InkWell(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(
-                                  Icons.link,
-                                  color: Colors.blueAccent,
-                                ),
-                                SizedBox(width: 5),
-                                Text('Details'),
-                              ],
-                            ),
-                          )
+                          if (comicDetails.resourceURI != null)
+                            InkWell(
+                              onTap: () async {
+                                final uri =
+                                    Uri.parse(comicDetails.resourceURI!);
+
+                                if (!await launchUrl(uri)) {
+                                  Navigator.of(context).push(ErrorDialog(
+                                      message: "Could not open link"));
+                                }
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Icon(
+                                    Icons.link,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text('Details'),
+                                ],
+                              ),
+                            )
                         ],
                       ),
                       Container(
