@@ -17,6 +17,7 @@ class CharacterDetailBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black38,
       appBar: ImageAppBar(
         thumbnail: characterDetails.thumbnail!,
         title: characterDetails.name,

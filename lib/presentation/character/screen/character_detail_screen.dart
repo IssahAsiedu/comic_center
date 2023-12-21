@@ -20,7 +20,6 @@ class CharacterDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black54,
       body: FutureBuilder<ApiResponse<CharacterDetails>>(
         future: MarvelRestClient().getCharacterDetails(id),
         builder: (_, snapshot) {

@@ -19,7 +19,7 @@ class _SeriesDetailBodyState extends State<SeriesDetailBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Colors.black38,
       appBar: ImageAppBar(
         thumbnail: widget.seriesDetails.thumbnail!,
         title: widget.seriesDetails.name,
