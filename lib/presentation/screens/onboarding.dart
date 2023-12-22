@@ -122,7 +122,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     padding: const EdgeInsets.all(15),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

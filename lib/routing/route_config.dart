@@ -83,9 +83,8 @@ class AppRouteNotifier extends AsyncNotifier<void> implements Listenable {
 
     if (state.uri.path == onboarding) {
       final user = ref.read(supabaseClientProvider).auth.currentUser;
-      if (user != null) {
-        Future(() => ref.read(authProvider.notifier).setUser(user));
-      }
+      if (user == null) return null;
+      Future(() => ref.read(authProvider.notifier).setUser(user));
       return home;
     }
 

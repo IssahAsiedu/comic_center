@@ -17,7 +17,7 @@ class GoogleButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(4),
           border: Border.all(color: Colors.white),
         ),
         child: Row(
@@ -27,7 +27,10 @@ class GoogleButton extends StatelessWidget {
               'Continue with google',
               style: TextStyle(fontSize: 18),
             ),
-            SvgPicture.asset(AppAssets.googleLogo),
+            Container(
+              margin: const EdgeInsets.only(left: 5),
+              child: SvgPicture.asset(AppAssets.googleLogo),
+            ),
           ],
         ),
       ),

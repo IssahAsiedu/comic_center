@@ -24,7 +24,7 @@ class ErrorDialog extends PopupRoute<void> {
     return UnconstrainedBox(
       child: Material(
         color: Colors.redAccent,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(4),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Row(

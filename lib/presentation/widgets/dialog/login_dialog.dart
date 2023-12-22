@@ -24,15 +24,16 @@ class LoginDialog extends PopupRoute<void> {
   ) {
     return UnconstrainedBox(
       child: Material(
-        borderRadius: BorderRadius.circular(14),
-        color: Colors.grey,
+        borderRadius: BorderRadius.circular(4),
+        elevation: 2,
+        color: Colors.redAccent.withOpacity(0.6),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                width: 200,
+                width: 250,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
