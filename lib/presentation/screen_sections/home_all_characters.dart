@@ -120,7 +120,7 @@ class _HomeAllCharactersSectionState
 
     var response = await MarvelRestClient().getCharacter(query);
 
-    if (response.status == Status.error) {
+    if (response.status == Status.error && mounted) {
       _characterPagingController.error = Error();
       return;
     }

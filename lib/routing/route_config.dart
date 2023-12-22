@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:comics_center/presentation/Series/series_details_screen.dart';
 import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
 import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
+import 'package:comics_center/presentation/screens/app_init_screen.dart';
 import 'package:comics_center/presentation/screens/home/home.dart';
 import 'package:comics_center/presentation/screens/onboarding.dart';
 import 'package:comics_center/providers/app_providers.dart';
@@ -11,9 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
-    implements Listenable {
+class AppRouteNotifier extends AsyncNotifier<void> implements Listenable {
   static const root = "/";
+  static const onboarding = "/onboarding";
   static const characters = "/characters";
   static const comics = "/comics";
   static const home = "/home";
@@ -28,6 +29,10 @@ class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
   static generateSeriesRoute([String? id]) => "$series/${id ?? ':id'}";
 
   static Widget _rootPageBuilder(BuildContext context, GoRouterState _) {
+    return const AppInitializationScreen();
+  }
+
+  static Widget _onboardingPageBuilder(BuildContext context, GoRouterState _) {
     return const OnboardingScreen();
   }
 
@@ -46,6 +51,7 @@ class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
 
   final _router = <GoRoute>[
     GoRoute(path: root, builder: _rootPageBuilder),
+    GoRoute(path: onboarding, builder: _onboardingPageBuilder),
     GoRoute(path: home, builder: (_, state) => const HomeScreen()),
     GoRoute(path: generateCharacterRoute(), builder: _characterPageBuilder),
     GoRoute(path: generateComicRoute(), builder: _comicPageBuilder),
@@ -75,10 +81,11 @@ class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
   String? redirect(BuildContext context, GoRouterState state) {
     if (this.state.isLoading || this.state.hasError) return null;
 
-    final user = ref.read(supabaseClientProvider).auth.currentUser;
-
-    if (state.uri.path == root && user != null) {
-      Future(() => ref.read(authProvider.notifier).setUser(user));
+    if (state.uri.path == onboarding) {
+      final user = ref.read(supabaseClientProvider).auth.currentUser;
+      if (user != null) {
+        Future(() => ref.read(authProvider.notifier).setUser(user));
+      }
       return home;
     }
 
@@ -87,10 +94,9 @@ class AppRouteNotifier extends AutoDisposeAsyncNotifier<void>
 }
 
 final routerNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<AppRouteNotifier, void>(
-        AppRouteNotifier.new);
+    AsyncNotifierProvider<AppRouteNotifier, void>(AppRouteNotifier.new);
 
-final routerProvider = Provider.autoDispose<GoRouter>((ref) {
+final routerProvider = Provider((ref) {
   final routerNotifier = ref.watch(routerNotifierProvider.notifier);
 
   return GoRouter(

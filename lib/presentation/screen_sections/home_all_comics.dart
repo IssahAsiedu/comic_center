@@ -130,7 +130,7 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
 
     var response = await MarvelRestClient().getComics(query);
 
-    if (response.status == Status.error) {
+    if (response.status == Status.error && mounted) {
       _comicsPagingController.error = Error();
       return;
     }
