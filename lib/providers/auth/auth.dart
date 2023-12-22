@@ -35,8 +35,8 @@ class AuthNotifier extends p.Notifier<AuthState> {
 
       final userData = <String, dynamic>{}
         ..addAll(response.user!.userMetadata!);
-
       userData['id'] = response.user!.id;
+
       state = AuthSuccess(UserData.fromMap(userData));
     } catch (e) {
       state = const AuthError('Login Failed');
