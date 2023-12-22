@@ -26,6 +26,7 @@ class PagedEmptyIndicator extends StatelessWidget {
 
         //empty text
         const Text('The list is Empty'),
+        const SizedBox(height: 20),
 
         // button
         GestureDetector(
@@ -35,6 +36,7 @@ class PagedEmptyIndicator extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
+              color: Colors.blueAccent,
             ),
           ),
         )

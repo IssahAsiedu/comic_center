@@ -120,39 +120,43 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
   }
 
   Future<void> fetchSeries(int pageKey) async {
-    var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+    try {
+      var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
 
-    var response = await MarvelRestClient().getSeries(query);
+      var response = await MarvelRestClient().getSeries(query);
 
-    if (response.status == Status.error && mounted) {
-      _seriesPagingController.error = Error();
-      return;
-    }
-
-    final series = response.data!.data;
-
-    if (!mounted) return;
-    final table =
-        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
-    final authState = ref.read(authProvider);
-
-    if (authState is AuthSuccess) {
-      for (var s in series) {
-        List<dynamic>? result =
-            await table.select().eq("userid", authState.user.id).eq('id', s.id);
-        if (result != null && result.isNotEmpty) s.bookMarked = true;
+      if (response.status == Status.error) {
+        _seriesPagingController.error = Error();
+        return;
       }
+
+      final series = response.data!.data;
+
+      final table =
+          ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+      final authState = ref.read(authProvider);
+
+      if (authState is AuthSuccess) {
+        for (var s in series) {
+          List<dynamic>? result = await table
+              .select()
+              .eq("userid", authState.user.id)
+              .eq('id', s.id);
+          if (result != null && result.isNotEmpty) s.bookMarked = true;
+        }
+      }
+
+      var pages = (response.data!.total / limit).ceil();
+
+      if (pageKey == pages) {
+        _seriesPagingController.appendLastPage(series);
+        return;
+      }
+      _seriesPagingController.appendPage(series, ++pageKey);
+    } catch (e) {
+      if (!mounted) return;
+      _seriesPagingController.error = Error();
     }
-
-    var pages = (response.data!.total / limit).ceil();
-
-    if (pageKey == pages && mounted) {
-      _seriesPagingController.appendLastPage(series);
-      return;
-    }
-
-    if (!mounted) return;
-    _seriesPagingController.appendPage(series, ++pageKey);
   }
 
   bool _isLastItem(int index) {

@@ -107,26 +107,29 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
   }
 
   Future<void> fetchCharacters(int pageKey) async {
-    var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
-    if (_searchController.text.isNotEmpty) {
-      query["nameStartsWith"] = _searchController.text;
-    }
-    var response = await MarvelRestClient().getCharacter(query);
+    try {
+      var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+      if (_searchController.text.isNotEmpty) {
+        query["nameStartsWith"] = _searchController.text;
+      }
+      var response = await MarvelRestClient().getCharacter(query);
 
-    if (response.status == Status.error) {
+      if (response.status == Status.error) {
+        _characterPagingController.error = Error();
+        return;
+      }
+
+      var pages = (response.data!.total / limit).ceil();
+
+      if (pageKey == pages) {
+        _characterPagingController.appendLastPage(response.data!.data);
+        return;
+      }
+      _characterPagingController.appendPage(response.data!.data, ++pageKey);
+    } catch (e) {
+      if (!mounted) return;
       _characterPagingController.error = Error();
-      return;
     }
-
-    var pages = (response.data!.total / limit).ceil();
-
-    if (pageKey == pages && mounted) {
-      _characterPagingController.appendLastPage(response.data!.data);
-      return;
-    }
-
-    if (!mounted) return;
-    _characterPagingController.appendPage(response.data!.data, ++pageKey);
   }
 
   @override

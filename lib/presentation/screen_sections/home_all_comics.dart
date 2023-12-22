@@ -126,40 +126,40 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
   }
 
   Future<void> fetchComics(int pageKey) async {
-    var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+    try {
+      var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+      var response = await MarvelRestClient().getComics(query);
 
-    var response = await MarvelRestClient().getComics(query);
-
-    if (response.status == Status.error && mounted) {
-      _comicsPagingController.error = Error();
-      return;
-    }
-
-    final comics = response.data!.data;
-
-    if (!mounted) return;
-    final table =
-        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
-    final authState = ref.read(authProvider);
-
-    if (authState is AuthSuccess) {
-      for (var comic in comics) {
-        List<dynamic>? result = await table
-            .select()
-            .eq("userid", authState.user.id)
-            .eq('id', comic.id);
-        if (result != null && result.isNotEmpty) comic.bookMarked = true;
+      if (response.status == Status.error) {
+        _comicsPagingController.error = Error();
+        return;
       }
-    }
 
-    var pages = (response.data!.total / limit).ceil();
-    if (pageKey == pages && mounted) {
-      _comicsPagingController.appendLastPage(comics);
-      return;
-    }
+      final comics = response.data!.data;
+      final table =
+          ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+      final authState = ref.read(authProvider);
 
-    if (!mounted) return;
-    _comicsPagingController.appendPage(comics, ++pageKey);
+      if (authState is AuthSuccess) {
+        for (var comic in comics) {
+          List<dynamic>? result = await table
+              .select()
+              .eq("userid", authState.user.id)
+              .eq('id', comic.id);
+          if (result != null && result.isNotEmpty) comic.bookMarked = true;
+        }
+      }
+
+      var pages = (response.data!.total / limit).ceil();
+      if (pageKey == pages) {
+        _comicsPagingController.appendLastPage(comics);
+        return;
+      }
+      _comicsPagingController.appendPage(comics, ++pageKey);
+    } catch (e) {
+      if (!mounted) return;
+      _comicsPagingController.error = Error();
+    }
   }
 
   bool _isLastItem(int index) {

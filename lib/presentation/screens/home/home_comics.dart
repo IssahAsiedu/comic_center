@@ -110,25 +110,29 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
   }
 
   Future<void> fetchComics(int pageKey) async {
-    var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+    try {
+      var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
 
-    if (_searchController.text.isNotEmpty) {
-      query["titleStartsWith"] = _searchController.text;
-    }
-    var response = await MarvelRestClient().getComics(query);
+      if (_searchController.text.isNotEmpty) {
+        query["titleStartsWith"] = _searchController.text;
+      }
+      var response = await MarvelRestClient().getComics(query);
 
-    if (response.status == Status.error) {
+      if (response.status == Status.error) {
+        _comicsPagingController.error = Error();
+        return;
+      }
+      var pages = (response.data!.total / limit).ceil();
+      if (pageKey == pages) {
+        _comicsPagingController.appendLastPage(response.data!.data);
+        return;
+      }
+
+      _comicsPagingController.appendPage(response.data!.data, ++pageKey);
+    } catch (e) {
+      if (!mounted) return;
       _comicsPagingController.error = Error();
-      return;
     }
-    var pages = (response.data!.total / limit).ceil();
-    if (pageKey == pages && mounted) {
-      _comicsPagingController.appendLastPage(response.data!.data);
-      return;
-    }
-
-    if (!mounted) return;
-    _comicsPagingController.appendPage(response.data!.data, ++pageKey);
   }
 
   bool _isLastItem(int index) {

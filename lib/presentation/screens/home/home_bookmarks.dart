@@ -2,6 +2,8 @@ import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/bookmark/bookmark_card.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
+import 'package:comics_center/presentation/widgets/dialog/error_dialog.dart';
+import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
 import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
@@ -35,6 +37,13 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future(() {
+      final authState = ref.read(authProvider);
+      if (authState is! AuthSuccess) {
+        Navigator.of(context).push(LoginDialog(() {}));
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         leading: Transform.scale(
@@ -66,7 +75,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
               },
               child: PagedListView<int, Bookmark>.separated(
                 separatorBuilder: (_, i) {
-                  return const Divider(color: Colors.white);
+                  return const Divider(color: Colors.white70);
                 },
                 padding: const EdgeInsets.symmetric(horizontal: 24),
                 pagingController: _bookmarksPagingController,
@@ -93,7 +102,10 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                             await table.delete().match({"pk": bookmark.pk});
                             _removeItemWithId(bookmark.pk);
                           } catch (e) {
-                            print(e);
+                            if (!mounted) return;
+                            var message = "item was not removed";
+                            Navigator.of(context)
+                                .push(ErrorDialog(message: message));
                           }
                         },
                         background: ColoredBox(
@@ -151,31 +163,34 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
   }
 
   Future<void> _onPageRequest(int key) async {
-    final table =
-        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+    try {
+      final table =
+          ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
 
-    final authState = ref.read(authProvider);
+      final authState = ref.read(authProvider);
 
-    if (authState is! AuthSuccess) {
-      _bookmarksPagingController.appendLastPage([]);
-      return;
+      if (authState is! AuthSuccess) {
+        _bookmarksPagingController.appendLastPage([]);
+        return;
+      }
+
+      final from = key * limit;
+      final to = (from + limit) - 1;
+      List<dynamic> result = await table.select().match(
+        {"userid": authState.user.id},
+      ).range(from, to);
+
+      if (result.isEmpty) {
+        _bookmarksPagingController.appendLastPage([]);
+        return;
+      }
+
+      var bookmarks = result.map((e) => Bookmark.fromMap(e)).toList();
+      _bookmarksPagingController.appendPage(bookmarks, key + 1);
+    } catch (e) {
+      if (!mounted) return;
+      _bookmarksPagingController.error = Error();
     }
-
-    final from = key * limit;
-    final to = (from + limit) - 1;
-    List<dynamic> result = await table.select().match(
-      {"userid": authState.user.id},
-    ).range(from, to);
-
-    if (result.isEmpty && mounted) {
-      _bookmarksPagingController.appendLastPage([]);
-      return;
-    }
-
-    var bookmarks = result.map((e) => Bookmark.fromMap(e)).toList();
-
-    if (!mounted) return;
-    _bookmarksPagingController.appendPage(bookmarks, key + 1);
   }
 
   bool _isLastItem(int index) {
