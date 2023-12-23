@@ -1,8 +1,10 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:comics_center/infrastructure/download/downloader.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
@@ -10,6 +12,8 @@ void main() async {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
+  await FlutterDownloader.initialize(debug: true);
+  FlutterDownloader.registerCallback(DownloadClass.callback);
   await dotenv.load(fileName: ".env");
   runApp(const ProviderScope(child: MyApp()));
 }

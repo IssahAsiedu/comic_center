@@ -1,10 +1,13 @@
+import 'dart:io';
+
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:comics_center/presentation/widgets/filled_image_container.dart';
-import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class ComicImages extends StatefulWidget {
   final ComicDetails comicDetails;
@@ -56,21 +59,36 @@ class _ComicImagesState extends State<ComicImages> {
                   ),
                 ),
 
-                //download image button
-                Positioned(
-                  right: 20,
-                  bottom: 5,
-                  child: DownloadButton(
-                    selectedImage: selectedImage,
-                  ),
-                ),
-
                 //bookmark button
                 Positioned(
                   top: 10,
                   right: 20,
-                  child: BookMarkButton(
-                    bookmarkable: widget.comicDetails,
+                  child: Row(
+                    children: [
+                      BookMarkButton(
+                        bookmarkable: widget.comicDetails,
+                      ),
+                      const SizedBox(width: 10),
+                      CircleAvatar(
+                        backgroundColor: Colors.black54,
+                        child: PopupMenuButton(
+                            color: Colors.orangeAccent,
+                            itemBuilder: (_) {
+                              return [
+                                PopupMenuItem(
+                                  onTap: _downloadImage,
+                                  child: const Text(
+                                    'Save Image',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              ];
+                            }),
+                      )
+                    ],
                   ),
                 )
               ],
@@ -84,9 +102,7 @@ class _ComicImagesState extends State<ComicImages> {
             child: ListView.separated(
               itemCount: images.length,
               scrollDirection: Axis.horizontal,
-              separatorBuilder: (_, i) => const SizedBox(
-                width: 5,
-              ),
+              separatorBuilder: (_, i) => const SizedBox(width: 5),
               itemBuilder: (_, i) {
                 return GestureDetector(
                   onTap: () {
@@ -129,48 +145,22 @@ class _ComicImagesState extends State<ComicImages> {
               child: FilledImageContainer(imageUrl: selectedImage));
         });
   }
-}
 
-class DownloadButton extends ConsumerWidget {
-  const DownloadButton({
-    super.key,
-    required this.selectedImage,
-  });
+  void _downloadImage() async {
+    Directory dir = await getExternalStorageDirectory() ??
+        Directory('/storage/emulated/0/Download');
 
-  final String selectedImage;
+    var splits = selectedImage.split('/');
+    splits = splits[splits.length - 1].split('.');
+    final extension = splits[splits.length - 1];
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    var downloader = ref.watch(downloaderProvider);
-
-    double value = downloader[selectedImage] ?? 0;
-
-    return CircleAvatar(
-      backgroundColor: Colors.black,
-      radius: 30,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          SizedBox(
-              width: 50,
-              height: 50,
-              child: CircularProgressIndicator(
-                value: value.toDouble(),
-              )),
-          IconButton(
-            iconSize: 30,
-            color: Colors.white,
-            icon: const Icon(
-              Icons.download,
-            ),
-            onPressed: () {
-              ref
-                  .read(downloaderProvider.notifier)
-                  .downloadOnAndroid(selectedImage);
-            },
-          ),
-        ],
-      ),
+    await FlutterDownloader.enqueue(
+      url: selectedImage,
+      savedDir: dir.path,
+      showNotification: true,
+      saveInPublicStorage: true,
+      fileName: '${const Uuid().v4()}.$extension',
+      openFileFromNotification: true,
     );
   }
 }
