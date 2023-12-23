@@ -72,7 +72,10 @@ class _ComicDetailBodyState extends State<ComicDetailBody> {
                                 children: const [
                                   Icon(Icons.link, color: Colors.blueAccent),
                                   SizedBox(width: 5),
-                                  Text('Details'),
+                                  Text(
+                                    'Get Comic',
+                                    style: TextStyle(color: Colors.blueAccent),
+                                  ),
                                 ],
                               ),
                             )
