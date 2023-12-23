@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:comics_center/domain/comic/comic_details.dart';
 import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:comics_center/presentation/widgets/filled_image_container.dart';
@@ -153,6 +154,8 @@ class _ComicImagesState extends State<ComicImages> {
     var splits = selectedImage.split('/');
     splits = splits[splits.length - 1].split('.');
     final extension = splits[splits.length - 1];
+
+    BotToast.showText(text: 'See progress in notification panel.');
 
     await FlutterDownloader.enqueue(
       url: selectedImage,
