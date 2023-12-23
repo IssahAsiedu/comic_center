@@ -104,17 +104,18 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ),
         Positioned(
-          top: 30,
           left: 10,
           right: 10,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AppBackButton(
-                onTap: onBack,
-              ),
-              if (item != null) BookMarkButton(bookmarkable: item!),
-            ],
+          child: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppBackButton(
+                  onTap: onBack,
+                ),
+                if (item != null) BookMarkButton(bookmarkable: item!),
+              ],
+            ),
           ),
         )
       ],
