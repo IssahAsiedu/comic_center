@@ -105,7 +105,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                 textController: _searchController,
                 onTextChange: (_) {
                   _timer?.cancel();
-                  _timer = Timer(const Duration(milliseconds: 250), () {
+                  _timer = Timer(const Duration(seconds: 1), () {
                     _characterPagingController.refresh();
                   });
                 },
