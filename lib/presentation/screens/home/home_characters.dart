@@ -25,8 +25,10 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
   final PagingController<int, Character> _characterPagingController =
       PagingController(firstPageKey: 0);
   final TextEditingController _searchController = TextEditingController();
+
   final int limit = 10;
-  Timer? timer;
+
+  Timer? _timer;
 
   @override
   void initState() {
@@ -102,8 +104,8 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                 hintText: 'Search for a character',
                 textController: _searchController,
                 onTextChange: (_) {
-                  timer?.cancel();
-                  timer = Timer(const Duration(milliseconds: 250), () {
+                  _timer?.cancel();
+                  _timer = Timer(const Duration(milliseconds: 250), () {
                     _characterPagingController.refresh();
                   });
                 },

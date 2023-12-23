@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/comic/comic.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
@@ -23,6 +25,8 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
 
   final PagingController<int, Comic> _comicsPagingController =
       PagingController(firstPageKey: 0);
+
+  Timer? _timer;
 
   int limit = 10;
 
@@ -96,17 +100,19 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
               ),
               child: SearchField(
                 textController: _searchController,
-                onSubmit: _onSubmitText,
+                hintText: 'Search for a comic',
+                onTextChange: (_) {
+                  _timer?.cancel();
+                  _timer = Timer(const Duration(milliseconds: 250), () {
+                    _comicsPagingController.refresh();
+                  });
+                },
               ),
             ),
           )
         ],
       ),
     );
-  }
-
-  void _onSubmitText() {
-    _comicsPagingController.refresh();
   }
 
   Future<void> fetchComics(int pageKey) async {
