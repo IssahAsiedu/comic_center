@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/character/character.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
@@ -24,6 +26,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
       PagingController(firstPageKey: 0);
   final TextEditingController _searchController = TextEditingController();
   final int limit = 10;
+  Timer? timer;
 
   @override
   void initState() {
@@ -65,10 +68,10 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                         itemWidth: 200,
                         itemHeight: 200,
                         onTap: () {
-                          context.push(
-                            AppRouteNotifier.generateCharacterRoute(
-                                "${item.id}"),
+                          var route = AppRouteNotifier.generateCharacterRoute(
+                            "${item.id}",
                           );
+                          context.push(route);
                         },
                       );
                     }, firstPageErrorIndicatorBuilder: (_) {
@@ -96,8 +99,14 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
                 right: 24,
               ),
               child: SearchField(
+                hintText: 'Search for a character',
                 textController: _searchController,
-                onSubmit: () => _characterPagingController.refresh(),
+                onTextChange: (_) {
+                  timer?.cancel();
+                  timer = Timer(const Duration(milliseconds: 250), () {
+                    _characterPagingController.refresh();
+                  });
+                },
               ),
             ),
           )

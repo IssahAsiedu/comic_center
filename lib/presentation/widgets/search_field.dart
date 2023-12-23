@@ -40,7 +40,7 @@ class SearchField extends StatelessWidget {
           Icons.search,
           size: 30,
         ),
-        hintStyle: const TextStyle(color: Colors.white24),
+        hintStyle: const TextStyle(color: Colors.grey),
         hintText: hintText,
         fillColor: Colors.white,
         filled: true,
