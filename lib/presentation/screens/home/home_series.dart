@@ -1,85 +1,92 @@
-import 'package:comics_center/domain/character/character.dart';
+import 'package:comics_center/domain/Series/series.dart';
+import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
-import 'package:comics_center/presentation/character/widgets/character_card.dart';
+import 'package:comics_center/presentation/Series/home_series_card.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
+import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/routing/route_config.dart';
+import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class HomeCharactersScreen extends ConsumerStatefulWidget {
-  const HomeCharactersScreen({super.key});
+class HomeSeriesScreen extends ConsumerStatefulWidget {
+  const HomeSeriesScreen({super.key});
 
   @override
-  ConsumerState<HomeCharactersScreen> createState() =>
-      _HomeCharactersScreenState();
+  ConsumerState<HomeSeriesScreen> createState() => _HomeStoriesScreenState();
 }
 
-class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
-  final PagingController<int, Character> _characterPagingController =
+class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
+  final PagingController<int, Series> _seriesPagingController =
       PagingController(firstPageKey: 0);
   final TextEditingController _searchController = TextEditingController();
-  final int limit = 10;
+  int limit = 10;
 
   @override
   void initState() {
-    _characterPagingController.addPageRequestListener(fetchCharacters);
+    _seriesPagingController.addPageRequestListener(fetchSeries);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authProvider, (previous, next) {
+      if (next is! AuthSuccess && next is! AuthInitial) return;
+      _seriesPagingController.refresh();
+    });
+
     return Scaffold(
       appBar: const HomeAppBar(),
       body: Stack(
         children: [
-          //characters
+          //series
           Positioned.fill(
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 54),
               child: RefreshIndicator(
                 onRefresh: () async {
                   _searchController.text = "";
-                  _characterPagingController.refresh();
+                  _seriesPagingController.refresh();
                 },
-                child: PagedGridView<int, Character>(
+                child: PagedGridView<int, Series>(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 10,
                       crossAxisSpacing: 10,
                     ),
-                    pagingController: _characterPagingController,
+                    pagingController: _seriesPagingController,
                     builderDelegate: PagedChildBuilderDelegate(itemBuilder: (
                       BuildContext context,
-                      Character item,
+                      Series item,
                       int index,
                     ) {
-                      return CharacterCard(
-                        thumbnailUrl: item.thumbnail!,
-                        characterName: item.name,
-                        itemWidth: 200,
-                        itemHeight: 200,
-                        onTap: () {
-                          context.push(
-                            AppRouteNotifier.generateCharacterRoute(
-                                "${item.id}"),
-                          );
+                      return HomeSeriesCard(
+                        series: item,
+                        onTap: () async {
+                          var route = AppRouteNotifier.generateSeriesRoute(
+                              "${item.id}");
+                          final result = await context.push(route);
+                          if (result is! Bookmarkable) return;
+                          setState(() => item.bookMarked = result.bookMarked);
                         },
                       );
                     }, firstPageErrorIndicatorBuilder: (_) {
                       return PagedErrorIndicator(
                         onTap: () =>
-                            _characterPagingController.retryLastFailedRequest(),
+                            _seriesPagingController.retryLastFailedRequest(),
                       );
                     }, newPageErrorIndicatorBuilder: (_) {
                       return PagedErrorIndicator(
                         onTap: () =>
-                            _characterPagingController.retryLastFailedRequest(),
+                            _seriesPagingController.retryLastFailedRequest(),
                       );
                     })),
               ),
@@ -97,7 +104,7 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
               ),
               child: SearchField(
                 textController: _searchController,
-                onSubmit: () => _characterPagingController.refresh(),
+                onSubmit: () => _seriesPagingController.refresh(),
               ),
             ),
           )
@@ -106,36 +113,42 @@ class _HomeCharactersScreenState extends ConsumerState<HomeCharactersScreen> {
     );
   }
 
-  Future<void> fetchCharacters(int pageKey) async {
+  Future<void> fetchSeries(int pageKey) async {
     try {
       var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
-      if (_searchController.text.isNotEmpty) {
-        query["nameStartsWith"] = _searchController.text;
-      }
-      var response = await MarvelRestClient().getCharacter(query);
+
+      var response = await MarvelRestClient().getSeries(query);
 
       if (response.status == Status.error) {
-        _characterPagingController.error = Error();
+        _seriesPagingController.error = Error();
         return;
+      }
+
+      final series = response.data!.data;
+      final table =
+          ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+      final authState = ref.read(authProvider);
+
+      if (authState is AuthSuccess) {
+        for (var s in series) {
+          List<dynamic>? result = await table
+              .select()
+              .eq("userid", authState.user.id)
+              .eq('id', s.id);
+          if (result != null && result.isNotEmpty) s.bookMarked = true;
+        }
       }
 
       var pages = (response.data!.total / limit).ceil();
 
       if (pageKey == pages) {
-        _characterPagingController.appendLastPage(response.data!.data);
+        _seriesPagingController.appendLastPage(series);
         return;
       }
-      _characterPagingController.appendPage(response.data!.data, ++pageKey);
+      _seriesPagingController.appendPage(series, ++pageKey);
     } catch (e) {
       if (!mounted) return;
-      _characterPagingController.error = Error();
+      _seriesPagingController.error = Error();
     }
-  }
-
-  @override
-  void dispose() {
-    _characterPagingController.dispose();
-    _searchController.dispose();
-    super.dispose();
   }
 }

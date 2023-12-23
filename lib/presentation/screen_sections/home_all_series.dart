@@ -42,6 +42,7 @@ class _HomeAllStoriesSectionState extends ConsumerState<HomeAllSeriesSection> {
   @override
   Widget build(BuildContext context) {
     ref.listen(authProvider, (previous, next) {
+      if (next is! AuthSuccess && next is! AuthInitial) return;
       _seriesPagingController.refresh();
     });
 

@@ -1,4 +1,3 @@
-import 'package:comics_center/shared/utils.dart';
 import 'package:flutter/material.dart';
 
 var border = OutlineInputBorder(
@@ -26,44 +25,32 @@ class SearchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        TextField(
-          focusNode: focusNode,
-          controller: textController,
-          onChanged: onTextChange,
-          onEditingComplete: onSubmit,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Colors.black),
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.search),
-            hintStyle: const TextStyle(color: Colors.white24),
-            hintText: hintText,
-            fillColor: Colors.white,
-            filled: true,
-            contentPadding: EdgeInsets.zero,
-            focusedBorder: border,
-            enabledBorder: border,
-            constraints: BoxConstraints(
-              maxWidth:
-                  searchBoxWidth ?? MediaQuery.of(context).size.width * 0.9,
-            ),
+    return TextField(
+      focusNode: focusNode,
+      controller: textController,
+      onChanged: onTextChange,
+      onEditingComplete: onSubmit,
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
           ),
+      decoration: InputDecoration(
+        prefixIcon: const Icon(
+          Icons.search,
+          size: 30,
         ),
-        Positioned(
-          right: 0,
-          child: OutlinedButton(
-            onPressed: onSubmit,
-            style: kOutlinedButtonCircleBackgroundStyle,
-            child: const Icon(
-              Icons.arrow_forward,
-              color: Colors.white,
-            ),
-          ),
-        )
-      ],
+        hintStyle: const TextStyle(color: Colors.white24),
+        hintText: hintText,
+        fillColor: Colors.white,
+        filled: true,
+        contentPadding: EdgeInsets.zero,
+        focusedBorder: border,
+        enabledBorder: border,
+        constraints: BoxConstraints(
+          maxWidth: searchBoxWidth ?? MediaQuery.of(context).size.width * 0.9,
+        ),
+      ),
     );
   }
 }

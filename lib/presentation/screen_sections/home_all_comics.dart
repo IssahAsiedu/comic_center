@@ -44,6 +44,7 @@ class _HomeAllComicsSectionState extends ConsumerState<HomeAllComicsSection> {
     var listHeight = MediaQuery.of(context).size.height * 0.3;
 
     ref.listen(authProvider, (previous, next) {
+      if (next is! AuthSuccess && next is! AuthInitial) return;
       _comicsPagingController.refresh();
     });
 
