@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:comics_center/domain/Series/series.dart';
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/Series/home_series_card.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
+import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
 import 'package:comics_center/providers/app_providers.dart';
@@ -26,8 +29,12 @@ class HomeSeriesScreen extends ConsumerStatefulWidget {
 class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
   final PagingController<int, Series> _seriesPagingController =
       PagingController(firstPageKey: 0);
+
   final TextEditingController _searchController = TextEditingController();
+
   int limit = 10;
+
+  Timer? _timer;
 
   @override
   void initState() {
@@ -88,6 +95,10 @@ class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
                         onTap: () =>
                             _seriesPagingController.retryLastFailedRequest(),
                       );
+                    }, noItemsFoundIndicatorBuilder: (_) {
+                      return PagedEmptyIndicator(
+                        onRetry: () => _seriesPagingController.refresh(),
+                      );
                     })),
               ),
             ),
@@ -104,7 +115,13 @@ class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
               ),
               child: SearchField(
                 textController: _searchController,
-                onSubmit: () => _seriesPagingController.refresh(),
+                hintText: 'Search for a series',
+                onTextChange: (_) {
+                  _timer?.cancel();
+                  _timer = Timer(const Duration(seconds: 1), () {
+                    _seriesPagingController.refresh();
+                  });
+                },
               ),
             ),
           )
@@ -116,6 +133,10 @@ class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
   Future<void> fetchSeries(int pageKey) async {
     try {
       var query = <String, dynamic>{"offset": pageKey * limit, "limit": limit};
+
+      if (_searchController.text.isNotEmpty) {
+        query["titleStartsWith"] = _searchController.text;
+      }
 
       var response = await MarvelRestClient().getSeries(query);
 

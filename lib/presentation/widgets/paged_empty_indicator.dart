@@ -17,7 +17,7 @@ class PagedEmptyIndicator extends StatelessWidget {
         // icons
         const Icon(
           CupertinoIcons.ant,
-          size: 100,
+          size: 70,
           color: Colors.white,
         ),
 

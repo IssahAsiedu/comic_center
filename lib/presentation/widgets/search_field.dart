@@ -26,6 +26,7 @@ class SearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: false,
       focusNode: focusNode,
       controller: textController,
       onChanged: onTextChange,

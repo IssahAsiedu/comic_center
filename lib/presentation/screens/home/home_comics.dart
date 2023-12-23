@@ -5,6 +5,7 @@ import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/comic/widgets/comic_card.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
+import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
 import 'package:comics_center/routing/route_config.dart';
@@ -82,6 +83,12 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                         _comicsPagingController.retryLastFailedRequest();
                       },
                     );
+                  }, noItemsFoundIndicatorBuilder: (_) {
+                    return PagedEmptyIndicator(
+                      onRetry: () {
+                        _comicsPagingController.refresh();
+                      },
+                    );
                   }),
                   separatorBuilder: (_, i) {
                     return const SizedBox(height: 10);
@@ -103,7 +110,8 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                 hintText: 'Search for a comic',
                 onTextChange: (_) {
                   _timer?.cancel();
-                  _timer = Timer(const Duration(milliseconds: 250), () {
+                  _timer = Timer(const Duration(seconds: 1), () {
+                    print('hi');
                     _comicsPagingController.refresh();
                   });
                 },
