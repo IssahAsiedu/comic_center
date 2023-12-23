@@ -40,8 +40,16 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
     Future(() {
       final authState = ref.read(authProvider);
       if (authState is! AuthSuccess) {
-        Navigator.of(context).push(LoginDialog(() {}));
+        Navigator.of(context).push(LoginDialog(() async {
+          context.pop();
+          await ref.read(authProvider.notifier).googleLogin();
+        }));
       }
+    });
+
+    ref.listen(authProvider, (previous, next) {
+      if (next is! AuthSuccess && next is! AuthInitial) return;
+      _bookmarksPagingController.refresh();
     });
 
     return Scaffold(
