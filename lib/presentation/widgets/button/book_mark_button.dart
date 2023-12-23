@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/exceptions.dart';
 import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
@@ -41,6 +42,10 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
           Navigator.of(context).push(LoginDialog(() async {
             context.pop();
             await ref.read(authProvider.notifier).googleLogin();
+            BotToast.showText(
+              text: 'Login successful',
+              align: Alignment.topCenter,
+            );
           }));
         }
       },

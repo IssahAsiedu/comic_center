@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bot_toast/bot_toast.dart';
 import 'package:comics_center/presentation/Series/series_details_screen.dart';
 import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
 import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
@@ -99,10 +100,10 @@ final routerProvider = Provider((ref) {
   final routerNotifier = ref.watch(routerNotifierProvider.notifier);
 
   return GoRouter(
-    initialLocation: AppRouteNotifier.root,
-    routes: routerNotifier.router,
-    refreshListenable: routerNotifier,
-    debugLogDiagnostics: true,
-    redirect: routerNotifier.redirect,
-  );
+      initialLocation: AppRouteNotifier.root,
+      routes: routerNotifier.router,
+      refreshListenable: routerNotifier,
+      debugLogDiagnostics: true,
+      redirect: routerNotifier.redirect,
+      observers: [BotToastNavigatorObserver()]);
 });
