@@ -41,19 +41,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
           if (e is! UserNotFoundException) return;
           Navigator.of(context).push(LoginDialog(() async {
             context.pop();
-            try {
-              await ref.read(authProvider.notifier).googleLogin();
-              BotToast.showText(
-                text: 'Login successful',
-                align: Alignment.topCenter,
-              );
-            } catch (e) {
-              BotToast.showText(
-                text: 'An error occurred',
-                align: Alignment.topCenter,
-                backgroundColor: Colors.red,
-              );
-            }
+            await ref.read(authProvider.notifier).googleLogin();
           }));
         }
       },

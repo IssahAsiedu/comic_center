@@ -15,7 +15,7 @@ class AuthNotifier extends p.Notifier<AuthState> {
     var webClientId = dotenv.env['APP_WEB_CLIENT'];
 
     try {
-      final googleSignIn = GoogleSignIn(clientId: webClientId);
+      final googleSignIn = GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
       final googleAuth = await googleUser!.authentication;
       final accessToken = googleAuth.accessToken;
@@ -39,6 +39,7 @@ class AuthNotifier extends p.Notifier<AuthState> {
 
       state = AuthSuccess(UserData.fromMap(userData));
     } catch (e) {
+      print("error");
       state = const AuthError('Login Failed');
     }
   }
