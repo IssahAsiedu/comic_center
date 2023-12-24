@@ -8,6 +8,7 @@ import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
+import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,12 +28,17 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
   final PagingController<int, Comic> _comicsPagingController =
       PagingController(firstPageKey: 0);
 
+  final ScrollController _scrollController = ScrollController();
+
   Timer? _timer;
+
+  Timer? _scrollTimer;
 
   int limit = 10;
 
   @override
   void initState() {
+    _scrollController.addListener(_onScroll);
     _comicsPagingController.addPageRequestListener(fetchComics);
     super.initState();
   }
@@ -51,6 +57,7 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                 _comicsPagingController.refresh();
               },
               child: PagedListView<int, Comic>.separated(
+                  scrollController: _scrollController,
                   clipBehavior: Clip.antiAlias,
                   pagingController: _comicsPagingController,
                   builderDelegate: PagedChildBuilderDelegate(
@@ -157,5 +164,15 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
     _searchController.dispose();
     _comicsPagingController.dispose();
     super.dispose();
+  }
+
+  void _onScroll() {
+    _scrollTimer?.cancel();
+
+    ref.read(homeScrollingProvider.notifier).state = true;
+
+    _scrollTimer = Timer(const Duration(milliseconds: 500), () {
+      ref.read(homeScrollingProvider.notifier).state = false;
+    });
   }
 }
