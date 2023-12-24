@@ -20,8 +20,6 @@ class CharacterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('name: $characterName,, url: $thumbnailUrl');
-
     return GestureDetector(
       onTap: onTap,
       child: Container(

@@ -47,7 +47,7 @@ android {
         applicationId "com.example.comics_center"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
@@ -72,5 +72,6 @@ dependencies {
     implementation 'androidx.window:window-java:1.0.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'
 }

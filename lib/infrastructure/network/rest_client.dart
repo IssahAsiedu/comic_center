@@ -14,7 +14,8 @@ class MarvelRestClient {
   )..interceptors.add(MarvelRestInterceptor());
 
   Future<ApiResponse<PaginatedData<Character>>> getCharacter(
-      Map<String, dynamic> query) async {
+    Map<String, dynamic> query,
+  ) async {
     try {
       var result = await _dio.get('characters', queryParameters: query);
       var characterList = (result.data["data"]["results"] as List).map((e) {
@@ -31,7 +32,8 @@ class MarvelRestClient {
   }
 
   Future<ApiResponse<PaginatedData<Comic>>> getComics(
-      Map<String, dynamic> query) async {
+    Map<String, dynamic> query,
+  ) async {
     try {
       var result = await _dio.get("comics", queryParameters: query);
       var comicList = (result.data["data"]["results"] as List).map((e) {
@@ -74,7 +76,6 @@ class MarvelRestClient {
     try {
       var response = await _dio.get("series/$id");
       var map = response.data["data"]["results"][0];
-      print(map);
       var details = SeriesDetails.fromMap(map);
       return ApiResponse.success(data: details);
     } catch (e) {
@@ -83,7 +84,8 @@ class MarvelRestClient {
   }
 
   Future<ApiResponse<PaginatedData<Series>>> getSeries(
-      Map<String, dynamic> query) async {
+    Map<String, dynamic> query,
+  ) async {
     try {
       var result = await _dio.get('series', queryParameters: query);
 

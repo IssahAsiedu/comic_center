@@ -111,7 +111,6 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
                 onTextChange: (_) {
                   _timer?.cancel();
                   _timer = Timer(const Duration(seconds: 1), () {
-                    print('hi');
                     _comicsPagingController.refresh();
                   });
                 },
