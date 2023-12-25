@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/bookmark/bookmark_card.dart';
@@ -48,8 +49,20 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
     });
 
     ref.listen(authProvider, (previous, next) {
-      if (next is! AuthSuccess && next is! AuthInitial) return;
-      _bookmarksPagingController.refresh();
+      if (next is AuthSuccess) {
+        BotToast.showText(
+          text: "Login Successful",
+          align: Alignment.topCenter,
+        );
+        _bookmarksPagingController.refresh();
+      }
+
+      if (next is AuthError) {
+        BotToast.showText(
+          text: "Login error",
+          align: Alignment.topCenter,
+        );
+      }
     });
 
     return Scaffold(
