@@ -4,6 +4,7 @@ import 'package:comics_center/exceptions.dart';
 import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
 import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -31,6 +32,22 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(authProvider, (previous, next) {
+      if (next is AuthSuccess) {
+        BotToast.showText(
+          text: "Login Successful",
+          align: Alignment.topCenter,
+        );
+      }
+
+      if (next is AuthError) {
+        BotToast.showText(
+          text: "Login error",
+          align: Alignment.topCenter,
+        );
+      }
+    });
+
     return GestureDetector(
       onTap: () async {
         try {

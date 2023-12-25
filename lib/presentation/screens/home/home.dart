@@ -17,23 +17,6 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(homeViewProvider);
-
-    ref.listen(authProvider, (previous, next) {
-      if (next is AuthSuccess) {
-        BotToast.showText(
-          text: "Login Successful",
-          align: Alignment.topCenter,
-        );
-      }
-
-      if (next is AuthError) {
-        BotToast.showText(
-          text: "Login error",
-          align: Alignment.topCenter,
-        );
-      }
-    });
-
     return FocusScope(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
