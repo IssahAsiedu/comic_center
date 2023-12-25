@@ -28,7 +28,7 @@ class CharacterDetailBody extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
           Text(characterDetails.description),
           DetailList(
             items: characterDetails.comics,
@@ -38,6 +38,7 @@ class CharacterDetailBody extends StatelessWidget {
               context.push(route);
             },
           ),
+          const SizedBox(height: 30),
           DetailList(
             items: characterDetails.series,
             title: "Series",

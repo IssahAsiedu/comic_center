@@ -38,18 +38,15 @@ class CharacterCard extends StatelessWidget {
               fit: BoxFit.cover,
             )),
             Positioned(
-              left: 0,
-              right: 0,
+              left: -3,
+              right: -3,
               bottom: 0,
               child: Container(
-                padding: const EdgeInsets.all(5),
+                padding: const EdgeInsets.all(8),
                 height: itemHeight * 0.3,
                 decoration: const BoxDecoration(
                   color: Colors.black87,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
-                  ),
+                  borderRadius: BorderRadius.only(),
                 ),
                 child: Center(
                     child: Text(
@@ -62,27 +59,6 @@ class CharacterCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class CharacterDetailBottomFade extends StatelessWidget {
-  const CharacterDetailBottomFade({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      height: size.height * 0.3,
-      width: size.width,
-      decoration: const BoxDecoration(
-          gradient: LinearGradient(
-              colors: [Colors.transparent, Colors.black],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              tileMode: TileMode.clamp)),
     );
   }
 }

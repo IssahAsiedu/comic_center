@@ -41,6 +41,7 @@ class _SeriesDetailBodyState extends State<SeriesDetailBody> {
               ),
             ),
 
+          const SizedBox(height: 30),
           // comics list
           DetailList(
             items: widget.seriesDetails.comics,

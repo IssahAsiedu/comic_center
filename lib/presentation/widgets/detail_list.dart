@@ -32,32 +32,48 @@ class DetailList<T extends Item> extends StatelessWidget {
       );
     }
 
-    return DataTable(
-      dividerThickness: 1,
-      showBottomBorder: true,
-      columns: [
-        DataColumn(
-            label: Expanded(
-                child: Text(
+    const headerStyle = TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontFamily: 'Bangers',
+      decoration: TextDecoration.underline,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        //header
+        Text(
           title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-            fontFamily: 'Bangers',
-            decoration: TextDecoration.underline,
-          ),
-        )))
+          style: headerStyle,
+        ),
+
+        //content
+        for (var i = 0; i < items.length; i++)
+          InkWell(
+            onTap: () {
+              onTap?.call(items[i]);
+            },
+            child: Container(
+              constraints: BoxConstraints(minHeight: 50),
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: [
+                  Text(
+                    '${i + 1}.',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(child: Text(items[i].name))
+                ],
+              ),
+            ),
+          )
       ],
-      rows: items
-          .map((e) => DataRow(cells: [
-                DataCell(
-                  Text(e.name),
-                  onTap: () {
-                    onTap?.call(e);
-                  },
-                )
-              ]))
-          .toList(),
     );
   }
 }
