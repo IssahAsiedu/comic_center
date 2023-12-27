@@ -55,7 +55,7 @@ class DetailList<T extends Item> extends StatelessWidget {
               onTap?.call(items[i]);
             },
             child: Container(
-              constraints: BoxConstraints(minHeight: 50),
+              constraints: const BoxConstraints(minHeight: 50),
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: Row(
                 children: [

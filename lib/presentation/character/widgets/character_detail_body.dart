@@ -1,6 +1,5 @@
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/character/character_detail.dart';
-import 'package:comics_center/domain/item.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
 import 'package:comics_center/presentation/widgets/button/book_mark_button.dart';
 import 'package:comics_center/presentation/widgets/detail_list.dart';
@@ -30,6 +29,7 @@ class CharacterDetailBody extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           Text(characterDetails.description),
+          const SizedBox(height: 10),
           DetailList(
             items: characterDetails.comics,
             title: "Comics",

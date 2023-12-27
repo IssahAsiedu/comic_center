@@ -30,31 +30,28 @@ class CharacterCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(2),
           border: Border.all(color: Colors.white12),
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Positioned.fill(
-                child: Image.network(
-              thumbnailUrl,
-              fit: BoxFit.cover,
-            )),
-            Positioned(
-              left: -3,
-              right: -3,
-              bottom: 0,
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                height: itemHeight * 0.3,
-                decoration: const BoxDecoration(
-                  color: Colors.black87,
-                  borderRadius: BorderRadius.only(),
-                ),
-                child: Center(
-                    child: Text(
-                  characterName,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontFamily: "Bangers", fontSize: 16),
-                )),
+            Expanded(
+              child: Image.network(
+                thumbnailUrl,
+                fit: BoxFit.cover,
               ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(8),
+              height: itemHeight * 0.3,
+              decoration: const BoxDecoration(
+                color: Colors.black87,
+                borderRadius: BorderRadius.only(),
+              ),
+              child: Center(
+                  child: Text(
+                characterName,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontFamily: "Bangers", fontSize: 16),
+              )),
             )
           ],
         ),
