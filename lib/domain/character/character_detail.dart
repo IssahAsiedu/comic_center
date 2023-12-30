@@ -22,6 +22,7 @@ class CharacterDetails extends Character {
     var comics = (map["comics"]["items"] as List<dynamic>)
         .map((i) => Item.fromMap(i))
         .toList();
+
     var series = (map["series"]["items"] as List<dynamic>)
         .map((i) => Item.fromMap(i))
         .toList();

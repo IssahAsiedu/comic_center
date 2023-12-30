@@ -22,23 +22,23 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
             SizedBox(
               height: 40,
               child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, i) {
-                    return SelectionButton(
-                      selected: selectedOption.current == i,
-                      onTap: () {
-                        final currentState = ref.read(homeViewProvider);
-                        ref.read(homeViewProvider.notifier).state =
-                            HomePageState(
-                                current: i, previous: currentState.current);
-                      },
-                      text: options[i],
-                    );
-                  },
-                  separatorBuilder: (_, i) {
-                    return const SizedBox(width: 20);
-                  },
-                  itemCount: options.length),
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (_, i) {
+                  return SelectionButton(
+                    selected: selectedOption.current == i,
+                    onTap: () {
+                      final currentState = ref.read(homeViewProvider);
+                      ref.read(homeViewProvider.notifier).state = HomePageState(
+                          current: i, previous: currentState.current);
+                    },
+                    text: options[i],
+                  );
+                },
+                separatorBuilder: (_, i) {
+                  return const SizedBox(width: 20);
+                },
+                itemCount: options.length,
+              ),
             )
           ],
         ),

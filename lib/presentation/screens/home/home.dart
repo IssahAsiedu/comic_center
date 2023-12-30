@@ -1,12 +1,9 @@
-import 'package:bot_toast/bot_toast.dart';
 import 'package:comics_center/presentation/screens/home/home_all.dart';
 import 'package:comics_center/presentation/screens/home/home_bookmarks.dart';
 import 'package:comics_center/presentation/screens/home/home_characters.dart';
 import 'package:comics_center/presentation/screens/home/home_comics.dart';
 import 'package:comics_center/presentation/screens/home/home_series.dart';
 import 'package:comics_center/presentation/widgets/bottom_%20bar/app_bottom_nav.dart';
-import 'package:comics_center/providers/auth/auth.dart';
-import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -17,6 +14,7 @@ class HomeScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedOption = ref.watch(homeViewProvider);
+
     return FocusScope(
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -26,8 +24,9 @@ class HomeScreen extends HookConsumerWidget {
 
             if (selectedOption.current == 4) {
               ref.read(homeViewProvider.notifier).state = HomePageState(
-                  current: selectedOption.previous,
-                  previous: selectedOption.previous);
+                current: selectedOption.previous,
+                previous: selectedOption.previous,
+              );
               return false;
             }
 

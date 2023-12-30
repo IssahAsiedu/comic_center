@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/exceptions.dart';
 import 'package:comics_center/providers/auth/auth.dart';
@@ -30,8 +29,8 @@ final bookmarkingProvider =
     var userId = authState.user.id;
 
     if (bookMarkable.bookMarked) {
-      bookMarkable.bookMarked = false;
       await table.delete().match({"userid": userId, "id": bookMarkable.id});
+      bookMarkable.bookMarked = false;
       return;
     }
 
