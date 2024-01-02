@@ -89,7 +89,7 @@ class _ComicDetailBodyState extends State<ComicDetailBody> {
                       if (widget.comicDetails.description != null &&
                           widget.comicDetails.description!.isNotEmpty)
                         Container(
-                          margin: const EdgeInsets.only(top: 25),
+                          margin: const EdgeInsets.only(top: 25, bottom: 30),
                           child: DescriptionSection(
                             title: "Description",
                             content: widget.comicDetails.description!,
