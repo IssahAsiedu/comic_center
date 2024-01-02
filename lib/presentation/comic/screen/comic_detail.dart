@@ -31,9 +31,9 @@ class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
         context.pop(comicDetails);
         return true;
       },
-      child: Scaffold(
-        backgroundColor: Colors.white12,
-        body: FutureBuilder<ComicDetails>(
+      child: Material(
+        color: Colors.white12,
+        child: FutureBuilder<ComicDetails>(
           future: getComic(),
           builder: (_, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {

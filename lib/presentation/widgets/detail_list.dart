@@ -51,7 +51,7 @@ class DetailList<T extends Item> extends StatelessWidget {
         for (var i = 0; i < items.length; i++)
           Card(
             color: Colors.black12,
-            margin: const EdgeInsets.symmetric(vertical: 5),
+            margin: const EdgeInsets.symmetric(vertical: 8),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -62,7 +62,7 @@ class DetailList<T extends Item> extends StatelessWidget {
                   Text(
                     items[i].name,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 20),
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
 
                   // spacer

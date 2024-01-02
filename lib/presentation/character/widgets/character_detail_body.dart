@@ -8,7 +8,7 @@ import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class CharacterDetailBody extends StatelessWidget {
+class CharacterDetailBody extends StatefulWidget {
   final CharacterDetails characterDetails;
 
   const CharacterDetailBody({
@@ -17,39 +17,84 @@ class CharacterDetailBody extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CharacterDetailBody> createState() => _CharacterDetailBodyState();
+}
+
+class _CharacterDetailBodyState extends State<CharacterDetailBody> {
+  final _controller = ScrollController();
+  bool appBarClosed = false;
+
+  @override
+  void initState() {
+    _controller.addListener(() {
+      var appBarClosed = _controller.hasClients && _controller.offset > 47;
+      setState(() => this.appBarClosed = appBarClosed);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black38,
-      appBar: ImageAppBar(
-        thumbnail: characterDetails.thumbnail!,
-        title: characterDetails.name,
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        children: [
-          const SizedBox(height: 20),
-          Text(characterDetails.description),
-          const SizedBox(height: 10),
-          DetailList(
-            items: characterDetails.comics,
-            title: "Comics",
-            onTap: (e) {
-              var route = AppRouteNotifier.generateComicRoute("${e.id}");
-              context.push(route);
-            },
+    return CustomScrollView(
+      controller: _controller,
+      slivers: [
+        SliverAppBar(
+          leading: Transform.scale(
+            scale: .8,
+            child: const AppBackButton(),
           ),
-          const SizedBox(height: 30),
-          DetailList(
-            items: characterDetails.series,
-            title: "Series",
-            onTap: (e) {
-              var route = AppRouteNotifier.generateSeriesRoute("${e.id}");
-              context.push(route);
-            },
+          flexibleSpace: ImageAppBar(
+            thumbnail: widget.characterDetails.thumbnail!,
+            title: widget.characterDetails.name,
+            titleVisible: !appBarClosed,
           ),
-        ],
-      ),
+          pinned: true,
+          stretch: true,
+          expandedHeight: 155,
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverToBoxAdapter(
+          child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Text(widget.characterDetails.description)),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: DetailList(
+              items: widget.characterDetails.comics,
+              title: "Comics",
+              onTap: (e) {
+                var route = AppRouteNotifier.generateComicRoute("${e.id}");
+                context.push(route);
+              },
+            ),
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: DetailList(
+              items: widget.characterDetails.series,
+              title: "Series",
+              onTap: (e) {
+                var route = AppRouteNotifier.generateSeriesRoute("${e.id}");
+                context.push(route);
+              },
+            ),
+          ),
+        ),
+        const SliverToBoxAdapter(child: SizedBox(height: 30))
+      ],
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 
@@ -60,10 +105,12 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.title,
     this.item,
     this.onBack,
+    this.titleVisible = true,
   });
 
   final String thumbnail;
   final String title;
+  final bool titleVisible;
   final Bookmarkable? item;
   final void Function()? onBack;
 
@@ -86,21 +133,24 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              SlideWidget(
-                  child: Container(
-                padding: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.black45,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: 'Bangers',
-                    fontSize: 25,
+              Visibility(
+                visible: titleVisible,
+                child: SlideWidget(
+                    child: Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: Colors.black45,
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              ))
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontFamily: 'Bangers',
+                      fontSize: 25,
+                    ),
+                  ),
+                )),
+              )
             ],
           ),
         ),
@@ -111,9 +161,9 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppBackButton(
-                  onTap: onBack,
-                ),
+                // AppBackButton(
+                //   onTap: onBack,
+                // ),
                 if (item != null) BookMarkButton(bookmarkable: item!),
               ],
             ),
