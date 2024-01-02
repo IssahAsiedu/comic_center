@@ -63,18 +63,22 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
         }
       },
       child: CircleAvatar(
-        backgroundColor: Colors.black45,
-        child: !bookMarked
-            ? const Icon(
-                Icons.bookmark_border_rounded,
-                color: Colors.orangeAccent,
-                size: 30,
-              )
-            : const Icon(
-                Icons.bookmark,
-                color: Colors.orangeAccent,
-                size: 30,
-              ),
+        radius: 21.5,
+        backgroundColor: Colors.blueAccent,
+        child: CircleAvatar(
+          backgroundColor: Colors.black87,
+          child: !bookMarked
+              ? const Icon(
+                  Icons.bookmark_border_rounded,
+                  color: Colors.orangeAccent,
+                  size: 30,
+                )
+              : const Icon(
+                  Icons.bookmark,
+                  color: Colors.orangeAccent,
+                  size: 30,
+                ),
+        ),
       ),
     );
   }

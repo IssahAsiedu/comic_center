@@ -104,7 +104,6 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.thumbnail,
     required this.title,
     this.item,
-    this.onBack,
     this.titleVisible = true,
   });
 
@@ -112,7 +111,6 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool titleVisible;
   final Bookmarkable? item;
-  final void Function()? onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -137,9 +135,9 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
                 visible: titleVisible,
                 child: SlideWidget(
                     child: Container(
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: Colors.black45,
+                    color: Colors.black87,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -159,11 +157,8 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
           right: 10,
           child: SafeArea(
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                // AppBackButton(
-                //   onTap: onBack,
-                // ),
                 if (item != null) BookMarkButton(bookmarkable: item!),
               ],
             ),
