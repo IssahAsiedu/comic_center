@@ -71,7 +71,7 @@ class _ComicImagesState extends State<ComicImages> {
                       ),
                       const SizedBox(width: 10),
                       CircleAvatar(
-                        backgroundColor: Colors.black54,
+                        backgroundColor: Colors.black87,
                         child: PopupMenuButton(
                             color: Colors.orangeAccent,
                             itemBuilder: (_) {
