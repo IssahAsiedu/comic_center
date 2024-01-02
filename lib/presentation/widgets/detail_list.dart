@@ -36,7 +36,6 @@ class DetailList<T extends Item> extends StatelessWidget {
       color: Colors.white,
       fontSize: 20,
       fontFamily: 'Bangers',
-      decoration: TextDecoration.underline,
     );
 
     return Column(
@@ -50,25 +49,41 @@ class DetailList<T extends Item> extends StatelessWidget {
 
         //content
         for (var i = 0; i < items.length; i++)
-          InkWell(
-            onTap: () {
-              onTap?.call(items[i]);
-            },
-            child: Container(
-              constraints: const BoxConstraints(minHeight: 50),
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
+          Card(
+            color: Colors.black12,
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  //card title
                   Text(
-                    '${i + 1}.',
+                    items[i].name,
                     style: const TextStyle(
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                        fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(child: Text(items[i].name))
+
+                  // spacer
+                  const SizedBox(height: 10),
+
+                  //card content
+                  Text('Comic id: ${items[i].id}'),
+
+                  // spacer
+                  const SizedBox(height: 25),
+
+                  //button
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onTap?.call(items[i]);
+                      },
+                      child: const Text('View More'),
+                    ),
+                  )
                 ],
               ),
             ),
