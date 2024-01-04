@@ -6,7 +6,7 @@ import 'package:comics_center/shared/app_assets.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class CharacterDetailPage extends StatelessWidget {
+class CharacterDetailPage extends StatefulWidget {
   static const String route = "character";
   static const String idParam = "id";
 
@@ -18,10 +18,15 @@ class CharacterDetailPage extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CharacterDetailPage> createState() => _CharacterDetailPageState();
+}
+
+class _CharacterDetailPageState extends State<CharacterDetailPage> {
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder<ApiResponse<CharacterDetails>>(
-        future: MarvelRestClient().getCharacterDetails(id),
+        future: MarvelRestClient().getCharacterDetails(widget.id),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(

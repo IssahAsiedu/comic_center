@@ -9,9 +9,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await FlutterDownloader.initialize(debug: true);
   FlutterDownloader.registerCallback(DownloadClass.callback);
   await dotenv.load(fileName: ".env");
@@ -28,7 +26,7 @@ class MyApp extends HookConsumerWidget {
     return MaterialApp.router(
       theme: ThemeData(
         fontFamily: 'Manrope',
-        scaffoldBackgroundColor: Colors.white12,
+        scaffoldBackgroundColor: Colors.black,
         primarySwatch: Colors.blue,
         textTheme: const TextTheme(
           bodyMedium: TextStyle(color: Colors.white),

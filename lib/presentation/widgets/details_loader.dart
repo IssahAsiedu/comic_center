@@ -1,6 +1,4 @@
-import 'package:comics_center/shared/app_assets.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class DetailsLoader extends StatelessWidget {
   const DetailsLoader({
@@ -10,9 +8,10 @@ class DetailsLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Transform.scale(
-      scale: 0.7,
-      child: Lottie.asset(AppAssets.drStrangeLottieFile),
-    ));
+      child: Transform.scale(
+        scale: 0.7,
+        child: const CircularProgressIndicator(),
+      ),
+    );
   }
 }

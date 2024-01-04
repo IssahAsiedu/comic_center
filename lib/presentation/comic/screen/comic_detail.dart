@@ -53,7 +53,7 @@ class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
         context.pop(comicDetails);
         return true;
       },
-      child: Material(color: Colors.white12, child: child),
+      child: Material(color: Colors.black, child: child),
     );
   }
 
@@ -63,13 +63,12 @@ class _ComicDetailPageState extends ConsumerState<ComicDetailPage> {
         comicDetails = null;
         error = false;
       });
+
       var response = await MarvelRestClient().getComicDetails(widget.id);
 
       final table =
           ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
       final authState = ref.read(authProvider);
-
-      if (response.status != Status.success) throw Error();
 
       if (authState is AuthSuccess) {
         List<dynamic>? result = await table
