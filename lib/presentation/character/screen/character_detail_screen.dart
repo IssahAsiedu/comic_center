@@ -1,10 +1,9 @@
 import 'package:comics_center/domain/character/character_detail.dart';
-import 'package:comics_center/infrastructure/network/response.dart';
 import 'package:comics_center/infrastructure/network/rest_client.dart';
 import 'package:comics_center/presentation/character/widgets/character_detail_body.dart';
-import 'package:comics_center/shared/app_assets.dart';
+import 'package:comics_center/presentation/widgets/details_loader.dart';
+import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class CharacterDetailPage extends StatefulWidget {
   static const String route = "character";
@@ -22,34 +21,43 @@ class CharacterDetailPage extends StatefulWidget {
 }
 
 class _CharacterDetailPageState extends State<CharacterDetailPage> {
+  CharacterDetails? characterDetails;
+  bool error = false;
+
+  @override
+  void initState() {
+    getCharacter();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<ApiResponse<CharacterDetails>>(
-        future: MarvelRestClient().getCharacterDetails(widget.id),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: Transform.scale(
-                scale: 0.7,
-                child: Lottie.asset(AppAssets.drStrangeLottieFile),
-              ),
-            );
-          }
+    Widget child = const SizedBox.shrink();
 
-          if (!snapshot.hasData) {
-            return const Center(
-              child: Text('No data was received'),
-            );
-          }
+    if (error) {
+      child = PagedErrorIndicator(onTap: getCharacter);
+    } else if (characterDetails == null) {
+      child = const DetailsLoader();
+    } else {
+      child = CharacterDetailBody(characterDetails: characterDetails!);
+    }
 
-          if (snapshot.hasError || snapshot.data!.status == Status.error) {
-            return const Center(child: Text("An error occurred"));
-          }
-
-          return CharacterDetailBody(characterDetails: snapshot.data!.data!);
-        },
-      ),
+    return Material(
+      color: Colors.black,
+      child: child,
     );
+  }
+
+  Future<void> getCharacter() async {
+    try {
+      setState(() {
+        characterDetails = null;
+        error = false;
+      });
+      var response = await MarvelRestClient().getCharacterDetails(widget.id);
+      setState(() => characterDetails = response.data!);
+    } catch (e) {
+      setState(() => error = true);
+    }
   }
 }
