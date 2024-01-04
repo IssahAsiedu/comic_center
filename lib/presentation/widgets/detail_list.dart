@@ -51,6 +51,8 @@ class DetailList<T extends Item> extends StatelessWidget {
         for (var i = 0; i < items.length; i++)
           Card(
             color: Colors.black12,
+            borderOnForeground: true,
+            shape: Border.all(color: Colors.white12, width: 1.4),
             margin: const EdgeInsets.symmetric(vertical: 8),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
