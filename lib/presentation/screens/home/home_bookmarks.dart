@@ -90,83 +90,93 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
       body: Stack(
         children: [
           Positioned.fill(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                _bookmarksPagingController.refresh();
-              },
-              child: PagedListView<int, Bookmark>.separated(
-                separatorBuilder: (_, i) {
-                  return const Divider(color: Colors.white70);
-                },
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                pagingController: _bookmarksPagingController,
-                builderDelegate: PagedChildBuilderDelegate(
-                  noItemsFoundIndicatorBuilder: (_) {
-                    return PagedEmptyIndicator(
-                      onRetry: () {
-                        _bookmarksPagingController.refresh();
+            child: Column(
+              children: [
+                Expanded(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      _bookmarksPagingController.refresh();
+                    },
+                    child: PagedListView<int, Bookmark>.separated(
+                      separatorBuilder: (_, i) {
+                        return const Divider(color: Colors.white70);
                       },
-                    );
-                  },
-                  itemBuilder: (_, bookmark, index) {
-                    return Container(
-                      margin: EdgeInsets.only(
-                          top: index == 0 ? 20 : 0,
-                          bottom: _isLastItem(index) ? 50 : 0),
-                      child: Dismissible(
-                        key: ValueKey(bookmark.pk),
-                        onDismissed: (_) async {
-                          try {
-                            final table = ref
-                                .read(supabaseClientProvider)
-                                .from(AppStrings.bookmarksTable);
-                            await table.delete().match({"pk": bookmark.pk});
-                            _removeItemWithId(bookmark.pk);
-                          } catch (e) {
-                            if (!mounted) return;
-                            var message = "item was not removed";
-                            Navigator.of(context)
-                                .push(ErrorDialog(message: message));
-                          }
+                      padding: const EdgeInsets.symmetric(horizontal: 24),
+                      pagingController: _bookmarksPagingController,
+                      builderDelegate: PagedChildBuilderDelegate(
+                        noItemsFoundIndicatorBuilder: (_) {
+                          return PagedEmptyIndicator(
+                            onRetry: () {
+                              _bookmarksPagingController.refresh();
+                            },
+                          );
                         },
-                        background: ColoredBox(
-                          color: Colors.redAccent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(Icons.delete, color: Colors.white)
-                            ],
-                          ),
-                        ),
-                        child: BookmarkCard(
-                          bookmark: bookmark,
-                          onTap: () async {
-                            Bookmarkable? value;
-                            if (bookmark.type.toLowerCase() == "series") {
-                              final route =
-                                  AppRouteNotifier.generateSeriesRoute(
-                                      bookmark.id);
-                              value = await context.push(route);
-                            }
+                        itemBuilder: (_, bookmark, index) {
+                          return Container(
+                            margin: EdgeInsets.only(
+                                top: index == 0 ? 20 : 0,
+                                bottom: _isLastItem(index) ? 50 : 0),
+                            child: Dismissible(
+                              key: ValueKey(bookmark.pk),
+                              onDismissed: (_) async {
+                                try {
+                                  final table = ref
+                                      .read(supabaseClientProvider)
+                                      .from(AppStrings.bookmarksTable);
+                                  await table
+                                      .delete()
+                                      .match({"pk": bookmark.pk});
+                                  _removeItemWithId(bookmark.pk);
+                                } catch (e) {
+                                  if (!mounted) return;
+                                  var message = "item was not removed";
+                                  Navigator.of(context)
+                                      .push(ErrorDialog(message: message));
+                                }
+                              },
+                              background: ColoredBox(
+                                color: Colors.redAccent,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Icon(Icons.delete, color: Colors.white)
+                                  ],
+                                ),
+                              ),
+                              child: BookmarkCard(
+                                bookmark: bookmark,
+                                onTap: () async {
+                                  Bookmarkable? value;
+                                  if (bookmark.type.toLowerCase() == "series") {
+                                    final route =
+                                        AppRouteNotifier.generateSeriesRoute(
+                                            bookmark.id);
+                                    value = await context.push(route);
+                                  }
 
-                            if (bookmark.type.toLowerCase() == "comic" &&
-                                mounted) {
-                              final route = AppRouteNotifier.generateComicRoute(
-                                  bookmark.id);
-                              value = await context.push(route);
-                            }
+                                  if (bookmark.type.toLowerCase() == "comic" &&
+                                      mounted) {
+                                    final route =
+                                        AppRouteNotifier.generateComicRoute(
+                                            bookmark.id);
+                                    value = await context.push(route);
+                                  }
 
-                            if (value == null) return;
-                            if (value.bookMarked) return;
+                                  if (value == null) return;
+                                  if (value.bookMarked) return;
 
-                            _removeItemWithId(bookmark.pk);
-                          },
-                        ),
+                                  _removeItemWithId(bookmark.pk);
+                                },
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 78)
+              ],
             ),
           ),
         ],
