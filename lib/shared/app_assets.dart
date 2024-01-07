@@ -8,6 +8,4 @@ class AppAssets {
   static String onboardingImage = "assets/images/onboarding.jpg";
 
   static String googleLogo = "assets/images/google_logo.svg";
-
-  static String drStrangeLottieFile = "assets/lottie/strange.json";
 }

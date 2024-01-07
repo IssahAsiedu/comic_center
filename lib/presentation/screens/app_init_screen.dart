@@ -1,11 +1,9 @@
 import 'package:comics_center/firebase_options.dart';
 import 'package:comics_center/routing/route_config.dart';
-import 'package:comics_center/shared/app_assets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AppInitializationScreen extends StatefulWidget {
@@ -18,6 +16,7 @@ class AppInitializationScreen extends StatefulWidget {
 
 class _AppInitializationScreenState extends State<AppInitializationScreen> {
   bool encounteredError = false;
+  double _progress = 0.0;
 
   bool firebaseInitialized = false;
   bool supabaseInitialized = false;
@@ -40,10 +39,14 @@ class _AppInitializationScreenState extends State<AppInitializationScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircleAvatar(
-                  radius: 39,
-                  backgroundColor: Colors.redAccent,
-                  child: Lottie.asset(AppAssets.drStrangeLottieFile),
+                SizedBox(
+                  height: 10,
+                  width: 150,
+                  child: LinearProgressIndicator(
+                    value: _progress,
+                    backgroundColor: Colors.white,
+                    valueColor: const AlwaysStoppedAnimation(Colors.redAccent),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -61,7 +64,7 @@ class _AppInitializationScreenState extends State<AppInitializationScreen> {
           else
             Column(
               children: [
-                const Text('Ann error ocurred.'),
+                const Text('Ann error occurred.'),
 
                 //spacer
                 const SizedBox(height: 20),
@@ -83,12 +86,14 @@ class _AppInitializationScreenState extends State<AppInitializationScreen> {
   Future<void> _init() async {
     try {
       setState(() => encounteredError = false);
+      setState(() => _progress = 0.2);
       if (!firebaseInitialized) {
         await Firebase.initializeApp(
             options: DefaultFirebaseOptions.currentPlatform);
         firebaseInitialized = true;
       }
 
+      if (firebaseInitialized) setState(() => _progress = 0.5);
       var supabaseAppUrl = dotenv.env['SUPABASE_APP_URL'];
       var supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'];
 
@@ -100,7 +105,12 @@ class _AppInitializationScreenState extends State<AppInitializationScreen> {
         supabaseInitialized = true;
       }
 
-      if (!(supabaseInitialized && firebaseInitialized)) return;
+      if (supabaseInitialized) setState(() => _progress = 1.0);
+
+      if (!(supabaseInitialized && firebaseInitialized)) {
+        setState(() => encounteredError = true);
+        return;
+      }
 
       if (mounted) {
         context.pushReplacement(AppRouteNotifier.onboarding);
