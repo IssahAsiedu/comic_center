@@ -27,7 +27,7 @@ class _CharacterDetailBodyState extends State<CharacterDetailBody> {
   @override
   void initState() {
     _controller.addListener(() {
-      var appBarClosed = _controller.hasClients && _controller.offset > 47;
+      var appBarClosed = _controller.hasClients && _controller.offset > 200;
       setState(() => this.appBarClosed = appBarClosed);
     });
     super.initState();
@@ -50,7 +50,8 @@ class _CharacterDetailBodyState extends State<CharacterDetailBody> {
           ),
           pinned: true,
           stretch: true,
-          expandedHeight: 155,
+          elevation: 0,
+          expandedHeight: 350,
         ),
         const SliverToBoxAdapter(child: SizedBox(height: 20)),
         SliverToBoxAdapter(

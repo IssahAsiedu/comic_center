@@ -23,7 +23,7 @@ class _SeriesDetailBodyState extends State<SeriesDetailBody> {
   @override
   void initState() {
     _controller.addListener(() {
-      var appBarClosed = _controller.hasClients && _controller.offset > 47;
+      var appBarClosed = _controller.hasClients && _controller.offset > 200;
       setState(() => this.appBarClosed = appBarClosed);
     });
     super.initState();
@@ -48,7 +48,8 @@ class _SeriesDetailBodyState extends State<SeriesDetailBody> {
             item: widget.seriesDetails,
             titleVisible: !appBarClosed,
           ),
-          expandedHeight: 150,
+          expandedHeight: 350,
+          elevation: 0,
           pinned: true,
         ),
 
