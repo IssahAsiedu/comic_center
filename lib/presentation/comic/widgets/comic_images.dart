@@ -55,8 +55,8 @@ class _ComicImagesState extends State<ComicImages> {
               children: [
                 //filled image
                 Positioned.fill(
-                  child: FilledImageContainer(
-                    imageUrl: selectedImage,
+                  child: FittedBox(
+                    child: Image.network(selectedImage),
                   ),
                 ),
 
@@ -71,23 +71,27 @@ class _ComicImagesState extends State<ComicImages> {
                       ),
                       const SizedBox(width: 10),
                       CircleAvatar(
-                        backgroundColor: Colors.black87,
-                        child: PopupMenuButton(
-                            color: Colors.orangeAccent,
-                            itemBuilder: (_) {
-                              return [
-                                PopupMenuItem(
-                                  onTap: _downloadImage,
-                                  child: const Text(
-                                    'Save Image',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
+                        backgroundColor: Colors.blueAccent,
+                        radius: 21.5,
+                        child: CircleAvatar(
+                          backgroundColor: Colors.black87,
+                          child: PopupMenuButton(
+                              color: Colors.orangeAccent,
+                              itemBuilder: (_) {
+                                return [
+                                  PopupMenuItem(
+                                    onTap: _downloadImage,
+                                    child: const Text(
+                                      'Save Image',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              ];
-                            }),
+                                  )
+                                ];
+                              }),
+                        ),
                       )
                     ],
                   ),
@@ -143,7 +147,12 @@ class _ComicImagesState extends State<ComicImages> {
         context: context,
         builder: (_) {
           return InteractiveViewer(
-              child: FilledImageContainer(imageUrl: selectedImage));
+              child: Container(
+            color: Colors.black,
+            child: FittedBox(
+              child: Image.network(selectedImage),
+            ),
+          ));
         });
   }
 
