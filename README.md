@@ -1,11 +1,7 @@
-# comics_center
+## Comics Center 🦸🏿
 
-A new Flutter project.
-
-## Getting Started
-<p>
 A flutter application that fetches comics from the marvel api.
-</p>
+
 
 <p>
     Currently, the images of comics can only be downloaded on android.

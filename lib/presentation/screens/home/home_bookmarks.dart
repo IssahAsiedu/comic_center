@@ -86,6 +86,14 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
           style: TextStyle(fontFamily: 'Bangers'),
         ),
         elevation: 0,
+        actions: [
+          InkWell(
+            child: Container(
+              margin: const EdgeInsets.only(right: 20),
+              child: const Icon(Icons.search),
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: [
