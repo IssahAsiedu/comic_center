@@ -14,31 +14,3 @@ final homeRefreshStreamProvider = p.Provider((ref) {
   ref.onDispose(controller.close);
   return controller;
 });
-
-//TODO:: change
-final bookmarkingProvider =
-    p.FutureProvider.autoDispose.family<void, Bookmarkable>(
-  (ref, bookMarkable) async {
-    final authState = ref.read(authProvider);
-
-    if (authState is! AuthSuccess) {
-      throw UserNotFoundException();
-    }
-
-    final table =
-        ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
-    var userId = authState.user.id;
-
-    if (bookMarkable.bookMarked) {
-      await table.delete().match({"userid": userId, "id": bookMarkable.id});
-      bookMarkable.bookMarked = false;
-      return;
-    }
-
-    var data = bookMarkable.bookmarkData;
-    data['userid'] = userId;
-
-    await table.insert(data);
-    bookMarkable.bookMarked = true;
-  },
-);

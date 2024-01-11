@@ -1,4 +1,5 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:comics_center/application/bookmarks_service.dart';
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/exceptions.dart';
 import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
@@ -49,20 +50,7 @@ class _BookMarkButtonState extends ConsumerState<BookmarkButton> {
     });
 
     return GestureDetector(
-      onTap: () async {
-        try {
-          setState(() => bookMarked = !bookMarked);
-          //TODO:: change
-          await ref.read(bookmarkingProvider(widget.bookmarkable).future);
-        } catch (e) {
-          setState(() => bookMarked = !bookMarked);
-          if (e is! UserNotFoundException) return;
-          Navigator.of(context).push(LoginDialog(() async {
-            context.pop();
-            await ref.read(authProvider.notifier).googleLogin();
-          }));
-        }
-      },
+      onTap: _onBookmark,
       child: CircleAvatar(
         radius: 21.5,
         backgroundColor: Colors.blueAccent,
@@ -82,6 +70,21 @@ class _BookMarkButtonState extends ConsumerState<BookmarkButton> {
         ),
       ),
     );
+  }
+
+  Future<void> _onBookmark() async {
+    try {
+      setState(() => bookMarked = !bookMarked);
+      final bookmarkService = ref.read(bookmarkServiceProvider);
+      await bookmarkService.updateBookmarkedStatus(widget.bookmarkable);
+    } catch (e) {
+      setState(() => bookMarked = !bookMarked);
+      if (e is! UserNotFoundException) return;
+      Navigator.of(context).push(LoginDialog(() async {
+        context.pop();
+        await ref.read(authProvider.notifier).googleLogin();
+      }));
+    }
   }
 
   @override
