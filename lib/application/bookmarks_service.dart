@@ -65,8 +65,6 @@ class BookmarksService {
         .textSearch("name", query)
         .limit(7);
 
-    print("result checker");
-
     return result.map((e) => Bookmark.fromMap(e)).toList();
   }
 

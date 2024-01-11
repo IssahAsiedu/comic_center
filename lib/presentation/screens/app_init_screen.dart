@@ -1,5 +1,6 @@
 import 'package:comics_center/firebase_options.dart';
 import 'package:comics_center/routing/route_config.dart';
+import 'package:comics_center/shared/app_assets.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -39,6 +40,15 @@ class _AppInitializationScreenState extends State<AppInitializationScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  margin: const EdgeInsets.only(bottom: 15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(40),
+                    image: DecorationImage(image: AssetImage(AppAssets.icon)),
+                  ),
+                ),
                 SizedBox(
                   height: 10,
                   width: 150,

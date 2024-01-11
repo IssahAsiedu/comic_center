@@ -14,7 +14,7 @@ class BookmarksDelegate extends SearchDelegate<Bookmark> {
 
   @override
   Widget? buildLeading(BuildContext context) =>
-      Transform.scale(scale: 0.7, child: const AppBackButton());
+      Transform.scale(scale: 0.65, child: const AppBackButton());
 
   @override
   Widget buildResults(BuildContext context) {
