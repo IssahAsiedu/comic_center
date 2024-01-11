@@ -56,7 +56,7 @@ class HomeSeriesCard extends StatelessWidget {
                   //bookmark button
                   Transform.scale(
                     scale: 0.7,
-                    child: BookMarkButton(bookmarkable: series),
+                    child: BookmarkButton(bookmarkable: series),
                   )
                 ],
               ),

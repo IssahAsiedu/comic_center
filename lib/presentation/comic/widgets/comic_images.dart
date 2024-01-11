@@ -66,7 +66,7 @@ class _ComicImagesState extends State<ComicImages> {
                   right: 20,
                   child: Row(
                     children: [
-                      BookMarkButton(
+                      BookmarkButton(
                         bookmarkable: widget.comicDetails,
                       ),
                       const SizedBox(width: 10),

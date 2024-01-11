@@ -160,7 +160,7 @@ class ImageAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                if (item != null) BookMarkButton(bookmarkable: item!),
+                if (item != null) BookmarkButton(bookmarkable: item!),
               ],
             ),
           ),

@@ -90,7 +90,7 @@ class HomeComicCard extends StatelessWidget {
                 right: 10,
                 child: Transform.scale(
                   scale: 0.8,
-                  child: BookMarkButton(bookmarkable: comic),
+                  child: BookmarkButton(bookmarkable: comic),
                 ),
               )
             ],

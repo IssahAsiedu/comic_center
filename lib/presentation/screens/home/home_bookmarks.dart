@@ -1,7 +1,9 @@
 import 'package:bot_toast/bot_toast.dart';
+import 'package:comics_center/application/bookmarks_service.dart';
 import 'package:comics_center/domain/book_markable.dart';
 import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/bookmark/bookmark_card.dart';
+import 'package:comics_center/presentation/search_delegates/bookmarks_delegate.dart';
 import 'package:comics_center/presentation/widgets/back_button.dart';
 import 'package:comics_center/presentation/widgets/dialog/error_dialog.dart';
 import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
@@ -40,29 +42,15 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
   Widget build(BuildContext context) {
     Future(() {
       final authState = ref.read(authProvider);
-      if (authState is! AuthSuccess) {
-        Navigator.of(context).push(LoginDialog(() async {
-          context.pop();
-          await ref.read(authProvider.notifier).googleLogin();
-        }));
-      }
+      if (authState is AuthSuccess) return;
+      Navigator.of(context).push(LoginDialog(() async {
+        context.pop();
+        await ref.read(authProvider.notifier).googleLogin();
+      }));
     });
 
     ref.listen(authProvider, (previous, next) {
-      if (next is AuthSuccess) {
-        BotToast.showText(
-          text: "Login Successful",
-          align: Alignment.topCenter,
-        );
-        _bookmarksPagingController.refresh();
-      }
-
-      if (next is AuthError) {
-        BotToast.showText(
-          text: "Login error",
-          align: Alignment.topCenter,
-        );
-      }
+      _listenToAuthProvider(next);
     });
 
     return Scaffold(
@@ -70,13 +58,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         leading: Transform.scale(
           scale: 0.7,
           child: AppBackButton(
-            onTap: () {
-              var currentState = ref.read(homeViewProvider);
-              ref.read(homeViewProvider.notifier).state = HomePageState(
-                current: currentState.previous,
-                previous: currentState.previous,
-              );
-            },
+            onTap: _onBackButton,
           ),
         ),
         backgroundColor: Colors.black12,
@@ -88,6 +70,9 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         elevation: 0,
         actions: [
           InkWell(
+            onTap: () {
+              showSearch(context: context, delegate: BookmarksDelegate(ref));
+            },
             child: Container(
               margin: const EdgeInsets.only(right: 20),
               child: const Icon(Icons.search),
@@ -114,9 +99,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                       builderDelegate: PagedChildBuilderDelegate(
                         noItemsFoundIndicatorBuilder: (_) {
                           return PagedEmptyIndicator(
-                            onRetry: () {
-                              _bookmarksPagingController.refresh();
-                            },
+                            onRetry: () => _bookmarksPagingController.refresh(),
                           );
                         },
                         itemBuilder: (_, bookmark, index) {
@@ -126,22 +109,8 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                                 bottom: _isLastItem(index) ? 50 : 0),
                             child: Dismissible(
                               key: ValueKey(bookmark.pk),
-                              onDismissed: (_) async {
-                                try {
-                                  final table = ref
-                                      .read(supabaseClientProvider)
-                                      .from(AppStrings.bookmarksTable);
-                                  await table
-                                      .delete()
-                                      .match({"pk": bookmark.pk});
-                                  _removeItemWithId(bookmark.pk);
-                                } catch (e) {
-                                  if (!mounted) return;
-                                  var message = "item was not removed";
-                                  Navigator.of(context)
-                                      .push(ErrorDialog(message: message));
-                                }
-                              },
+                              onDismissed: (_) async =>
+                                  _onBookmarkDismissed(bookmark),
                               background: ColoredBox(
                                 color: Colors.redAccent,
                                 child: Row(
@@ -153,28 +122,7 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
                               ),
                               child: BookmarkCard(
                                 bookmark: bookmark,
-                                onTap: () async {
-                                  Bookmarkable? value;
-                                  if (bookmark.type.toLowerCase() == "series") {
-                                    final route =
-                                        AppRouteNotifier.generateSeriesRoute(
-                                            bookmark.id);
-                                    value = await context.push(route);
-                                  }
-
-                                  if (bookmark.type.toLowerCase() == "comic" &&
-                                      mounted) {
-                                    final route =
-                                        AppRouteNotifier.generateComicRoute(
-                                            bookmark.id);
-                                    value = await context.push(route);
-                                  }
-
-                                  if (value == null) return;
-                                  if (value.bookMarked) return;
-
-                                  _removeItemWithId(bookmark.pk);
-                                },
+                                onTap: () => _onBookmarkTapped(bookmark),
                               ),
                             ),
                           );
@@ -192,6 +140,61 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
     );
   }
 
+  void _onBackButton() {
+    var currentState = ref.read(homeViewProvider);
+    ref.read(homeViewProvider.notifier).state = HomePageState(
+      current: currentState.previous,
+      previous: currentState.previous,
+    );
+  }
+
+  void _listenToAuthProvider(AuthState next) {
+    switch (next.runtimeType) {
+      case AuthSuccess:
+        BotToast.showText(
+          text: "Login Successful",
+          align: Alignment.topCenter,
+        );
+        _bookmarksPagingController.refresh();
+        break;
+      case AuthError:
+        BotToast.showText(
+          text: "Login error",
+          align: Alignment.topCenter,
+        );
+        break;
+    }
+  }
+
+  Future<void> _onBookmarkDismissed(Bookmark bookmark) async {
+    try {
+      await ref.read(bookmarkServiceProvider).deleteBookmark(bookmark.pk);
+      _removeItemWithId(bookmark.pk);
+    } catch (e) {
+      if (!mounted) return;
+      var message = "item was not removed";
+      Navigator.of(context).push(ErrorDialog(message: message));
+    }
+  }
+
+  Future<void> _onBookmarkTapped(Bookmark bookmark) async {
+    Bookmarkable? value;
+    if (bookmark.type.toLowerCase() == "series") {
+      final route = AppRouteNotifier.generateSeriesRoute(bookmark.id);
+      value = await context.push(route);
+    }
+
+    if (bookmark.type.toLowerCase() == "comic" && mounted) {
+      final route = AppRouteNotifier.generateComicRoute(bookmark.id);
+      value = await context.push(route);
+    }
+
+    if (value == null) return;
+    if (value.bookMarked) return;
+
+    _removeItemWithId(bookmark.pk);
+  }
+
   void _removeItemWithId(String id) {
     var items = _bookmarksPagingController.itemList?.where((e) {
       return e.pk != id;
@@ -203,28 +206,14 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
 
   Future<void> _onPageRequest(int key) async {
     try {
-      final table =
-          ref.read(supabaseClientProvider).from(AppStrings.bookmarksTable);
+      final bookmarkService = ref.read(bookmarkServiceProvider);
+      final bookmarks = await bookmarkService.getBookMarks(key);
 
-      final authState = ref.read(authProvider);
-
-      if (authState is! AuthSuccess) {
+      if (bookmarks.isEmpty) {
         _bookmarksPagingController.appendLastPage([]);
         return;
       }
 
-      final from = key * limit;
-      final to = (from + limit) - 1;
-      List<dynamic> result = await table.select().match(
-        {"userid": authState.user.id},
-      ).range(from, to);
-
-      if (result.isEmpty) {
-        _bookmarksPagingController.appendLastPage([]);
-        return;
-      }
-
-      var bookmarks = result.map((e) => Bookmark.fromMap(e)).toList();
       _bookmarksPagingController.appendPage(bookmarks, key + 1);
     } catch (e) {
       if (!mounted) return;

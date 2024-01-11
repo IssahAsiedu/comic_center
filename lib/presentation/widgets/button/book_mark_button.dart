@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class BookMarkButton extends ConsumerStatefulWidget {
-  const BookMarkButton({
+class BookmarkButton extends ConsumerStatefulWidget {
+  const BookmarkButton({
     super.key,
     required this.bookmarkable,
   });
@@ -18,10 +18,10 @@ class BookMarkButton extends ConsumerStatefulWidget {
   final Bookmarkable bookmarkable;
 
   @override
-  ConsumerState<BookMarkButton> createState() => _BookMarkButtonState();
+  ConsumerState<BookmarkButton> createState() => _BookMarkButtonState();
 }
 
-class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
+class _BookMarkButtonState extends ConsumerState<BookmarkButton> {
   bool bookMarked = false;
 
   @override
@@ -52,6 +52,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
       onTap: () async {
         try {
           setState(() => bookMarked = !bookMarked);
+          //TODO:: change
           await ref.read(bookmarkingProvider(widget.bookmarkable).future);
         } catch (e) {
           setState(() => bookMarked = !bookMarked);
@@ -84,7 +85,7 @@ class _BookMarkButtonState extends ConsumerState<BookMarkButton> {
   }
 
   @override
-  void didUpdateWidget(covariant BookMarkButton oldWidget) {
+  void didUpdateWidget(covariant BookmarkButton oldWidget) {
     bookMarked = widget.bookmarkable.bookMarked;
     super.didUpdateWidget(oldWidget);
   }
