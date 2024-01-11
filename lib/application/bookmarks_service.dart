@@ -57,9 +57,15 @@ class BookmarksService {
   }
 
   Future<List<Bookmark>> getBookMarksFromQuery(String query) async {
-    List<dynamic> result = await table.select().match(
-      {"userid": (authState as state.AuthSuccess).user.id, "name": query},
-    ).limit(7);
+    List<dynamic> result = await table
+        .select()
+        .match(
+          {"userid": (authState as state.AuthSuccess).user.id},
+        )
+        .textSearch("name", query)
+        .limit(7);
+
+    print("result checker");
 
     return result.map((e) => Bookmark.fromMap(e)).toList();
   }
