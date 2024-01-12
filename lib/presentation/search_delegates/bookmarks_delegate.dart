@@ -67,7 +67,11 @@ class BookmarksDelegate extends SearchDelegate<Bookmark> {
         }
 
         if (snapshot.hasError) {
-          return const Center(child: Text('An error occurred ⚠'));
+          return const Center(
+              child: Text(
+            'An error occurred ⚠\nYou need to be signed in.',
+            textAlign: TextAlign.center,
+          ));
         }
 
         return ListView.separated(
