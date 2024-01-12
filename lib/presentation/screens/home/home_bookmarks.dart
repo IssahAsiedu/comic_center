@@ -67,20 +67,11 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         ),
         elevation: 0,
         actions: [
-          InkWell(
-            onTap: () async {
-              PagingController<int, Bookmark> pagingController =
-                  PagingController(firstPageKey: 0);
-              await showSearch(
-                context: context,
-                delegate: BookmarksDelegate(
-                    ref: ref, pagingController: pagingController),
-              );
-              pagingController.dispose();
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: const Icon(Icons.search),
+          Transform.scale(
+            scale: 0.85,
+            child: IconButton(
+              onPressed: () => _onSearch(context),
+              icon: const Icon(Icons.search),
             ),
           ),
         ],
@@ -143,6 +134,16 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _onSearch(BuildContext context) async {
+    PagingController<int, Bookmark> pagingController =
+        PagingController(firstPageKey: 0);
+    await showSearch(
+      context: context,
+      delegate: BookmarksDelegate(ref: ref, pagingController: pagingController),
+    );
+    pagingController.dispose();
   }
 
   void _onBackButton() {
