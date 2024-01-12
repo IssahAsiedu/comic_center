@@ -8,12 +8,10 @@ import 'package:comics_center/presentation/widgets/back_button.dart';
 import 'package:comics_center/presentation/widgets/dialog/error_dialog.dart';
 import 'package:comics_center/presentation/widgets/dialog/login_dialog.dart';
 import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
-import 'package:comics_center/providers/app_providers.dart';
 import 'package:comics_center/providers/auth/auth.dart';
 import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:comics_center/routing/route_config.dart';
-import 'package:comics_center/shared/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -70,8 +68,15 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
         elevation: 0,
         actions: [
           InkWell(
-            onTap: () {
-              showSearch(context: context, delegate: BookmarksDelegate(ref));
+            onTap: () async {
+              PagingController<int, Bookmark> pagingController =
+                  PagingController(firstPageKey: 0);
+              await showSearch(
+                context: context,
+                delegate: BookmarksDelegate(
+                    ref: ref, pagingController: pagingController),
+              );
+              pagingController.dispose();
             },
             child: Container(
               margin: const EdgeInsets.only(right: 20),
@@ -179,15 +184,8 @@ class _HomeBookmarksScreenState extends ConsumerState<HomeBookmarksScreen> {
 
   Future<void> _onBookmarkTapped(Bookmark bookmark) async {
     Bookmarkable? value;
-    if (bookmark.type.toLowerCase() == "series") {
-      final route = AppRouteNotifier.generateSeriesRoute(bookmark.id);
-      value = await context.push(route);
-    }
 
-    if (bookmark.type.toLowerCase() == "comic" && mounted) {
-      final route = AppRouteNotifier.generateComicRoute(bookmark.id);
-      value = await context.push(route);
-    }
+    value = await context.showBookmarkDetails(bookmark);
 
     if (value == null) return;
     if (value.bookMarked) return;

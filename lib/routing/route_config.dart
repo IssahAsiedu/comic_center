@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bot_toast/bot_toast.dart';
+import 'package:comics_center/domain/bookmark.dart';
 import 'package:comics_center/presentation/Series/series_details_screen.dart';
 import 'package:comics_center/presentation/character/screen/character_detail_screen.dart';
 import 'package:comics_center/presentation/comic/screen/comic_detail.dart';
@@ -107,3 +108,15 @@ final routerProvider = Provider((ref) {
       redirect: routerNotifier.redirect,
       observers: [BotToastNavigatorObserver()]);
 });
+
+extension AppContext on BuildContext {
+  Future showBookmarkDetails(Bookmark bookmark) async {
+    if (bookmark.type.toLowerCase() == "series") {
+      final route = AppRouteNotifier.generateSeriesRoute(bookmark.id);
+      return push(route);
+    }
+
+    final route = AppRouteNotifier.generateComicRoute(bookmark.id);
+    return await push(route);
+  }
+}

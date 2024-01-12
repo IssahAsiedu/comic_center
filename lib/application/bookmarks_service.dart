@@ -40,16 +40,22 @@ class BookmarksService {
     bookmarkable.bookMarked = true;
   }
 
-  Future<List<Bookmark>> getBookMarks(int page) async {
+  Future<List<Bookmark>> getBookMarks(int page, [String? searchString]) async {
     if (authState is! state.AuthSuccess) {
       return [];
     }
 
     final from = page * 5;
     final to = (from + 5) - 1;
-    List<dynamic> result = await table.select().match(
+    var query = table.select().match(
       {"userid": (authState as state.AuthSuccess).user.id},
-    ).range(from, to);
+    );
+
+    if (searchString != null && searchString.isNotEmpty) {
+      query = query.textSearch('name', searchString);
+    }
+
+    List<dynamic> result = await query.range(from, to);
 
     if (result.isEmpty) return [];
 
@@ -63,7 +69,7 @@ class BookmarksService {
           {"userid": (authState as state.AuthSuccess).user.id},
         )
         .textSearch("name", query)
-        .limit(7);
+        .limit(5);
 
     return result.map((e) => Bookmark.fromMap(e)).toList();
   }
