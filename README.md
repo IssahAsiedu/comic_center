@@ -10,10 +10,10 @@ This is an application that helps you navigate your way thru Marvel's Characters
 2. Supabase
 
 ## Features
-1. Bookmark Marvel Comics and Series
-2. Search for characters, comics and series
+1. Bookmark Marvel Comics and Series.
+2. Search for characters, comics and series.
 3. Showcase pages that will enable you get the comic from Marvel.
-4. Save Comic Posters
+4. Save Comic Posters.
 
 ## Preview
 link to be added
@@ -24,10 +24,10 @@ To run this app and get access to all the features:
 1. You will need to link it to a supabase project.
     - The app uses supabase auth (Google). Check [here](https://supabase.com/blog/flutter-authentication).
 
-    - You have to create a bookmarks table too. Check out [Use Supabe With flutter](https://supabase.com/docs/guides/getting-started/quickstarts/flutter) 
+    - You have to create a bookmarks table too. Check out [Use Supabase With flutter](https://supabase.com/docs/guides/getting-started/quickstarts/flutter) 
 
     ```
-    create table bookmarks (
+    create table public.bookmarks (
         pk character varying(255) not null,
         name text not null,
         thumbnail text null,
@@ -49,12 +49,12 @@ To run this app and get access to all the features:
      4. SUPABASE_ANON_KEY - Supabase anon key
      5. APP_WEB_CLIENT - Google app web client, the one you provided whiles following [here](https://supabase.com/blog/flutter-authentication).
 
-4. Make sure the Google Sign in method is set up correctly. Creating a firebase     project makes this step easier.
+4. Make sure the Google Sign in method is set up correctly. Creating a firebase project makes this step easier.
 
 ### For IOS 
 - Make sure the following packages are set up correctly
-    1. google_sign_in
-    2. flutter_downloader
+    1. [google_sign_in](https://pub.dev/packages/google_sign_in)
+    2. [flutter_downloader](https://pub.dev/packages/flutter_downloader)
 
 ## Prerequisites
 -  Flutter version used is 3.7.12
