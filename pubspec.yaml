@@ -19,13 +19,21 @@ dependencies:
   flutter_dotenv: ^5.0.2
   dio: ^5.1.2
   crypto: ^3.0.3
-  go_router: ^8.0.5
-  flutter_local_notifications: ^14.1.1
+  go_router: ^10.0.0
   path_provider: ^2.0.15
-  permission_handler: ^10.4.1
   path: ^1.8.2
   flutter_riverpod: ^2.3.6
-  lottie: ^2.3.2
+  flutter_hooks: ^0.18.6
+  hooks_riverpod: ^2.3.8
+  flutter_keyboard_visibility: ^5.4.1
+  supabase_flutter: ^1.10.25
+  google_sign_in: ^6.1.6
+  flutter_svg: ^2.0.5
+  firebase_core: ^2.24.2
+  uuid: ^4.1.0
+  url_launcher: ^6.1.11
+  bot_toast: ^4.1.3
+  flutter_downloader: ^1.10.5
 
 dev_dependencies:
   flutter_test:
@@ -35,16 +43,16 @@ dev_dependencies:
 
 
 flutter:
-
   uses-material-design: true
 
   assets:
-     - .env
-     - assets/images/
-     - assets/lottie/
+    - .env
+    - assets/images/
 
   fonts:
-     - family: Bangers
-       fonts:
-         - asset: fonts/Bangers-Regular.ttf
-
+    - family: Bangers
+      fonts:
+        - asset: fonts/Bangers-Regular.ttf
+    - family: Manrope
+      fonts:
+        - asset: fonts/Manrope-Regular.ttf

@@ -1,4 +1,3 @@
-
 class AppAssets {
   AppAssets._();
 
@@ -6,5 +5,9 @@ class AppAssets {
 
   static String digitalImage = "assets/images/digital.png";
 
-  static String drStrangeLottieFile = "assets/lottie/strange.json";
+  static String onboardingImage = "assets/images/onboarding.jpg";
+
+  static String googleLogo = "assets/images/google_logo.svg";
+
+  static String icon = 'assets/images/icon.jpg';
 }
