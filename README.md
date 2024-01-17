@@ -65,6 +65,8 @@ To run this app and get access to all the features:
 - [@IssahAsiedu](https://www.github.com/IssahAsiedu) | C# & Dart
 - Evans Mbongo- [luckyevance3@gmail.com](luckyevance3@gmail.com) | App Icon designer
 
+## Screenshots
+
 <table>
     <tr>
         <td><img src="./exhibit/img2.png" width=250px height=500px /></td>
