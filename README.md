@@ -16,7 +16,8 @@ This is an application that helps you navigate your way thru Marvel's Characters
 4. Save Comic Posters.
 
 ## Preview
-link to be added
+- [Android APK](https://github.com/IssahAsiedu/comic_center/releases/download/v0.1.0/app-release.apk)
+- Google Play store link will be added soon.
 
 ## Project Setup
 To run this app and get access to all the features:
