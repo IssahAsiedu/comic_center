@@ -5,6 +5,8 @@ import 'package:comics_center/presentation/screen_sections/home_all_comics.dart'
 import 'package:comics_center/presentation/screen_sections/home_all_series.dart';
 import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/providers/app_providers.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,8 +30,10 @@ class _HomeAllScreenState extends ConsumerState<HomeAllScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(showLoggedInUser: authState is AuthSuccess),
       body: RefreshIndicator(
         onRefresh: () async {
           ref.read(homeRefreshStreamProvider).sink.add("home");

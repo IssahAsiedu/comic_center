@@ -26,7 +26,7 @@ class LoginDialog extends PopupRoute<void> {
       child: Material(
         borderRadius: BorderRadius.circular(4),
         elevation: 2,
-        color: Colors.redAccent.withOpacity(0.6),
+        color: Colors.redAccent.withOpacity(0.85),
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -60,7 +60,7 @@ class LoginDialog extends PopupRoute<void> {
               const SizedBox(
                 width: 150,
                 child: Text(
-                  'You are not login, login to continue',
+                  'You are not logged in, login to continue.',
                   style: TextStyle(),
                   textAlign: TextAlign.center,
                 ),

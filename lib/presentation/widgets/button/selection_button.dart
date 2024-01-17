@@ -20,7 +20,7 @@ class SelectionButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
           constraints: const BoxConstraints(minHeight: 40, minWidth: 50),
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(5),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: selected ? Colors.blue.shade700 : Colors.transparent,
@@ -36,6 +36,7 @@ class SelectionButton extends StatelessWidget {
                 text,
                 style: const TextStyle(
                   color: Colors.white,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               )

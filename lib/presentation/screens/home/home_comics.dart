@@ -8,6 +8,8 @@ import 'package:comics_center/presentation/widgets/app_bar/home_app_bar.dart';
 import 'package:comics_center/presentation/widgets/paged_empty_indicator.dart';
 import 'package:comics_center/presentation/widgets/paged_error_indicator.dart';
 import 'package:comics_center/presentation/widgets/search_field.dart';
+import 'package:comics_center/providers/auth/auth.dart';
+import 'package:comics_center/providers/auth/auth_state.dart';
 import 'package:comics_center/providers/home/home_providers.dart';
 import 'package:comics_center/routing/route_config.dart';
 import 'package:flutter/material.dart';
@@ -45,8 +47,10 @@ class _HomeComicsScreenState extends ConsumerState<HomeComicsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(showLoggedInUser: authState is AuthSuccess),
       body: Stack(
         children: [
           //comics

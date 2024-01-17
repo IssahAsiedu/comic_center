@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
-  const HomeAppBar({super.key});
+  const HomeAppBar({super.key, required this.showLoggedInUser});
+
+  final bool showLoggedInUser;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +17,7 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
 
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(18),
         child: Column(
           children: [
             const _UserDetails(),
@@ -47,7 +49,7 @@ class HomeAppBar extends HookConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(120);
+  Size get preferredSize => Size.fromHeight(showLoggedInUser ? 120 : 81);
 }
 
 class _UserDetails extends HookConsumerWidget {

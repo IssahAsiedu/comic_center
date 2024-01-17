@@ -49,8 +49,10 @@ class _HomeStoriesScreenState extends ConsumerState<HomeSeriesScreen> {
       _seriesPagingController.refresh();
     });
 
+    final authState = ref.watch(authProvider);
+
     return Scaffold(
-      appBar: const HomeAppBar(),
+      appBar: HomeAppBar(showLoggedInUser: authState is AuthSuccess),
       body: Stack(
         children: [
           //series
